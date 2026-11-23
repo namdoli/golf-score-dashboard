@@ -472,7 +472,7 @@
       data: { labels, datasets: ds },
       options: baseOptions({
         plugins: {
-          legend: { position: 'top', align: 'end', labels: { boxWidth: 14, boxHeight: 2, font: { size: 11 }, usePointStyle: false, filter: it => !it.text.includes('밴드') } },
+          legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 14, boxHeight: 2, font: { size: 11 }, padding: 10, usePointStyle: false, filter: it => !it.text.includes('밴드') } },
           tooltip: {
             callbacks: {
               title: items => items.length ? idx[items[0].dataIndex].r.clubShort + ' · ' + dateKo(idx[items[0].dataIndex].r.date) : '',
