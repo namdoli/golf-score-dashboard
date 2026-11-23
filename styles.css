@@ -453,6 +453,17 @@ body.modal-open{overflow:hidden}
   .rc-club{font-size:15.5px;line-height:1.35}
   .rc-chips{margin-top:7px}
   .round-detail .scorecard{padding:15px 12px 16px}
+  /* 펼친 스코어카드도 390px 안에서 9홀이 한눈에 들어오게 */
+  .sc-grid{min-width:0}
+  .sc-nine{grid-template-columns:20px repeat(9,minmax(0,1fr)) 32px;gap:3px}
+  .sc-nine-title{font-size:11px}
+  .sc-h{font-size:9.5px;padding:2px 0}
+  .sc-hole{padding:4px 1px 5px;border-radius:6px}
+  .sc-hole .hp{font-size:9px}
+  .sc-hole .hs{font-size:14px}
+  .sc-hole .hd{font-size:8.5px}
+  .sc-total{font-size:13px}
+  .sc-total small{font-size:8.5px}
   .scv-frame video{height:min(48vh,360px)}
   .sc-media.two{grid-template-columns:1fr}
   .scp-img-btn img{height:min(52vh,380px)}
