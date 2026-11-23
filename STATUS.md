@@ -4,7 +4,7 @@
 
 - 저장소: https://github.com/namdoli/golf-score-dashboard (public, `main`)
 - 라이브: https://namdoli.github.io/golf-score-dashboard/ (GitHub Pages, `main` / `/ (root)`, 상태 `built`)
-- 최종 커밋: `4a226ec` — 스코어 미입력 상세에서 빈 코스명 숨김 (캐시 버스팅 `?v=20261123h`)
+- 최종 커밋: `701401c` — 연도 필터(스코어 없는 연도) 추세 인사이트 가드 (캐시 버스팅 `?v=20261123i`)
 
 ## 배포 과정에서 있었던 일
 1. Pickle GitHub App에 저장소 생성 권한이 없어 `gh repo create`가 403 → 사용자가 `namdoli/golf-score-dashboard` public 저장소를 직접 생성.
