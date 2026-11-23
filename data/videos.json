@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T22:39:18+09:00",
+  "generatedAt": "2026-11-23T22:42:48+09:00",
   "note": "라운드에 연결된 스윙 영상 목록. 한 라운드에 여러 개를 두려면 같은 roundId로 항목을 여러 번 넣으면 됩니다(배열 순서 = 재생 순서). make_data.py가 이 파일을 읽어 scores.json의 해당 라운드에 swingVideos 배열(1개면 swingVideo도 함께)을 붙입니다.",
   "videos": [
     {
@@ -241,6 +241,36 @@
       "bytes": 3385139,
       "originalFile": "MVATW4N1nTTQ…6b3.mp4 (채팅 첨부)",
       "originalBytes": 4366886
+    },
+    {
+      "roundId": "59495c6e-8c0c-42eb-9488-e8ce3ce6a066",
+      "date": "2026-04-24",
+      "club": "베르힐 영종",
+      "src": "videos/berhill_20260424_1.mp4",
+      "poster": "videos/berhill_20260424_1.jpg",
+      "title": "드라이버 티샷",
+      "note": "무늬 상의 · 베르힐 영종 레이크·오션 라운드 · 인천 시내 스카이라인 배경 티샷",
+      "durationSec": 6.04,
+      "width": 720,
+      "height": 1280,
+      "bytes": 470471,
+      "originalFile": "_talkv_…debb5ce1 (TalkV)",
+      "originalBytes": 1591173
+    },
+    {
+      "roundId": "59495c6e-8c0c-42eb-9488-e8ce3ce6a066",
+      "date": "2026-04-24",
+      "club": "베르힐 영종",
+      "src": "videos/berhill_20260424_2.mp4",
+      "poster": "videos/berhill_20260424_2.jpg",
+      "title": "드라이버 티샷",
+      "note": "무늬 상의 · 노을 진 링크스 홀 티샷",
+      "durationSec": 8.23,
+      "width": 720,
+      "height": 960,
+      "bytes": 857230,
+      "originalFile": "_talkv_…3b783b78 (TalkV)",
+      "originalBytes": 3274858
     }
   ]
 }
