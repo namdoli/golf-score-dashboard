@@ -880,7 +880,10 @@
           <button class="scv-open" type="button" data-vid="${r.id}">크게 보기 ⤢</button>
         </div>
         <div class="scv-frame">
-          <video controls playsinline preload="none" poster="${r.swingVideo.poster}" src="${r.swingVideo.src}"></video>
+          <div class="scv-player">
+            <video controls playsinline preload="metadata" poster="${r.swingVideo.poster}" src="${r.swingVideo.src}"></video>
+            <button class="scv-play" type="button" aria-label="${r.swingVideo.title} 재생">▶</button>
+          </div>
         </div>
       </div>` : ''}
       <div class="sc-wrap">
@@ -945,6 +948,17 @@
       }
       if (e.target.closest && e.target.closest('#vmClose, [data-close]')) {
         closeVideo();
+        return;
+      }
+      const playBtn = e.target.closest && e.target.closest('.scv-play');
+      if (playBtn) {
+        e.stopPropagation();
+        const vid = playBtn.parentElement.querySelector('video');
+        if (vid) {
+          playBtn.style.display = 'none';
+          const p = vid.play();
+          if (p && p.catch) p.catch(() => { playBtn.style.display = ''; });
+        }
       }
     }, true);
 
