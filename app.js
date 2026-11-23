@@ -263,6 +263,7 @@
     }
     markers.forEach(m => map.removeLayer(m));
     markers = [];
+    map.closePopup();
 
     const per = statForCourses(rounds);
     const list = [];
@@ -301,7 +302,7 @@
         </div>
         ${!scores.length ? '<div class="pc-note">스코어 미입력 라운드입니다.</div>' : ''}
         <div class="pc-rounds">${roundRows}</div>
-        ${g.mapsUrl ? `<a class="pc-link" href="${g.mapsUrl}" target="_blank" rel="noopener">카카오맵에서 보기 →</a>` : ''}
+        ${g.mapsUrl ? `<a class="pc-link" href="${g.mapsUrl}" target="_blank" rel="noopener">${/google/i.test(g.mapsUrl) ? '구글맵에서 보기' : '카카오맵에서 보기'} →</a>` : ''}
       `, { maxWidth: 280, closeButton: true });
 
       mk.on('mouseover', () => mk.openPopup());
@@ -337,6 +338,7 @@
 
     const krChip = document.getElementById('krChip');
     if (krChip && domestic.length) krChip.addEventListener('click', () => {
+      map.closePopup();
       map.fitBounds(L.featureGroup(domestic).getBounds().pad(0.14));
     });
     const jpChip = document.getElementById('jpChip');
