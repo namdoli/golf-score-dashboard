@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T17:50:10+09:00",
+  "generatedAt": "2026-11-23T17:52:41+09:00",
   "note": "라운드에 연결된 스윙 영상 목록. 한 라운드에 여러 개를 두려면 같은 roundId로 항목을 여러 번 넣으면 됩니다(배열 순서 = 재생 순서). make_data.py가 이 파일을 읽어 scores.json의 해당 라운드에 swingVideos 배열(1개면 swingVideo도 함께)을 붙입니다.",
   "videos": [
     {
@@ -151,6 +151,21 @@
       "bytes": 681664,
       "originalFile": "_talkv_...5b3fa3a9.mp4 (TalkV)",
       "originalBytes": 1819167
+    },
+    {
+      "roundId": "ac4a0c27-ff29-4b02-bb7f-98b22b148f25",
+      "date": "2026-08-28",
+      "club": "수원cc",
+      "src": "videos/suwon_20260828.mp4",
+      "poster": "videos/suwon_20260828.jpg",
+      "title": "티샷 스윙",
+      "note": "분홍 상의 · 수원CC 주간 라운드 · 클럽하우스 배경 드라이버 티샷",
+      "durationSec": 12.5,
+      "width": 720,
+      "height": 1280,
+      "bytes": 1269468,
+      "originalFile": "rIUKPNE_...cfa45e89.mov",
+      "originalBytes": 3506386
     }
   ]
 }
