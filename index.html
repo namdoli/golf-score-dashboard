@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>골프 스코어 대시보드 · 남돌군</title>
-<meta name="description" content="안남석(남돌군) 골프 라운드 기록 대시보드 — 66라운드 · 1,188홀">
+<meta name="description" content="안남석(남돌군) 골프 라운드 기록 대시보드 — 94라운드(스코어 66건) · 1,188홀">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9B%B3%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="styles.css?v=20261123d">
+<link rel="stylesheet" href="styles.css?v=20261123e">
 </head>
 <body>
 <div class="app">
@@ -40,7 +40,7 @@
     <section class="card map-card">
       <div class="card-head">
         <div>
-          <h2><span class="ico">🗺️</span> 골프장 지도</h2>
+          <h2><span class="ico">🗺️</span> 방문한 골프장</h2>
           <p class="card-sub" id="mapSub">방문한 골프장을 한눈에 — 마커 크기·색은 방문 횟수</p>
         </div>
         <div class="map-legend">
@@ -125,25 +125,13 @@
       <div class="heatmap-scroll"><div class="heatmap" id="heatmap"></div></div>
     </section>
 
-    <section class="card swing-card" id="swingCard" hidden>
-      <div class="card-head">
-        <div>
-          <h2><span class="ico">🎬</span> 스윙 영상</h2>
-          <p class="card-sub">영상이 연결된 라운드 — 눌러서 바로 재생</p>
-        </div>
-        <div class="swing-card-note" id="swingCardNote"></div>
-      </div>
-      <div class="swing-grid" id="swingGrid"></div>
-    </section>
-
     <section class="card">
       <div class="card-head">
         <div>
           <h2><span class="ico">📋</span> 라운드 기록</h2>
-          <p class="card-sub">행을 누르면 18홀 스코어카드가 펼쳐집니다</p>
+          <p class="card-sub">행을 누르면 18홀 스코어카드가 펼쳐집니다 · 🎬 표시가 있는 라운드는 스윙 영상도 함께 볼 수 있어요</p>
         </div>
         <div class="table-tools">
-          <button class="video-filter" id="videoOnlyBtn" type="button" aria-pressed="false" title="스윙 영상이 있는 라운드만 보기">🎬 스윙 영상만</button>
           <input id="search" type="search" placeholder="골프장 · 연도 검색" aria-label="라운드 검색">
           <span class="count-chip" id="tableCount"></span>
         </div>
@@ -169,7 +157,7 @@
   </main>
 
   <footer>
-    <p>데이터: 네이버 스포츠 MY골프 64라운드 + G Lounge 남춘천CC 2라운드 · 2023.11 – 2026.11</p>
+    <p>데이터: 네이버 스포츠 MY골프 64라운드 + G Lounge 남춘천CC 2라운드 + 직접 입력 1라운드 + 애플 캘린더 27라운드 · 2023.11 – 2026.11</p>
     <p class="muted">본인 기록만 표시합니다. 골프장 좌표는 카카오맵·구글맵 지오코딩 결과입니다.</p>
   </footer>
 </div>
@@ -199,6 +187,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="app.js?v=20261123d"></script>
+<script src="app.js?v=20261123e"></script>
 </body>
 </html>

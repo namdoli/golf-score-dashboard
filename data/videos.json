@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T14:15:00+09:00",
+  "generatedAt": "2026-11-23T14:25:00+09:00",
   "note": "라운드에 연결된 스윙 영상 목록. make_data.py가 이 파일을 읽어 scores.json의 해당 라운드에 swingVideo를 붙입니다.",
   "videos": [
     {
@@ -31,6 +31,21 @@
       "bytes": 1066514,
       "originalFile": "IMG_2400.mp4",
       "originalBytes": 1877778
+    },
+    {
+      "roundId": "e9e746d5-52d1-5c9c-8444-f0e960667af5",
+      "date": "2026-07-31",
+      "club": "서원밸리CC",
+      "src": "videos/seowon_valley_20260731.mp4",
+      "poster": "videos/seowon_valley_20260731.jpg",
+      "title": "티샷 스윙",
+      "note": "서원밸리CC 라운드 · 스코어 미입력",
+      "durationSec": 9.67,
+      "width": 720,
+      "height": 1280,
+      "bytes": 1153441,
+      "originalFile": "_talkv_...4645dfe1.mp4 (TalkV)",
+      "originalBytes": 3339621
     }
   ]
 }

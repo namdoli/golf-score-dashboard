@@ -376,5 +376,144 @@
   "lat": 37.98915,
   "lng": 127.2239,
   "mapsUrl": "http://place.map.kakao.com/1641460654"
+ },
+ {
+  "key": "서원밸리CC",
+  "name": "서원밸리CC",
+  "region": "경기 파주",
+  "address": "경기 파주시 광탄면 서원길 333",
+  "lat": 37.8246552,
+  "lng": 126.8932999,
+  "mapsUrl": "http://place.map.kakao.com/17925896"
+ },
+ {
+  "key": "서원힐스CC",
+  "name": "서원힐스CC",
+  "region": "경기 파주",
+  "address": "경기 파주시 광탄면 서원길 333",
+  "lat": 37.81667,
+  "lng": 126.89532,
+  "mapsUrl": "http://place.map.kakao.com/18479336",
+  "country": "KR"
+ },
+ {
+  "key": "일산스프링힐스CC",
+  "name": "일산스프링힐스CC",
+  "region": "경기 고양",
+  "address": "경기 고양시 덕양구 산황로 62",
+  "lat": 37.65774,
+  "lng": 126.81324,
+  "mapsUrl": "http://place.map.kakao.com/10534177",
+  "country": "KR"
+ },
+ {
+  "key": "레이크사이드CC",
+  "name": "레이크사이드CC",
+  "region": "경기 용인",
+  "address": "경기 용인시 처인구 모현읍 능원로 181",
+  "lat": 37.31944,
+  "lng": 127.17914,
+  "mapsUrl": "http://place.map.kakao.com/9769457",
+  "country": "KR"
+ },
+ {
+  "key": "블루원 용인CC",
+  "name": "블루원 용인CC",
+  "region": "경기 용인",
+  "address": "경기 용인시 처인구 원삼면 보개원삼로1534번길 40",
+  "lat": 37.13415,
+  "lng": 127.326,
+  "mapsUrl": "http://place.map.kakao.com/19392775",
+  "country": "KR"
+ },
+ {
+  "key": "월송리CC",
+  "name": "월송리CC",
+  "region": "강원 원주",
+  "address": "강원특별자치도 원주시 지정면 오크밸리2길 250",
+  "lat": 37.414,
+  "lng": 127.82233,
+  "mapsUrl": "http://place.map.kakao.com/2103781267",
+  "country": "KR"
+ },
+ {
+  "key": "360도컨트리클럽",
+  "name": "360도CC",
+  "region": "경기 여주",
+  "address": "경기 여주시 강천면 부평로 609",
+  "lat": 37.30238,
+  "lng": 127.73946,
+  "mapsUrl": "http://place.map.kakao.com/8515922",
+  "country": "KR"
+ },
+ {
+  "key": "가평베네스트GC",
+  "name": "가평베네스트GC",
+  "region": "경기 가평",
+  "address": "경기 가평군 상면 둔덕말길 232",
+  "lat": 37.79718,
+  "lng": 127.30548,
+  "mapsUrl": "http://place.map.kakao.com/25070348",
+  "country": "KR"
+ },
+ {
+  "key": "포레스트힐 컨트리클럽",
+  "name": "포레스트힐CC",
+  "region": "경기 포천",
+  "address": "경기 포천시 화현면 봉화로 253",
+  "lat": 37.87352,
+  "lng": 127.27352,
+  "mapsUrl": "http://place.map.kakao.com/25070390",
+  "country": "KR"
+ },
+ {
+  "key": "베뉴지CC",
+  "name": "베뉴지CC",
+  "region": "경기 가평",
+  "address": "경기 가평군 가평읍 용추로171번길 100",
+  "lat": 37.84681,
+  "lng": 127.47167,
+  "mapsUrl": "http://place.map.kakao.com/880877714",
+  "country": "KR"
+ },
+ {
+  "key": "스타cc",
+  "name": "스타컨트리클럽",
+  "region": "충북 충주",
+  "address": "충북 충주시 앙성면 상대촌1길 198",
+  "lat": 37.08293,
+  "lng": 127.70061,
+  "mapsUrl": "http://place.map.kakao.com/1927600923",
+  "country": "KR"
+ },
+ {
+  "key": "렉스필드CC",
+  "name": "렉스필드CC",
+  "region": "경기 여주",
+  "address": "경기 여주시 산북면 광여로 1115",
+  "lat": 37.4018,
+  "lng": 127.42174,
+  "mapsUrl": "http://place.map.kakao.com/16684340",
+  "country": "KR"
+ },
+ {
+  "key": "한탄강CC",
+  "name": "한탄강CC",
+  "region": "강원 철원",
+  "address": "강원특별자치도 철원군 갈말읍 순담길 59",
+  "lat": 38.17137,
+  "lng": 127.29358,
+  "mapsUrl": "http://place.map.kakao.com/16625859",
+  "country": "KR"
+ },
+ {
+  "key": "루스쓰 리조트",
+  "name": "루스쓰 리조트 (Rusutsu Resort Golf 72)",
+  "region": "일본 홋카이도",
+  "address": "13 Izumikawa, Rusutsu, Abuta District, Hokkaido 048-1711",
+  "lat": 42.74718,
+  "lng": 140.90341,
+  "mapsUrl": "https://maps.google.com/?cid=2200508278114603649&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
+  "country": "JP"
  }
 ]

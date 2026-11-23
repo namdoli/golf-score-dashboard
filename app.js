@@ -8,7 +8,7 @@
     slateLight: '#94a3b8', ink: '#0f172a'
   };
 
-  const state = { year: 'all', search: '', sortKey: 'date', sortDir: 'desc', openId: null, videoOnly: false };
+  const state = { year: 'all', search: '', sortKey: 'date', sortDir: 'desc', openId: null };
   let DATA = null, ROUNDS = [], COURSES = [], map = null, markers = [];
   const charts = {};
 
@@ -41,14 +41,16 @@
     return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
   };
   const mean = arr => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0);
-  const fmtDur = sec => {
+  // 스코어 미입력(null) 라운드는 통계에서 제외 — 0/NaN이 섞이지 않도록
+  const hasScore = r => r && r.total !== null && r.total !== undefined && Number.isFinite(Number(r.total));
+  const scored = list => list.filter(hasScore);
+  const NO_PLACE = '장소 미기재 (캘린더)';
+  const sourceLabel = r => (r.source === 'calendar' ? '애플 캘린더' : r.source);
+  function fmtDur(sec) {
     const s = Math.round(sec || 0);
     return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
   };
   const fmtMB = b => (b / 1048576).toFixed(1) + 'MB';
-  function swingRounds() {
-    return ROUNDS.filter(r => r.swingVideo && r.swingVideo.src);
-  }
 
   function filteredRounds() {
     return state.year === 'all' ? ROUNDS : ROUNDS.filter(r => r.year === Number(state.year));
@@ -156,44 +158,16 @@
     renderHalf(rounds);
     renderGoals(rounds);
     renderHeatmap(rounds);
-    renderSwingGallery();
     renderTable(rounds);
   }
 
   /* ---------- SWING VIDEO ---------- */
-  function renderSwingGallery() {
-    const card = $('#swingCard');
-    if (!card) return;
-    const list = swingRounds().slice().sort(byDate).reverse();
-    if (!list.length) { card.hidden = true; return; }
-    card.hidden = false;
-    $('#swingCardNote').textContent = list.length + '개 라운드';
-    $('#swingGrid').innerHTML = list.map(r => {
-      const v = r.swingVideo;
-      return `<button class="swing-item" type="button" data-vid="${r.id}" aria-label="${r.clubShort} ${dateKo(r.date)} ${v.title} 재생">
-        <div class="swing-thumb" style="background-image:url('${v.poster}')">
-          <span class="swing-play">▶</span>
-          <span class="swing-dur">${fmtDur(v.durationSec)}</span>
-        </div>
-        <div class="swing-meta">
-          <div class="swing-course">${r.clubShort}<span class="swing-style">🎬 ${v.title}</span></div>
-          <div class="swing-sub">${dateKo(r.date)}${r.teeTime ? ' ' + r.teeTime + ' 티오프' : ''} · ${courseLabel(r)}</div>
-          <div class="swing-tags">
-            <span class="swing-tag score">${r.total}타</span>
-            <span class="swing-tag">${fmtSign(r.toPar)}</span>
-            <span class="swing-tag">${v.note}</span>
-          </div>
-        </div>
-      </button>`;
-    }).join('');
-  }
-
   function openVideo(roundId) {
     const r = ROUNDS.find(x => x.id === roundId);
     if (!r || !r.swingVideo) return;
     const v = r.swingVideo, modal = $('#videoModal'), vid = $('#vmVideo');
     $('#vmTitle').textContent = `${r.clubShort} · ${v.title}`;
-    $('#vmSub').textContent = `${dateKo(r.date)}${r.teeTime ? ' ' + r.teeTime + ' 티오프' : ''} · ${r.total}타 (파 ${r.par}, ${fmtSign(r.toPar)}) · ${v.note}`;
+    $('#vmSub').textContent = `${dateKo(r.date)}${r.teeTime ? ' ' + r.teeTime + ' 티오프' : ''} · ${hasScore(r) ? `${r.total}타 (파 ${r.par}, ${fmtSign(r.toPar)})` : '스코어 미입력'} · ${v.note}`;
     $('#vmFoot').innerHTML = `<span>${courseLabel(r)} · ${fmtDur(v.durationSec)} · ${fmtMB(v.bytes)}</span>` +
       `<a href="${v.src}" target="_blank" rel="noopener">원본 열기 ↗</a>`;
     vid.poster = v.poster;
@@ -218,18 +192,20 @@
 
   /* ---------- KPI ---------- */
   function renderKpis(rounds) {
-    const scores = rounds.map(r => r.total);
-    const uniq = new Set(rounds.map(r => r.club)).size;
+    const rated = scored(rounds);
+    const pending = rounds.length - rated.length;
+    const scores = rated.map(r => r.total);
+    const uniq = new Set(rounds.filter(r => r.club !== NO_PLACE).map(r => r.club)).size;
     const totalCourses = COURSES.length;
-    const holes = rounds.reduce((a, r) => a + (r.holes ? r.holes.length : 0), 0);
-    const bestRound = rounds.slice().sort((a, b) => a.total - b.total)[0];
+    const holes = rated.reduce((a, r) => a + (r.holes ? r.holes.length : 0), 0);
+    const bestRound = rated.slice().sort((a, b) => a.total - b.total)[0];
     const m = DATA.meta;
     const avg = scores.length ? mean(scores) : 0;
 
     const cards = [
       {
         label: '총 라운드', icon: '🏌️', value: rounds.length, unit: '회',
-        foot: `${holes.toLocaleString()}홀 기록`
+        foot: `스코어 <b>${rated.length}</b>건 · ${holes.toLocaleString()}홀${pending ? ` · 미입력 <b>${pending}</b>건` : ''}`
       },
       {
         label: '방문 골프장', icon: '📍', value: uniq, unit: '곳',
@@ -237,7 +213,7 @@
       },
       {
         label: '평균 타수', icon: '📊', value: avg ? fmt1(avg) : '–', unit: '타',
-        foot: `중앙값 <b>${scores.length ? median(scores) : '–'}</b>타`
+        foot: `중앙값 <b>${scores.length ? median(scores) : '–'}</b>타 · 스코어 ${rated.length}건 기준`
       },
       {
         label: '베스트 스코어', icon: '🏆', cls: 'k-accent',
@@ -290,14 +266,17 @@
 
     const per = statForCourses(rounds);
     const list = [];
-    per.forEach((v, k) => list.push({ key: k, ...v }));
+    per.forEach((v, k) => { if (courseForKey(k)) list.push({ key: k, ...v }); });
+    const domestic = [];
+    let jpMarker = null, jpVisits = 0;
 
     list.forEach(({ key, rounds: rs }) => {
       const g = courseForKey(key);
       if (!g) return;
-      const scores = rs.map(r => r.total);
-      const avg = mean(scores);
-      const best = Math.min(...scores);
+      const ratedRs = scored(rs);
+      const scores = ratedRs.map(r => r.total);
+      const avg = scores.length ? mean(scores) : null;
+      const best = scores.length ? Math.min(...scores) : null;
       const last = rs.map(r => r.date).sort().slice(-1)[0];
       const visits = rs.length;
       const radius = 6 + Math.min(visits, 5) * 2.4;
@@ -308,7 +287,7 @@
       }).addTo(map);
 
       const roundRows = rs.slice().sort(byDate).reverse().map(r =>
-        `<div class="pc-round"><span>${dateKo(r.date)} <em>${courseLabel(r, '·')}</em></span><b>${r.total}</b></div>`
+        `<div class="pc-round"><span>${dateKo(r.date)} <em>${courseLabel(r, '·')}</em></span><b>${hasScore(r) ? r.total : '<span style="color:#94a3b8;font-weight:600">미입력</span>'}</b></div>`
       ).join('');
 
       mk.bindPopup(`
@@ -316,10 +295,11 @@
         <div class="pc-region">${g.region} · ${g.address}</div>
         <div class="pc-stats">
           <div class="pc-stat">방문 <b>${visits}회</b></div>
-          <div class="pc-stat">평균 <b>${fmt1(avg)}타</b></div>
-          <div class="pc-stat">베스트 <b>${best}타</b></div>
+          <div class="pc-stat">평균 <b>${avg !== null ? fmt1(avg) + '타' : '–'}</b></div>
+          <div class="pc-stat">베스트 <b>${best !== null ? best + '타' : '–'}</b></div>
           <div class="pc-stat">최근 <b>${dateKo(last)}</b></div>
         </div>
+        ${!scores.length ? '<div class="pc-note">스코어 미입력 라운드입니다.</div>' : ''}
         <div class="pc-rounds">${roundRows}</div>
         ${g.mapsUrl ? `<a class="pc-link" href="${g.mapsUrl}" target="_blank" rel="noopener">카카오맵에서 보기 →</a>` : ''}
       `, { maxWidth: 280, closeButton: true });
@@ -327,15 +307,19 @@
       mk.on('mouseover', () => mk.openPopup());
       mk.on('click', () => mk.openPopup());
       mk._visits = visits;
+      if (g.country === 'JP') { jpMarker = mk; jpVisits = visits; }
+      else domestic.push(mk);
       markers.push(mk);
     });
 
-    if (markers.length) {
-      const group = L.featureGroup(markers);
+    // 초기 뷰는 국내 골프장 기준 — 해외(홋카이도)는 칩으로 이동
+    const focus = domestic.length ? domestic : markers;
+    if (focus.length) {
+      const group = L.featureGroup(focus);
       map.fitBounds(group.getBounds().pad(0.14));
     }
 
-    $('#mapSub').textContent = `방문한 골프장 ${list.length}곳 — 마커 크기·색은 방문 횟수`;
+    $('#mapSub').textContent = `방문한 골프장 ${list.length}곳 — 마커 크기·색은 방문 횟수${jpMarker ? ' (해외 1곳 포함)' : ''}`;
     const top = list.slice().sort((a, b) => b.rounds.length - a.rounds.length)[0];
     const regions = {};
     list.forEach(({ key }) => {
@@ -345,9 +329,21 @@
     const regionTop = Object.entries(regions).sort((a, b) => b[1] - a[1]).slice(0, 4);
     $('#mapFoot').innerHTML = [
       `<span class="chip">지도 위 <b>${list.length}곳</b></span>`,
+      domestic.length ? `<button class="chip chip-btn" type="button" id="krChip">🇰🇷 국내 <b>${domestic.length}곳</b></button>` : '',
+      jpMarker ? `<button class="chip chip-btn jp" type="button" id="jpChip">🇯🇵 홋카이도 루스쓰 <b>${jpVisits}회</b> →</button>` : '',
       top ? `<span class="chip">최다 방문 <b>${(courseForKey(top.key) || {}).name || top.key}</b> ${top.rounds.length}회</span>` : '',
       ...regionTop.map(([r, n]) => `<span class="chip">${r} <b>${n}</b></span>`)
     ].join('');
+
+    const krChip = document.getElementById('krChip');
+    if (krChip && domestic.length) krChip.addEventListener('click', () => {
+      map.fitBounds(L.featureGroup(domestic).getBounds().pad(0.14));
+    });
+    const jpChip = document.getElementById('jpChip');
+    if (jpChip && jpMarker) jpChip.addEventListener('click', () => {
+      map.setView(jpMarker.getLatLng(), 11, { animate: true });
+      jpMarker.openPopup();
+    });
   }
 
   /* ---------- TREND ---------- */
@@ -359,7 +355,7 @@
   }
 
   function renderTrend(rounds) {
-    const all = ROUNDS;
+    const all = scored(ROUNDS);
     const scores = all.map(r => r.total);
     const ma5 = movingAvg(scores, 5);
     const ma10 = movingAvg(scores, 10);
@@ -423,7 +419,7 @@
 
     // year comparison
     const yc = {};
-    ROUNDS.forEach(r => {
+    scored(ROUNDS).forEach(r => {
       if (!yc[r.year]) yc[r.year] = [];
       yc[r.year].push(r.total);
     });
@@ -454,7 +450,7 @@
         },
         scales: {
           x: { grid: { display: false }, ticks: { font: { size: 11 } } },
-          y: { beginAtZero: false, suggestedMin: Math.min(...avgByYear) - 4, title: { display: true, text: '평균 타수', font: { size: 10 } }, grid: { color: 'rgba(226,232,240,.9)' } },
+          y: { beginAtZero: false, suggestedMin: avgByYear.length ? Math.min(...avgByYear) - 4 : 70, title: { display: true, text: '평균 타수', font: { size: 10 } }, grid: { color: 'rgba(226,232,240,.9)' } },
           y1: { position: 'right', beginAtZero: true, title: { display: true, text: '라운드', font: { size: 10 } }, grid: { display: false }, ticks: { precision: 0 } }
         }
       })
@@ -465,7 +461,7 @@
     const imp = avgByYear[0] - avgByYear[avgByYear.length - 1];
     const recent = scores.slice(-10), prev = scores.slice(-20, -10);
     const delta = prev.length ? mean(prev) - mean(recent) : 0;
-    const bestR = ROUNDS.slice().sort((a, b) => a.total - b.total)[0];
+    const bestR = scored(ROUNDS).slice().sort((a, b) => a.total - b.total)[0];
     const insights = [
       `<div class="insight"><span class="ic">🎯</span><span>${lastY}년 평균은 <b>${fmt1(avgByYear[avgByYear.length - 1])}타</b>, ${firstY}년(${fmt1(avgByYear[0])}타)보다 <b>${fmt1(Math.abs(imp))}타 ${imp >= 0 ? '좋아졌어요' : '높아졌어요'}</b>.</span></div>`,
       `<div class="insight"><span class="ic">📈</span><span>최근 10라운드 평균 <b>${fmt1(mean(recent))}타</b> — 그 이전 10라운드보다 <b>${fmt1(Math.abs(delta))}타 ${delta >= 0 ? '개선' : '상승'}</b>.</span></div>`,
@@ -648,12 +644,13 @@
   }
 
   function renderGoals(rounds) {
-    const n = rounds.length;
-    const u90 = rounds.filter(r => r.total < 90);
-    const u80 = rounds.filter(r => r.total < 80);
-    const ndp = rounds.filter(r => r.noDoublePar);
-    const streak = longestStreak(rounds, r => r.noDoublePar);
-    const bestScore = n ? Math.min(...rounds.map(r => r.total)) : null;
+    const rated = scored(rounds);
+    const n = rated.length;
+    const u90 = rated.filter(r => r.total < 90);
+    const u80 = rated.filter(r => r.total < 80);
+    const ndp = rated.filter(r => r.noDoublePar === true);
+    const streak = longestStreak(rated, r => r.noDoublePar === true);
+    const bestScore = n ? Math.min(...rated.map(r => r.total)) : null;
 
     const goals = [
       {
@@ -686,11 +683,11 @@
 
     // yearly trend of sub-90 share
     const yc = {};
-    ROUNDS.forEach(r => {
+    scored(ROUNDS).forEach(r => {
       yc[r.year] = yc[r.year] || { n: 0, u90: 0, ndp: 0 };
       yc[r.year].n++;
       if (r.total < 90) yc[r.year].u90++;
-      if (r.noDoublePar) yc[r.year].ndp++;
+      if (r.noDoublePar === true) yc[r.year].ndp++;
     });
     const years = Object.keys(yc).map(Number).sort();
     drawChart('goalChart', {
@@ -709,7 +706,7 @@
           {
             label: '연도 평균 타수', type: 'line',
             data: years.map(y => {
-              const s = ROUNDS.filter(r => r.year === y).map(r => r.total);
+              const s = scored(ROUNDS).filter(r => r.year === y).map(r => r.total);
               return Math.round(mean(s) * 10) / 10;
             }),
             borderColor: COLORS.amber, backgroundColor: COLORS.amber,
@@ -737,10 +734,11 @@
     const cells = {};
     rounds.forEach(r => {
       const k = r.year + '-' + r.month;
-      cells[k] = cells[k] || [];
-      cells[k].push(r.total);
+      const c = cells[k] || (cells[k] = { n: 0, scores: [] });
+      c.n++;
+      if (hasScore(r)) c.scores.push(r.total);
     });
-    const maxCount = Math.max(1, ...Object.values(cells).map(a => a.length));
+    const maxCount = Math.max(1, ...Object.values(cells).map(c => c.n));
     const shade = n => {
       if (!n) return null;
       const t = Math.min(1, n / maxCount);
@@ -754,14 +752,16 @@
     years.forEach(y => {
       html += `<div class="hm-cell hm-year">${y}</div>`;
       for (let m = 1; m <= 12; m++) {
-        const arr = cells[y + '-' + m];
-        if (!arr || !arr.length) {
+        const cell = cells[y + '-' + m];
+        if (!cell || !cell.n) {
           html += `<div class="hm-cell hm-empty">·</div>`;
         } else {
-          const bg = shade(arr.length);
-          const light = arr.length / maxCount > 0.55;
-          html += `<div class="hm-cell" style="background:${bg};color:${light ? '#fff' : '#064e3b'}" title="${y}년 ${m}월 · ${arr.length}라운드 · 평균 ${fmt1(mean(arr))}타">
-            <span class="n">${arr.length}</span><span class="a">${fmt1(mean(arr))}</span></div>`;
+          const bg = shade(cell.n);
+          const light = cell.n / maxCount > 0.55;
+          const avgTxt = cell.scores.length ? fmt1(mean(cell.scores)) : '–';
+          const tip = `${y}년 ${m}월 · ${cell.n}라운드` + (cell.scores.length ? ` · 평균 ${fmt1(mean(cell.scores))}타` : ' · 스코어 미입력');
+          html += `<div class="hm-cell" style="background:${bg};color:${light ? '#fff' : '#064e3b'}" title="${tip}">
+            <span class="n">${cell.n}</span><span class="a">${avgTxt}</span></div>`;
         }
       }
     });
@@ -788,7 +788,6 @@
         r.date.includes(q)
       );
     }
-    if (state.videoOnly) rows = rows.filter(r => r.swingVideo && r.swingVideo.src);
     rows.sort((a, b) => {
       const k = state.sortKey;
       let va, vb;
@@ -798,6 +797,8 @@
         const c = va.localeCompare(vb, 'ko');
         return state.sortDir === 'asc' ? c : -c;
       }
+      const na = va === null || va === undefined, nb = vb === null || vb === undefined;
+      if (na || nb) return na && nb ? 0 : (na ? 1 : -1); // 스코어 미입력은 항상 뒤로
       return state.sortDir === 'asc' ? va - vb : vb - va;
     });
 
@@ -816,9 +817,11 @@
           <td><div class="cell-club">${r.clubShort}</div>${r.swingVideo
             ? `<button class="swing-chip" type="button" data-vid="${r.id}" title="스윙 영상 바로 재생"><span class="ic">🎬</span>스윙 영상</button>`
             : ''}<div class="cell-courses">${r.region}</div></td>
-          <td style="color:var(--slate-500);font-size:12px">${courseLabel(r)}</td>
-          <td><span class="score-badge ${scoreClass(r.total)}">${r.total}</span></td>
-          <td class="toPar">${fmtSign(r.toPar)}</td>
+          <td style="color:var(--slate-500);font-size:12px">${(r.courses && r.courses.length) ? courseLabel(r) : '–'}</td>
+          <td>${hasScore(r)
+            ? `<span class="score-badge ${scoreClass(r.total)}">${r.total}</span>`
+            : `<span class="score-pending">미입력</span>`}</td>
+          <td class="toPar">${hasScore(r) ? fmtSign(r.toPar) : '–'}</td>
           <td style="color:var(--slate-600)">${r.frontScore || '–'}<span style="color:var(--slate-300)"> / ${r.front.par || '–'}</span></td>
           <td style="color:var(--slate-600)">${r.backScore || '–'}<span style="color:var(--slate-300)"> / ${r.back.par || '–'}</span></td>
           <td class="td-center">${r.noDoublePar ? '<span class="tag tag-ok">달성</span>' : '<span class="tag tag-no">–</span>'}</td>
@@ -863,17 +866,10 @@
   }
 
   function scorecardHtml(r) {
-    const front = r.holes.slice(0, 9);
-    const back = r.holes.slice(9, 18);
-    return `<div class="scorecard">
-      <div class="sc-head">
-        <div>
-          <h4>${r.clubShort} <span style="font-weight:600;color:var(--slate-400);font-size:12px">${courseLabel(r)}</span></h4>
-          <div class="meta">${dateKo(r.date)} ${r.teeTime ? '· ' + r.teeTime + ' 티오프' : ''} · 총 ${r.total}타 (파 ${r.par}, ${fmtSign(r.toPar)}) · ${r.source}</div>
-        </div>
-        <div class="meta">전반 ${r.frontScore} / 후반 ${r.backScore} · 노 더블 파 ${r.noDoublePar ? '달성 ✅' : '미달성'}</div>
-      </div>
-      ${r.swingVideo ? `<div class="sc-video">
+    const holes = r.holes || [];
+    const front = holes.slice(0, 9);
+    const back = holes.slice(9, 18);
+    const videoBlock = r.swingVideo ? `<div class="sc-video">
         <div class="scv-head">
           <span class="scv-label">🎬 스윙 영상</span>
           <span class="scv-sub">${r.swingVideo.title} · ${fmtDur(r.swingVideo.durationSec)} · ${r.swingVideo.note}</span>
@@ -885,7 +881,31 @@
             <button class="scv-play" type="button" aria-label="${r.swingVideo.title} 재생">▶</button>
           </div>
         </div>
-      </div>` : ''}
+      </div>` : '';
+
+    const head = `<div class="sc-head">
+        <div>
+          <h4>${r.clubShort} <span style="font-weight:600;color:var(--slate-400);font-size:12px">${courseLabel(r)}</span></h4>
+          <div class="meta">${dateKo(r.date)} ${r.teeTime ? '· ' + r.teeTime + ' 티오프' : ''} · ${hasScore(r) ? `총 ${r.total}타 (파 ${r.par}, ${fmtSign(r.toPar)})` : '스코어 미입력'} · ${sourceLabel(r)}</div>
+        </div>
+        <div class="meta">${hasScore(r) ? `전반 ${r.frontScore} / 후반 ${r.backScore} · 노 더블 파 ${r.noDoublePar ? '달성 ✅' : '미달성'}` : '스코어카드 미저장'}</div>
+      </div>`;
+
+    if (!hasScore(r) || !holes.length) {
+      return `<div class="scorecard">
+      ${head}
+      ${videoBlock}
+      <div class="sc-pending">
+        <span class="scp-ico">📝</span>
+        <div><b>스코어카드가 저장되지 않은 라운드입니다.</b>
+        <span>${r.source === 'calendar' ? '애플 캘린더 일정으로만 확인된 라운드' : '스코어를 입력하지 않은 라운드'}입니다. 통계 계산에서는 제외되고, 라운드 횟수와 지도 방문에는 포함됩니다.</span></div>
+      </div>
+    </div>`;
+    }
+
+    return `<div class="scorecard">
+      ${head}
+      ${videoBlock}
       <div class="sc-wrap">
         <div class="sc-grid two">
           ${nineHtml(front, r.front.par, r.frontScore, '전반 OUT')}
@@ -928,13 +948,6 @@
         state.search = search.value;
         renderTable(filteredRounds());
       }, 130);
-    });
-
-    const vBtn = $('#videoOnlyBtn');
-    if (vBtn) vBtn.addEventListener('click', () => {
-      state.videoOnly = !state.videoOnly;
-      vBtn.setAttribute('aria-pressed', String(state.videoOnly));
-      renderTable(filteredRounds());
     });
 
     // 영상 버튼은 행 펼치기보다 먼저 처리 (capture)
