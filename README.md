@@ -21,10 +21,23 @@
 | 라운드 | 골프장 | 스코어 | 파일 | 길이 | 용량 |
 |---|---|---|---|---|---|
 | 2026-07-31 | 서원밸리CC | 미입력 | `videos/seowon_valley_20260731.mp4` (원본 TalkV) | 9.7초 | 1.1MB |
+| 2026-09-18 | 이천실크밸리GC | 93타 | `videos/silkvalley_20260918.mp4` (원본 TalkV) | 8.6초 | 0.8MB |
+| 2026-10-01 | 베르힐 영종 | 90타 | `videos/berhill_20261001_1.mp4` · `_2.mp4` (원본 TalkV) | 13.1초 · 14.5초 | 1.4MB · 1.6MB |
 | 2026-10-29 | 라비에벨CC 올드코스 | 90타 | `videos/lavieestbelle_old_20261029.mp4` (원본 IMG_7229) | 18.7초 | 2.0MB |
 | 2026-10-30 | 라비에벨CC 듄스코스 | 95타 | `videos/lavieestbelle_dunes_20261030.mp4` (원본 IMG_2400) | 4.8초 | 1.0MB |
+| 2026-11-06 | 젠스필드CC | 86타 | `videos/jensfield_20261106.mp4` (원본 TalkV) | 17.6초 | 2.1MB |
+| 2026-11-08 | 힐데스하임CC | 87타 | `videos/hildesheim_20261108_1.mp4` · `_2.mp4` (원본 TalkV) | 8.9초 · 17.0초 | 1.6MB · 1.7MB |
 
-영상은 720×1280(H.264 High, CRF 26, `+faststart`, AAC 64k 모노)로 웹 최적화했고, 같은 이름의 `.jpg` 포스터 프레임을 씁니다. 연결 정보는 `data/videos.json`이 원본이며 `golf/make_data.py`가 `scores.json`의 해당 라운드에 `swingVideo` 필드로 붙입니다.
+영상은 720×1280(H.264 High, CRF 26, `+faststart`, AAC 64k 모노)로 웹 최적화했고, 같은 이름의 `.jpg` 포스터 프레임을 씁니다. 연결 정보는 `data/videos.json`이 원본이며 `golf/make_data.py`가 `scores.json`의 해당 라운드에 `swingVideos` 배열(1개면 `swingVideo`도 함께)로 붙입니다.
+
+### 연결된 라운드 사진
+
+| 라운드 | 골프장 | 파일 | 크기 |
+|---|---|---|---|
+| 2026-07-31 | 서원밸리CC | `photos/seowon_valley_20260731.jpg` (원본 IMG_1979) | 1200×1600 · 0.3MB |
+| 2026-10-01 | 베르힐 영종 | `photos/berhill_20261001.jpg` (원본 IMG_2201) | 1200×1600 · 0.3MB |
+
+사진은 긴 변 최대 1600px · JPEG q84로 줄이고 EXIF를 제거했습니다. 연결 정보는 `data/photos.json`이 원본입니다.
 
 ## 구성
 
@@ -35,7 +48,9 @@ app.js                데이터 집계 · 차트(Chart.js) · 지도(Leaflet) ·
 data/scores.json      정규화된 94라운드 (66라운드 홀별 스코어 + 28라운드 스코어 미입력)
 data/courses_geo.json 56개 골프장 좌표·주소
 data/videos.json      라운드별 스윙 영상 연결 목록
+data/photos.json      라운드별 사진 연결 목록
 videos/               웹 최적화 스윙 영상(mp4) + 포스터 이미지(jpg)
+photos/               웹 최적화 라운드 사진(jpg)
 ```
 
 정적 파일만으로 동작하며 GitHub Pages(`main` 브랜치 루트)에서 제공됩니다. 차트와 지도는 CDN(Chart.js 4.4.1, Leaflet 1.9.4)을 사용하고, 지도 타일은 API 키가 필요 없는 Esri World Light Gray Base·Reference입니다(출처 표기 포함).
