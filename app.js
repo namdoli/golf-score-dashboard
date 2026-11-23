@@ -53,7 +53,6 @@
   const hasScore = r => r && r.total !== null && r.total !== undefined && Number.isFinite(Number(r.total));
   const scored = list => list.filter(hasScore);
   const NO_PLACE = '장소 미기재 (캘린더)';
-  const sourceLabel = r => (r.source === 'calendar' ? '애플 캘린더' : r.source);
   function fmtDur(sec) {
     const s = Math.round(sec || 0);
     return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
@@ -112,6 +111,7 @@
         });
         hydrateHeader();
         buildFilters();
+        initStickyBar();
         renderAll();
         $('#loading').classList.add('hide');
         setTimeout(() => { $('#loading').style.display = 'none'; }, 380);
@@ -162,10 +162,60 @@
     $('#filterHint').innerHTML = `<b>${label}</b> · ${n}라운드`;
   }
 
+  /* ---------- STICKY SUMMARY (스크롤 고정 바) ---------- */
+  function handicapForSelection(rated) {
+    const m = DATA.meta.handicap;
+    if (state.year === 'all') {
+      return { text: m.index, note: `공식 핸디캡 인덱스 · ${m.asOf} 기준 (${m.club})` };
+    }
+    const last = rated.slice(-20);
+    if (last.length < 3) {
+      return { text: '–', note: '스코어가 3건 미만이어 추정하지 않습니다' };
+    }
+    const diffs = last.map(r => Number(r.total) - (Number(r.par) || 72)).sort((a, b) => a - b);
+    const take = Math.max(1, Math.min(8, Math.round(diffs.length * 0.4)));
+    return {
+      text: '≈' + fmt1(mean(diffs.slice(0, take))),
+      note: `그 해 스코어 기준 추정 (최근 ${last.length}라운드 중 베스트 ${take}개의 파 대비 평균) · 공식 인덱스 ${m.index} (${m.asOf})`
+    };
+  }
+
+  function renderStickySummary(rounds) {
+    const rated = scored(rounds);
+    const scores = rated.map(r => Number(r.total));
+    const handi = handicapForSelection(rated);
+    const avgEl = $('#sbAvg'), bestEl = $('#sbBest'), handiEl = $('#sbHandi');
+    if (avgEl) avgEl.textContent = scores.length ? fmt1(mean(scores)) : '–';
+    if (bestEl) bestEl.textContent = scores.length ? Math.min(...scores) : '–';
+    if (handiEl) handiEl.textContent = handi.text;
+    const wrap = $('#sbHandiWrap');
+    if (wrap) wrap.title = handi.note;
+    const bar = $('#stickyBar');
+    if (bar) bar.setAttribute('aria-label', `남돌군의 골프 스코어 · 평균 ${scores.length ? fmt1(mean(scores)) + '타' : '–'} · 베스트 ${scores.length ? Math.min(...scores) + '타' : '–'} · 핸디캡 ${handi.text}`);
+  }
+
+  function initStickyBar() {
+    const bar = $('#stickyBar');
+    if (!bar) return;
+    let raf = 0, stuck = false;
+    const sync = () => {
+      raf = 0;
+      const next = bar.getBoundingClientRect().top <= 1;
+      if (next === stuck) return;
+      stuck = next;
+      bar.classList.toggle('stuck', stuck);
+    };
+    const queue = () => { if (!raf) raf = requestAnimationFrame(sync); };
+    window.addEventListener('scroll', queue, { passive: true });
+    window.addEventListener('resize', queue);
+    sync();
+  }
+
   /* ---------- render orchestration ---------- */
   function renderAll() {
     updateHint();
     const rounds = filteredRounds();
+    renderStickySummary(rounds);
     renderKpis(rounds);
     renderMap(rounds);
     renderTrend(rounds);
@@ -948,6 +998,7 @@
     const open = state.openId === r.id;
     const has = hasScore(r);
     const great = has && Number(r.total) >= 80 && Number(r.total) <= 89;
+    const chips = mediaChipsHtml(r);
     const courses = (r.courses && r.courses.length) ? courseLabel(r) : '코스 정보 없음';
     const wd = weekdayKo(r.date);
     const [, mm, dd] = r.date.split('-');
@@ -961,7 +1012,7 @@
         <div class="rc-body">
           <div class="rc-club">${esc(r.clubShort)}</div>
           <div class="rc-sub">${esc(courses)}${r.region ? ' · ' + esc(r.region) : ''}</div>
-          <div class="rc-chips"><span class="rc-chip">${esc(sourceLabel(r))}</span>${mediaChipsHtml(r)}</div>
+          ${chips ? `<div class="rc-chips">${chips}</div>` : ''}
         </div>
         <div class="rc-score">${score}</div>
         <span class="rc-chev" aria-hidden="true">⌄</span>
@@ -1047,7 +1098,7 @@
     const head = `<div class="sc-head">
         <div>
           <h4>${r.clubShort} ${(r.courses && r.courses.length) ? `<span style="font-weight:600;color:var(--slate-400);font-size:12px">${courseLabel(r)}</span>` : ''}</h4>
-          <div class="meta">${dateKo(r.date)} ${r.teeTime ? '· ' + r.teeTime + ' 티오프' : ''} · ${hasScore(r) ? `총 ${r.total}타 (파 ${r.par}, ${fmtSign(r.toPar)})` : '스코어 미입력'} · ${sourceLabel(r)}</div>
+          <div class="meta">${dateKo(r.date)} ${r.teeTime ? '· ' + r.teeTime + ' 티오프' : ''} · ${hasScore(r) ? `총 ${r.total}타 (파 ${r.par}, ${fmtSign(r.toPar)})` : '스코어 미입력'}</div>
         </div>
         <div class="meta">${hasScore(r) ? `전반 ${r.frontScore} / 후반 ${r.backScore} · 노 더블 파 ${r.noDoublePar ? '달성 ✅' : '미달성'}` : '스코어카드 미저장'}</div>
       </div>`;
@@ -1059,7 +1110,7 @@
       <div class="sc-pending">
         <span class="scp-ico">📝</span>
         <div><b>스코어카드가 저장되지 않은 라운드입니다.</b>
-        <span>${r.source === 'calendar' ? '애플 캘린더 일정으로만 확인된 라운드' : '스코어를 입력하지 않은 라운드'}입니다. 통계 계산에서는 제외되고, 라운드 횟수와 지도 방문에는 포함됩니다.</span></div>
+        <span>일정으로만 확인되어 스코어가 없는 라운드입니다. 통계 계산에서는 제외되고, 라운드 횟수와 지도 방문에는 포함됩니다.</span></div>
       </div>
     </div>`;
     }
@@ -1116,7 +1167,7 @@
       <div class="sc-head">
         <div>
           <h4>📓 ${esc(u.clubShort)} 18홀 야디지북</h4>
-          <div class="meta">${dateKo(u.date)}${u.weekday ? '(' + u.weekday + ')' : ''}${u.teeTime ? ' · ' + esc(u.teeTime) + ' 티오프' : ''} · 파 ${u.par || 73} · 18홀 (SUN 9 + POINT 9) · ${esc(u.source || '')}</div>
+          <div class="meta">${dateKo(u.date)}${u.weekday ? '(' + u.weekday + ')' : ''}${u.teeTime ? ' · ' + esc(u.teeTime) + ' 티오프' : ''} · 파 ${u.par || 73} · 18홀 (SUN 9 + POINT 9)</div>
         </div>
         <div class="meta yrd-head-note">홀 칩을 누르면 홀 그림·그린맵·티별 거리·공략이 바뀝니다</div>
       </div>

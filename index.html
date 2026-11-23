@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>골프 스코어 대시보드 · 남돌군</title>
+<title>남돌군의 골프 스코어</title>
 <meta name="description" content="안남석(남돌군) 골프 라운드 기록 대시보드 — 94라운드(스코어 66건) · 1,188홀">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9B%B3%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="styles.css?v=20261123u">
+<link rel="stylesheet" href="styles.css?v=20261123v">
 </head>
 <body>
 <div class="app">
@@ -21,7 +21,7 @@
       <div class="brand">
         <span class="flag">⛳</span>
         <div>
-          <h1>골프 스코어 대시보드</h1>
+          <h1>남돌군의 골프 스코어</h1>
           <p class="sub" id="heroSub">불러오는 중…</p>
         </div>
       </div>
@@ -29,10 +29,25 @@
     </div>
   </header>
 
-  <nav class="filters" id="filtersBar" aria-label="연도 필터">
-    <div class="year-pills" id="yearPills"></div>
-    <div class="filter-hint" id="filterHint"></div>
-  </nav>
+  <div class="sticky-bar" id="stickyBar">
+    <div class="sb-head" id="sbHead" aria-hidden="true">
+      <div class="sb-brand">
+        <span class="sb-flag" aria-hidden="true">⛳</span>
+        <span class="sb-title">남돌군의 골프 스코어</span>
+      </div>
+      <div class="sb-stats" id="sbStats">
+        <span class="sb-stat"><span class="sb-lbl">평균</span><b id="sbAvg">–</b><small>타</small></span>
+        <span class="sb-sep" aria-hidden="true"></span>
+        <span class="sb-stat"><span class="sb-lbl">베스트</span><b id="sbBest">–</b><small>타</small></span>
+        <span class="sb-sep" aria-hidden="true"></span>
+        <span class="sb-stat" id="sbHandiWrap"><span class="sb-lbl">핸디캡</span><b id="sbHandi">–</b></span>
+      </div>
+    </div>
+    <nav class="filters" id="filtersBar" aria-label="연도 필터">
+      <div class="year-pills" id="yearPills"></div>
+      <div class="filter-hint" id="filterHint"></div>
+    </nav>
+  </div>
 
   <main>
     <section class="kpi-grid" id="kpiGrid" aria-label="핵심 지표"></section>
@@ -199,6 +214,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="app.js?v=20261123u"></script>
+<script src="app.js?v=20261123v"></script>
 </body>
 </html>
