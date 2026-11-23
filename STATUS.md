@@ -133,3 +133,10 @@
 - **HTTP**: mp4 5개·포스터 5개·사진 2개·데이터 3개 모두 200(용량 로컬과 일치), 4xx/5xx 0건.
 - **참고**: 작업 중 `git push`가 `GH_TOKEN` 무효로 403 → `gh auth` 토큰을 credential helper로 지정해 푸시(저장소 자체 권한은 admin/push 정상, `gh api`도 정상).
 - 스크린샷: `browser/berhill_detail_live-*.png`(상세 2영상+사진), `browser/berhill_modal_v1_live-*.png`(모달), `browser/berhill_photo_modal_live-*.png`, `browser/h1club_photo_modal_live-*.png`
+
+## 라운드 미디어 추가 2 — 블루헤런CC(6/11)·남춘천CC(5/17) (2026-11-23 17:56–17:59)
+- **추가**: 6/11 블루헤런CC(`10b17629…`, 96타) 스윙 영상 1개(`blueheron_20260611.mp4`, 12.98초 1.1MB), 5/17 남춘천CC(`extra-2026-05-17`, 99타) 사진 1장(`namchuncheon_20260517.jpg`, 1200×1600 0.3MB).
+- **인코딩**: iPhone `.mov` → 720×1280 H.264 High/CRF 26/`+faststart`/AAC 64k 모노. 원본이 `bt2020nc` 색공간이라 `colorspace=iall=bt2020:all=bt709`로 변환해 다른 영상과 같은 bt709로 맞춤(녹색·하늘 색이 붕뜨지 않음).
+- **데이터**: `videos.json` 12건·`photos.json` 4건, `meta.swingVideos` 12, 캐시 `?v=20261123ag`.
+- **라이브 검증(17:58–17:59)**: index `app.js?v=20261123ag` 200, 6/11 카드 `🎬 스윙 영상` → 모달 재생 `readyState 4`·720×1280·duration 12.98·자동재생, 5/17 카드 `📷 사진` → 모달 1200×1600 표시. 두 파일 모두 200(용량 로컬과 일치).
+- 스크린샷: `browser/blueheron_video_modal_live-*.png`, `browser/namchuncheon_photo_modal_live-*.png`
