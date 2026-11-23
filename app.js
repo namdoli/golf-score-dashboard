@@ -37,6 +37,11 @@
     const [y, m, dd] = d.split('-');
     return `${y}.${m}.${dd}`;
   };
+  const WEEK_KO = ['일', '월', '화', '수', '목', '금', '토'];
+  function weekdayKo(d) {
+    const dt = new Date(d + 'T00:00:00');
+    return isNaN(dt.getTime()) ? '' : WEEK_KO[dt.getDay()];
+  }
   const median = arr => {
     if (!arr.length) return 0;
     const s = [...arr].sort((a, b) => a - b);
@@ -302,7 +307,7 @@
 
     $('#kpiGrid').innerHTML = cards.map(c => `
       <div class="kpi ${c.cls || ''}">
-        <div class="label">${c.icon} ${c.label}</div>
+        <div class="label"><span class="lico" aria-hidden="true">${c.icon}</span>${c.label}</div>
         <div class="value">${c.value}${c.unit ? `<small>${c.unit}</small>` : ''}</div>
         <div class="foot">${c.foot}</div>
       </div>`).join('');
@@ -858,13 +863,6 @@
   }
 
   /* ---------- TABLE ---------- */
-  function scoreClass(t) {
-    if (t <= 85) return 'sb-great';
-    if (t <= 92) return 'sb-good';
-    if (t <= 99) return 'sb-mid';
-    return 'sb-bad';
-  }
-
   function renderTable(rounds) {
     let rows = rounds.slice();
     const up = upcomingFor();
@@ -893,47 +891,82 @@
     });
 
     $('#tableCount').textContent = rows.length + '라운드' + (up.length ? ` + 예정 ${up.length}` : '');
+    renderSortBar();
 
+    const list = $('#roundsList');
     if (!rows.length && !up.length) {
-      $('#roundsBody').innerHTML = `<tr><td colspan="8" style="padding:36px;text-align:center;color:var(--slate-400)">조건에 맞는 라운드가 없습니다.</td></tr>`;
+      list.innerHTML = `<div class="rounds-empty">조건에 맞는 라운드가 없습니다.</div>`;
       return;
     }
 
-    $('#roundsBody').innerHTML = up.map(u => upcomingRowHtml(u)).join('') + rows.map(r => {
-      const open = state.openId === r.id;
-      const main = `
-        <tr class="row ${open ? 'open' : ''}" data-id="${r.id}">
-          <td style="white-space:nowrap;color:var(--slate-500)">${dateKo(r.date)}</td>
-          <td><div class="cell-club">${r.clubShort}</div>${(r.swingVideo || roundPhotos(r).length) ? `<div class="media-chips">${r.swingVideo
-            ? `<button class="swing-chip" type="button" data-vid="${r.id}" title="스윙 영상 바로 재생"><span class="ic">🎬</span>스윙 영상</button>`
-            : ''}${roundPhotos(r).length
-            ? `<button class="photo-chip" type="button" data-photo="${r.id}" data-idx="0" title="라운드 사진 크게 보기"><span class="ic">📷</span>사진</button>`
-            : ''}</div>` : ''}<div class="cell-courses">${r.region}</div></td>
-          <td style="color:var(--slate-500);font-size:12px">${(r.courses && r.courses.length) ? courseLabel(r) : '–'}</td>
-          <td>${hasScore(r)
-            ? `<span class="score-badge ${scoreClass(r.total)}">${r.total}</span>`
-            : `<span class="score-pending">미입력</span>`}</td>
-          <td class="toPar">${hasScore(r) ? fmtSign(r.toPar) : '–'}</td>
-          <td style="color:var(--slate-600)">${r.frontScore || '–'}<span style="color:var(--slate-300)"> / ${r.front.par || '–'}</span></td>
-          <td style="color:var(--slate-600)">${r.backScore || '–'}<span style="color:var(--slate-300)"> / ${r.back.par || '–'}</span></td>
-          <td class="td-center">${r.noDoublePar ? '<span class="tag tag-ok">달성</span>' : '<span class="tag tag-no">–</span>'}</td>
-        </tr>`;
-      if (!open) return main;
-      return main + `<tr class="scorecard-row"><td colspan="8">${scorecardHtml(r)}</td></tr>`;
-    }).join('');
+    list.innerHTML = up.map(u => upcomingCardHtml(u)).join('') + rows.map(roundCardHtml).join('');
 
-    $$('#roundsBody tr.row').forEach(tr => tr.addEventListener('click', () => {
-      const id = tr.dataset.id;
-      state.openId = state.openId === id ? null : id;
-      renderTable(filteredRounds());
-      if (state.openId) {
-        const el = document.querySelector(`tr.row[data-id="${state.openId}"]`);
-        if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      }
-    }));
+    $$('#roundsList .round-card').forEach(card => {
+      card.addEventListener('click', () => toggleRound(card.dataset.id));
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleRound(card.dataset.id); }
+      });
+    });
 
     // 펼쳐진 예정 라운드가 있으면 야디지북을 불러와 그린다
     if (up.some(u => u.id === state.openId)) ensureYardage();
+  }
+
+  function toggleRound(id) {
+    state.openId = state.openId === id ? null : id;
+    renderTable(filteredRounds());
+    if (state.openId) {
+      const el = document.querySelector(`.round-item[data-id="${state.openId}"]`);
+      if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+  }
+
+  /* 정렬 컨트롤 — 기존 표 헤더 정렬(날짜·골프장·타수·파 대비)을 그대로 옮긴 버튼 */
+  function renderSortBar() {
+    $$('#sortBar .sort-btn').forEach(btn => {
+      const on = btn.dataset.sort === state.sortKey;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      const c = btn.querySelector('.caret');
+      if (c) c.textContent = on ? (state.sortDir === 'asc' ? '↑' : '↓') : '';
+    });
+  }
+
+  function mediaChipsHtml(r) {
+    const chips = [];
+    if (r.swingVideo) {
+      chips.push(`<button class="rc-chip rc-chip-media" type="button" data-vid="${r.id}" title="스윙 영상 바로 재생"><span aria-hidden="true">🎬</span>스윙 영상</button>`);
+    }
+    if (roundPhotos(r).length) {
+      chips.push(`<button class="rc-chip rc-chip-media" type="button" data-photo="${r.id}" data-idx="0" title="라운드 사진 크게 보기"><span aria-hidden="true">📷</span>사진</button>`);
+    }
+    return chips.join('');
+  }
+
+  function roundCardHtml(r) {
+    const open = state.openId === r.id;
+    const has = hasScore(r);
+    const great = has && Number(r.total) >= 80 && Number(r.total) <= 89;
+    const courses = (r.courses && r.courses.length) ? courseLabel(r) : '코스 정보 없음';
+    const wd = weekdayKo(r.date);
+    const [, mm, dd] = r.date.split('-');
+    const score = has
+      ? `<span class="rc-total ${great ? 'great' : ''}">${r.total}<small>타</small></span>
+         <span class="rc-par">${fmtSign(r.toPar)} · 전 ${r.frontScore || '–'} / 후 ${r.backScore || '–'}</span>`
+      : `<span class="rc-noscore">미입력</span>`;
+    return `<div class="round-item ${open ? 'open' : ''}" data-id="${r.id}">
+      <div class="round-card" role="button" tabindex="0" aria-expanded="${open}" aria-label="${esc(r.clubShort)} ${dateKo(r.date)} 라운드 ${has ? r.total + '타' : '스코어 미입력'}">
+        <span class="rc-date"><b>${mm}.${dd}</b><i>${r.date.slice(0, 4)}${wd ? ' · ' + wd : ''}</i></span>
+        <div class="rc-body">
+          <div class="rc-club">${esc(r.clubShort)}</div>
+          <div class="rc-sub">${esc(courses)}${r.region ? ' · ' + esc(r.region) : ''}</div>
+          <div class="rc-chips"><span class="rc-chip">${esc(sourceLabel(r))}</span>${mediaChipsHtml(r)}</div>
+        </div>
+        <div class="rc-score">${score}</div>
+        <span class="rc-chev" aria-hidden="true">⌄</span>
+      </div>
+      ${open ? `<div class="round-detail">${scorecardHtml(r)}</div>` : ''}
+    </div>`;
   }
 
   function holeClass(h) {
@@ -1053,22 +1086,28 @@
     });
   }
 
-  function upcomingRowHtml(u) {
+  function upcomingCardHtml(u) {
     const open = state.openId === u.id;
-    return `<tr class="row upcoming ${open ? 'open' : ''}" data-id="${u.id}">
-        <td style="white-space:nowrap;color:#0f766e;font-weight:700">${dateKo(u.date)}</td>
-        <td>
-          <div class="cell-club">${esc(u.clubShort)}</div>
-          <span class="yrd-badge-chip">${esc(u.badge || '📅 예정 · 야디지북 준비됨')}</span>
-          <div class="cell-courses">${esc(u.region || '')}${u.teeTime ? ' · ' + esc(u.teeTime) + ' 티오프' : ''}</div>
-        </td>
-        <td style="color:var(--slate-500);font-size:12px">${esc(u.courseLabel || (u.courses || []).join(' · ') || '–')}</td>
-        <td><span class="score-upcoming">예정</span></td>
-        <td class="toPar">–</td>
-        <td style="color:var(--slate-300)">–</td>
-        <td style="color:var(--slate-300)">–</td>
-        <td class="td-center"><span class="tag tag-up">야디지북</span></td>
-      </tr>` + (open ? `<tr class="scorecard-row"><td colspan="8">${yardageBookHtml(u)}</td></tr>` : '');
+    const [, mm, dd] = u.date.split('-');
+    const wd = u.weekday || weekdayKo(u.date);
+    const sub = [
+      u.courseLabel || (u.courses || []).join(' · '),
+      u.region,
+      u.teeTime ? u.teeTime + ' 티오프' : ''
+    ].filter(Boolean).join(' · ');
+    return `<div class="round-item upcoming ${open ? 'open' : ''}" data-id="${u.id}">
+      <div class="round-card" role="button" tabindex="0" aria-expanded="${open}" aria-label="${esc(u.clubShort)} ${dateKo(u.date)} 예정 라운드 야디지북">
+        <span class="rc-date upcoming"><b>${mm}/${dd}</b><i>${wd ? wd + ' · ' : ''}예정</i></span>
+        <div class="rc-body">
+          <div class="rc-club">${esc(u.clubShort)}</div>
+          <div class="rc-sub">${esc(sub)}</div>
+          <div class="rc-chips"><span class="rc-chip rc-chip-plan"><span aria-hidden="true">📓</span>야디지북 준비됨</span></div>
+        </div>
+        <div class="rc-score"><span class="rc-chip rc-chip-upcoming">📅 예정</span></div>
+        <span class="rc-chev" aria-hidden="true">⌄</span>
+      </div>
+      ${open ? `<div class="round-detail">${yardageBookHtml(u)}</div>` : ''}
+    </div>`;
   }
 
   function yardageBookHtml(u) {
@@ -1333,16 +1372,11 @@
       }
     });
 
-    $$('#roundsTable th[data-sort]').forEach(th => {
-      th.addEventListener('click', () => {
-        const k = th.dataset.sort;
+    $$('#sortBar .sort-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const k = btn.dataset.sort;
         if (state.sortKey === k) state.sortDir = state.sortDir === 'asc' ? 'desc' : 'asc';
         else { state.sortKey = k; state.sortDir = k === 'club' ? 'asc' : 'desc'; }
-        $$('#roundsTable th').forEach(x => {
-          x.classList.toggle('sorted', x.dataset.sort === state.sortKey);
-          const c = x.querySelector('.caret');
-          if (c) c.textContent = x.dataset.sort === state.sortKey ? (state.sortDir === 'asc' ? '↑' : '↓') : '';
-        });
         renderTable(filteredRounds());
       });
     });

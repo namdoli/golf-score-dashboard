@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9B%B3%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="styles.css?v=20261123q">
+<link rel="stylesheet" href="styles.css?v=20261123r">
 </head>
 <body>
 <div class="app">
@@ -129,30 +129,23 @@
       <div class="card-head">
         <div>
           <h2><span class="ico">📋</span> 라운드 기록</h2>
-          <p class="card-sub">행을 누르면 18홀 스코어카드가 펼쳐집니다 · 🎬 스윙 영상 · 📷 단체사진이 있는 라운드는 펼친 상세에서 스코어카드와 함께 볼 수 있어요 · 📅 예정 라운드는 맨 위에서 18홀 야디지북으로 열립니다</p>
+          <p class="card-sub">카드를 누르면 18홀 스코어카드가 펼쳐집니다 · 🎬 스윙 영상 · 📷 단체사진이 있는 라운드는 펼친 상세에서 스코어카드와 함께 볼 수 있어요 · 📅 예정 라운드는 맨 위에서 18홀 야디지북으로 열립니다</p>
         </div>
-        <div class="table-tools">
+      </div>
+      <div class="rounds-tools">
+        <div class="search-wrap">
           <input id="search" type="search" placeholder="골프장 · 연도 검색" aria-label="라운드 검색">
-          <span class="count-chip" id="tableCount"></span>
         </div>
+        <div class="sort-bar" id="sortBar" role="group" aria-label="정렬 기준">
+          <span class="sort-label">정렬</span>
+          <button class="sort-btn active" type="button" data-sort="date" aria-pressed="true">날짜<span class="caret">↓</span></button>
+          <button class="sort-btn" type="button" data-sort="club" aria-pressed="false">골프장<span class="caret"></span></button>
+          <button class="sort-btn" type="button" data-sort="total" aria-pressed="false">타수<span class="caret"></span></button>
+          <button class="sort-btn" type="button" data-sort="toPar" aria-pressed="false">파 대비<span class="caret"></span></button>
+        </div>
+        <span class="count-chip" id="tableCount"></span>
       </div>
-      <div class="table-scroll">
-        <table class="rounds" id="roundsTable">
-          <thead>
-            <tr>
-              <th data-sort="date" class="sorted">날짜<span class="caret">↓</span></th>
-              <th data-sort="club">골프장<span class="caret"></span></th>
-              <th>코스</th>
-              <th data-sort="total">타수<span class="caret"></span></th>
-              <th data-sort="toPar">파 대비<span class="caret"></span></th>
-              <th>전반</th>
-              <th>후반</th>
-              <th class="center">노 더블 파</th>
-            </tr>
-          </thead>
-          <tbody id="roundsBody"></tbody>
-        </table>
-      </div>
+      <div class="rounds-list" id="roundsList"></div>
     </section>
   </main>
 
@@ -206,6 +199,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="app.js?v=20261123q"></script>
+<script src="app.js?v=20261123r"></script>
 </body>
 </html>
