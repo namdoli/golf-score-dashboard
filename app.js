@@ -126,7 +126,7 @@
   function hydrateHeader() {
     const m = DATA.meta;
     $('#heroSub').textContent =
-      `${dateKo(m.period.from)} – ${dateKo(m.period.to)} · ${m.counts.rounds}라운드 ${m.counts.holes.toLocaleString()}홀`;
+      `${dateKo(m.period.from)} – ${dateKo(m.period.to)} · ${m.counts.rounds}라운드`;
     $('#heroBadges').innerHTML = [
       `<span class="hbadge">핸디캡 <b>${m.handicap.index}</b></span>`,
       `<span class="hbadge">베스트 <b>${m.best}타</b></span>`,
@@ -354,7 +354,6 @@
     const scores = rated.map(r => r.total);
     const uniq = new Set(rounds.filter(r => r.club !== NO_PLACE).map(r => r.club)).size;
     const totalCourses = COURSES.length;
-    const holes = rated.reduce((a, r) => a + (r.holes ? r.holes.length : 0), 0);
     const bestRound = rated.slice().sort((a, b) => a.total - b.total)[0];
     const m = DATA.meta;
     const avg = scores.length ? mean(scores) : 0;
@@ -362,7 +361,7 @@
     const cards = [
       {
         label: '총 라운드', icon: '🏌️', value: rounds.length, unit: '회',
-        foot: `스코어 <b>${rated.length}</b>건 · ${holes.toLocaleString()}홀${pending ? ` · 미입력 <b>${pending}</b>건` : ''}`
+        foot: `스코어 <b>${rated.length}</b>건${pending ? ` · 미입력 <b>${pending}</b>건` : ''}`
       },
       {
         label: '방문 골프장', icon: '📍', value: uniq, unit: '곳',
