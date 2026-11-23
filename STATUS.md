@@ -1,31 +1,22 @@
-# 골프 대시보드 — 배포 대기 상태
+# 골프 대시보드 — 배포 완료
 
-**작성:** 2026-11-23 13:45 (KST)
+**최종 업데이트:** 2026-11-23 13:42 (KST)
 
-## 현재 상태
-- 대시보드 제작·데이터 검증 완료: `golf/dashboard/`
-- 로컬 git 저장소 초기화 및 커밋 완료 (`main`, 커밋 `904e44b`)
-- 원격 `origin` = `https://github.com/namdoli/golf-score-dashboard.git` (아직 저장소 없음)
-- **막힌 지점:** Pickle GitHub App에 저장소 생성 권한(Administration)이 없어 `gh repo create`/`POST user/repos`가 403.
-  사용자가 실수로 생성 완료 버튼을 눌렀고, 실제로는 저장소가 만들어지지 않음(2026-11-23 13:45 확인: `public_repos: 0`, API 404).
+- 저장소: https://github.com/namdoli/golf-score-dashboard (public, `main`)
+- 라이브: https://namdoli.github.io/golf-score-dashboard/ (GitHub Pages, `main` / `/ (root)`, 상태 `built`)
+- 최종 커밋: `532d147` — 스코어카드 폭 정리
 
-## 남은 작업 (저장소가 생기면 즉시)
-```bash
-cd golf/dashboard
-git push -u origin main
-gh api -X POST repos/namdoli/golf-score-dashboard/pages \
-  -f "source[branch]=main" -f "source[path]=/"
-gh api repos/namdoli/golf-score-dashboard/pages --jq '.status,.html_url'   # built 확인
-```
-그다음 `https://namdoli.github.io/golf-score-dashboard/` 를 브라우저로 열어 콘솔 오류·차트·지도·스코어카드 렌더링을 확인하고 데스크톱/모바일 스크린샷을 남긴다.
+## 배포 과정에서 있었던 일
+1. Pickle GitHub App에 저장소 생성 권한이 없어 `gh repo create`가 403 → 사용자가 `namdoli/golf-score-dashboard` public 저장소를 직접 생성.
+2. Pages API도 403(앱에 Pages 권한 없음) → 사용자가 Settings > Pages에서 `main` / `(root)` 저장 후 빌드 완료.
+3. 이후 코드 수정은 `git push origin main` 만으로 자동 반영(GitHub Pages legacy 빌드).
 
-Pages 활성화가 403이면 코드는 푸시된 상태이므로 사용자가
-`https://github.com/namdoli/golf-score-dashboard/settings/pages` 에서 Branch `main` / `/ (root)` 만 선택하면 된다.
+## 검증 기록 (2026-11-23 13:39–13:41, 라이브 URL 기준)
+- Chart.js 차트 6개(trend/year/par/dist/half/goal) 모두 인스턴스 생성
+- Leaflet 1.9.4, 마커 42개, 타일 15/15 로드, 팝업(골프장명·지역·방문횟수·평균/베스트·최근방문·라운드목록) 정상
+- 연도 필터 클릭 → 35라운드/21곳/92.6타로 전 섹션 갱신
+- 66라운드 표, 검색·정렬, 행 클릭 시 18홀 스코어카드(전반 40/후반 41) 펼침 확인
+- 실패 리소스: 없음(favicon 추가로 404 해소)
 
-## 사용자가 할 일
-1. https://github.com/new → Repository name `golf-score-dashboard`, **Public**, README/라이선스 없이 생성
-2. Pickle의 GitHub 저장소 접근에 이 저장소가 포함되는지 확인
-(또는 https://github.com/apps/pickle/installations/new 에서 Administration·Pages 쓰기 권한 승인)
-
-## 데이터 요약
-66라운드 · 1,188홀 · 42개 골프장(전부 실좌표 지오코딩) · 평균 95.1타 · 베스트 81타 · 핸디캡 17.7
+## 데이터
+66라운드 · 1,188홀 · 42개 골프장(전부 카카오맵 실좌표) · 평균 95.1타 · 베스트 81타 · 핸디캡 17.7
