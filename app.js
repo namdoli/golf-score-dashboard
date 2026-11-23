@@ -1189,7 +1189,7 @@
       <div class="yrd-main">
         <div class="yrd-stage">
           <div class="yrd-frame" style="aspect-ratio:${W} / ${H}">
-            <img class="yrd-img" src="${esc(hole.images.layout)}" alt="${esc(course.label)} ${hole.courseNo}번 홀(${hole.no}번) 레이아웃" loading="lazy">
+            <img class="yrd-img" src="${esc(hole.images.layout)}" alt="${hole.no === hole.courseNo ? `${hole.no}번 홀` : `${hole.no}번 홀(${esc(course.code)} ${hole.courseNo}번)`} 레이아웃" loading="lazy">
             ${yrdTrajectory(hole)}
             ${yrdPins(hole)}
             <span class="yrd-stagetag">${hole.no}번 홀${hole.courseNo !== hole.no ? ` <i>${esc(course.code)} ${hole.courseNo}번</i>` : ''} · 파${hole.par}</span>

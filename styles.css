@@ -506,6 +506,7 @@ tr.row.upcoming td{border-bottom-color:#d5f5ec}
 .yrd-dist{width:100%;border-collapse:separate;border-spacing:0;font-size:12px;background:#fff;border:1px solid var(--slate-200);border-radius:12px;overflow:hidden;table-layout:fixed}
 .yrd-dist th{text-align:left;font-weight:700;color:var(--slate-500);padding:6px 11px;font-size:11.5px;border-bottom:1px solid var(--slate-100)}
 .yrd-dist th em{font-style:normal;font-size:9px;font-weight:800;color:#0f766e;background:#ccfbf1;border-radius:5px;padding:1px 5px;margin-left:4px;vertical-align:1px}
+.yrd-dist thead th:last-child{text-align:right}
 .yrd-dist td{text-align:right;font-weight:800;color:var(--slate-700);padding:6px 11px;border-bottom:1px solid var(--slate-100);font-variant-numeric:tabular-nums}
 .yrd-dist td small{font-size:9.5px;font-weight:600;color:var(--slate-400);margin-left:2px}
 .yrd-dist tr:last-child th,.yrd-dist tr:last-child td{border-bottom:none}
