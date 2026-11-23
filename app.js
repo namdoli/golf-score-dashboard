@@ -347,66 +347,50 @@
   }
 
   /* ---------- TREND ---------- */
-  function movingAvg(arr, w) {
-    return arr.map((_, i) => {
-      const s = arr.slice(Math.max(0, i - w + 1), i + 1);
-      return mean(s);
-    });
-  }
-
   function renderTrend(rounds) {
     const all = scored(ROUNDS);
     const scores = all.map(r => r.total);
-    const ma5 = movingAvg(scores, 5);
-    const ma10 = movingAvg(scores, 10);
-    const bandMax = scores.map((_, i) => Math.max(...scores.slice(Math.max(0, i - 4), i + 1)));
-    const bandMin = scores.map((_, i) => Math.min(...scores.slice(Math.max(0, i - 4), i + 1)));
 
     const idx = all.map((r, i) => ({ r, i })).filter(({ r }) => state.year === 'all' || r.year === Number(state.year));
     const labels = idx.map(({ r }) => `${r.date.slice(5)} ${r.clubShort}`);
     const pick = f => idx.map(({ i }) => f(i));
 
+    // 선형 추세선 (라운드당 타수 변화) — 이동평균 없이 성장 흐름만
+    let fit = null;
+    if (scores.length > 1) {
+      const xs = scores.map((_, i) => i);
+      const mx = mean(xs), my = mean(scores);
+      let num = 0, den = 0;
+      xs.forEach((x, i) => { num += (x - mx) * (scores[i] - my); den += (x - mx) * (x - mx); });
+      const slope = den ? num / den : 0;
+      fit = { slope, intercept: my - slope * mx };
+    }
+
     const ds = [
       {
-        label: '5라운드 밴드(최저)', data: pick(i => bandMin[i]),
-        borderColor: 'rgba(16,185,129,0)', backgroundColor: 'rgba(16,185,129,.12)',
-        pointRadius: 0, borderWidth: 0, fill: false, tension: 0
-      },
-      {
-        label: '5라운드 밴드(최고)', data: pick(i => bandMax[i]),
-        borderColor: 'rgba(16,185,129,0)', backgroundColor: 'rgba(16,185,129,.12)',
-        pointRadius: 0, borderWidth: 0, fill: '-1', tension: 0
-      },
-      {
-        label: '라운드 타수', data: pick(i => scores[i]),
-        borderColor: 'rgba(148,163,184,.85)', backgroundColor: 'rgba(148,163,184,.85)',
-        borderWidth: 1.6, pointRadius: 2.6, pointHoverRadius: 4, tension: .25
-      },
-      {
-        label: '5라운드 이동평균', data: pick(i => ma5[i]),
+        label: '라운드 스코어', data: pick(i => scores[i]),
         borderColor: COLORS.emerald, backgroundColor: COLORS.emerald,
-        borderWidth: 2.8, pointRadius: 0, pointHoverRadius: 4, tension: .35, fill: false
-      },
-      {
-        label: '10라운드 이동평균', data: pick(i => ma10[i]),
-        borderColor: COLORS.sky, backgroundColor: COLORS.sky,
-        borderWidth: 2.4, borderDash: [6, 4], pointRadius: 0, pointHoverRadius: 4, tension: .35, fill: false
+        borderWidth: 1.8, pointRadius: 2.8, pointHoverRadius: 5, tension: .28
       }
     ];
+    if (fit) {
+      ds.push({
+        label: '성장 추세선', data: pick(i => fit.intercept + fit.slope * i),
+        borderColor: COLORS.amber, backgroundColor: COLORS.amber,
+        borderWidth: 2.2, borderDash: [7, 5], pointRadius: 0, pointHoverRadius: 0, tension: 0, fill: false
+      });
+    }
 
     drawChart('trendChart', {
       type: 'line',
       data: { labels, datasets: ds },
       options: baseOptions({
         plugins: {
-          legend: { position: 'top', align: 'end', labels: { boxWidth: 12, boxHeight: 2, usePointStyle: false, font: { size: 11 }, filter: it => !it.text.includes('밴드') } },
+          legend: { position: 'top', align: 'end', labels: { boxWidth: 14, boxHeight: 2, font: { size: 11 } } },
           tooltip: {
             callbacks: {
               title: items => items.length ? idx[items[0].dataIndex].r.clubShort + ' · ' + dateKo(idx[items[0].dataIndex].r.date) : '',
-              label: c => {
-                if (c.dataset.label.includes('밴드')) return null;
-                return `${c.dataset.label}: ${fmt1(c.parsed.y)}타`;
-              }
+              label: c => `${c.dataset.label}: ${fmt1(c.parsed.y)}타`
             }
           }
         },
@@ -456,16 +440,18 @@
       })
     });
 
-    // insights
+    // insights — 성장 추이 중심
     const firstY = years[0], lastY = years[years.length - 1];
     const imp = avgByYear[0] - avgByYear[avgByYear.length - 1];
-    const recent = scores.slice(-10), prev = scores.slice(-20, -10);
-    const delta = prev.length ? mean(prev) - mean(recent) : 0;
+    const recent5 = scores.slice(-5);
+    const recent5Best = recent5.length ? Math.min(...recent5) : null;
+    const recent5Avg = recent5.length ? mean(recent5) : null;
+    const slopeTxt = fit ? `${fit.slope < 0 ? '라운드당 평균 ' + fmt1(Math.abs(fit.slope)) + '타씩 좋아지는' : '라운드당 평균 ' + fmt1(Math.abs(fit.slope)) + '타씩 높아지는'} 흐름` : '';
     const bestR = scored(ROUNDS).slice().sort((a, b) => a.total - b.total)[0];
     const insights = [
       `<div class="insight"><span class="ic">🎯</span><span>${lastY}년 평균은 <b>${fmt1(avgByYear[avgByYear.length - 1])}타</b>, ${firstY}년(${fmt1(avgByYear[0])}타)보다 <b>${fmt1(Math.abs(imp))}타 ${imp >= 0 ? '좋아졌어요' : '높아졌어요'}</b>.</span></div>`,
-      `<div class="insight"><span class="ic">📈</span><span>최근 10라운드 평균 <b>${fmt1(mean(recent))}타</b> — 그 이전 10라운드보다 <b>${fmt1(Math.abs(delta))}타 ${delta >= 0 ? '개선' : '상승'}</b>.</span></div>`,
-      `<div class="insight"><span class="ic">🏆</span><span>베스트 라운드는 <b>${bestR.total}타</b> · ${bestR.clubShort} (${dateKo(bestR.date)}).</span></div>`
+      recent5.length ? `<div class="insight"><span class="ic">📈</span><span>최근 5라운드 평균 <b>${fmt1(recent5Avg)}타</b> · 최고 <b>${recent5Best}타</b>${slopeTxt ? ` — 전체적으로 ${slopeTxt}예요` : ''}.</span></div>` : '',
+      bestR ? `<div class="insight"><span class="ic">🏆</span><span>베스트 라운드는 <b>${bestR.total}타</b> · ${bestR.clubShort} (${dateKo(bestR.date)}).</span></div>` : ''
     ];
     $('#trendInsights').innerHTML = insights.join('');
   }
