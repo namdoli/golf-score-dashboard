@@ -1098,6 +1098,7 @@
         state.yrd.doc = doc;
         state.yrd.path = path;
         state.yrd.loading = false;
+        if (/[?&]yrdemo=1/.test(location.search)) yrdDemo(doc);
         renderYardage();
       })
       .catch(err => {
@@ -1153,6 +1154,25 @@
         <span class="yrd-dot">${p.n}</span>${label ? `<span class="yrd-tag ${side}">${esc(label)}</span>` : ''}
       </div>`;
     }).join('');
+  }
+
+  // [임시 검증용] ?yrdemo=1 일 때만 샷 예시를 채워 오버레이를 확인한다. 검증 후 제거.
+  function yrdDemo(doc) {
+    const h1 = doc.courses[0].holes[0];
+    if (!h1.shots || !h1.shots.length) {
+      h1.shots = [
+        { order: 1, label: '티샷', club: '드라이버', lie: '페어웨이 우측 150m 말붕 근처', x: 47, y: 63 },
+        { order: 2, label: '세컨', club: '7아이언', lie: '그린 앞 우측 러프', x: 74, y: 28 },
+        { order: 3, label: '서드', club: '웨지', lie: '그린 온 (핀 우측 4m)', x: 82, y: 13 }
+      ];
+      h1.putts = 2;
+      h1.score = 5;
+      h1.note = '테스트 데이터 — 2단 그린 상단 핀';
+    }
+    const h12 = doc.courses[1].holes[2];
+    h12.shots = [{ order: 1, label: '티샷', club: '6아이언', lie: '그린 중앙 온', x: 54, y: 40 }];
+    h12.putts = 2;
+    h12.score = 3;
   }
 
   function renderYardage() {
