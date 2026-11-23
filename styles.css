@@ -89,11 +89,11 @@ p{margin:0}
 .kpi .label{display:flex;align-items:center;gap:7px;font-size:12.8px;font-weight:700;color:var(--slate-500);letter-spacing:.01em;word-break:keep-all}
 .kpi .label .lico{font-size:14px;line-height:1;filter:saturate(.95)}
 .kpi .value{
-  font-size:clamp(30px,3.4vw,38px);font-weight:900;color:var(--slate-900);letter-spacing:-.045em;
+  font-size:clamp(32px,3.4vw,40px);font-weight:900;color:var(--slate-900);letter-spacing:-.045em;
   margin-top:11px;line-height:1.04;font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1;
 }
 .kpi .value small{font-size:15px;font-weight:600;color:var(--slate-400);margin-left:4px;letter-spacing:0;font-variant-numeric:normal}
-.kpi .foot{font-size:12.2px;color:var(--slate-400);margin-top:10px;line-height:1.55;word-break:keep-all}
+.kpi .foot{font-size:12.2px;color:var(--slate-400);margin-top:10px;line-height:1.55;word-break:keep-all;text-wrap:balance}
 .kpi .foot b{color:var(--emerald-700);font-weight:700}
 
 /* CARDS */
@@ -418,6 +418,7 @@ body.modal-open{overflow:hidden}
   .hero-badges{justify-content:flex-start}
   .kpi-grid{grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:18px}
   .kpi{padding:18px 16px 16px;border-radius:15px}
+  .kpi:last-child{grid-column:1 / -1}
   .kpi .value{font-size:30px;margin-top:9px}
   .kpi .value small{font-size:13.5px}
   .kpi .foot{font-size:11.8px;margin-top:8px}
@@ -439,15 +440,16 @@ body.modal-open{overflow:hidden}
   .sort-btn{padding:7px 9px;font-size:12px}
   .count-chip{margin-left:0}
   .rounds-list{gap:8px}
-  .round-card{grid-template-columns:auto minmax(0,1fr) 26px;gap:8px 10px;padding:12px 13px;border-radius:14px}
-  .rc-date{grid-column:1;grid-row:1;min-width:58px;padding:6px 8px;border-radius:10px}
+  .round-card{grid-template-columns:auto minmax(0,1fr) auto;gap:8px 10px;padding:12px 13px;border-radius:14px;align-items:center}
+  .rc-date{grid-column:1;grid-row:1 / span 2;align-self:start;min-width:58px;padding:6px 8px;border-radius:10px}
   .rc-date b{font-size:14px}
   .rc-date i{font-size:10px}
-  .rc-score{grid-column:2;grid-row:1;justify-self:end;flex-direction:row;align-items:baseline;gap:7px;min-width:0}
-  .rc-total{font-size:26px}
+  .rc-body{grid-column:2;grid-row:1 / span 2}
+  .rc-score{grid-column:3;grid-row:1;justify-self:end;align-items:flex-end;min-width:0}
+  .rc-total{font-size:27px}
   .rc-total small{font-size:12px}
-  .rc-chev{grid-column:3;grid-row:1;width:26px;height:26px;font-size:13px}
-  .rc-body{grid-column:1 / -1;grid-row:2}
+  .rc-par{display:none}
+  .rc-chev{grid-column:3;grid-row:2;justify-self:end;width:24px;height:24px;font-size:12px}
   .rc-club{font-size:15.5px;line-height:1.35}
   .rc-chips{margin-top:7px}
   .round-detail .scorecard{padding:15px 12px 16px}
