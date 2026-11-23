@@ -1,10 +1,10 @@
 # 골프 대시보드 — 배포 완료
 
-**최종 업데이트:** 2026-11-23 16:40 (KST)
+**최종 업데이트:** 2026-11-23 22:35 (KST)
 
 - 저장소: https://github.com/namdoli/golf-score-dashboard (public, `main`)
 - 라이브: https://namdoli.github.io/golf-score-dashboard/ (GitHub Pages, `main` / `/ (root)`, 상태 `built`)
-- 최종 커밋: `aad2184` — 젠스필드·힐데스하임 스윙 영상 3개 + 다중 영상 지원 + 본명 제거 (캐시 버스팅 `?v=20261123z`)
+- 최종 커밋: `45236a5` — 클럽72CC 오션코스(6/2)·루쓰쓰 리조트 Wood(8/12) 스윙 영상 2개 추가 (캐시 버스팅 `?v=20261123ai`)
 
 ## 배포 과정에서 있었던 일
 1. Pickle GitHub App에 저장소 생성 권한이 없어 `gh repo create`가 403 → 사용자가 `namdoli/golf-score-dashboard` public 저장소를 직접 생성.
@@ -148,3 +148,10 @@
 - **연도 필터 연동**: 선택 연도 막대만 진하게(`.42` 채움·`#fb923c` 테두리), 나머지는 `.15`/55% 알파.
 - **라이브 검증(18:11–18:14, 실제 URL)**: `app.js?v=20261123ah` 200, 차트 6개 모두 생성, 4xx/5xx·실패 리소스 0. 데이터 2023 1회/105.0타 · 2024 12회/102.3타 · 2025 18회/94.6타 · 2026 35회/92.6타가 막대·선에 정확히 매핑, 툴팁 문구 확인. `2026` 필터 시 2026 막대만 강조되고 KPI `49회 · 92.6타 · 핸디캡 ≈15.5` 정상 갱신, `전체` 복귀 시 원상복구.
 - 스크린샷: `golf/preview_yearchart_swapped.png`(차트), `golf/preview_yearchart_tooltip.png`(툴팁)
+
+## 스윙 영상 추가 — 클럽72CC 오션코스(6/2, 81타)·루쓰쓰 리조트 Wood(8/12) (2026-11-23 22:30–22:35, `?v=20261123ah`→`ai`)
+- **추가**: 6/2 클럽72CC 오션코스(`c7d56f8c…`, 81타, 베스트 스코어) 영상 1개(`club72_20260602.mp4`, 8.03초, 1.0MB) · 8/12 루쓰쓰 리조트 Wood Course(`9afca1db…`, 스코어 미입력·캘린더 라운드) 영상 1개(`rusutsu_20260812.mp4`, 10.9초, 2.6MB).
+- **인코딩**: 둘 다 원본 TalkV mp4(bt709) → 720×1280 H.264 High/level 4.0/CRF 26/preset slow/30fps/`+faststart`/AAC 64k 모노. 루쓰쓰 원본은 1280×720 가로 저장 + 회전 메타데이터(-90°)라 ffmpeg autorotate로 세로 정규화. 포스터는 각 영상 프레임 추출(720×1280 q3, 73KB/107KB) — 클럽72는 다운스윙(5.5초), 루쓰쓰는 팔로스루(9.6초).
+- **데이터**: `data/videos.json` 14건(이번 2건 추가), `scores.json` 해당 라운드에 `swingVideos`+`swingVideo`, `meta.swingVideos` 14. README 영상 표에 두 줄 추가. 캐시 `?v=20261123ai`.
+- **라이브 검증(22:33–22:34, 실제 URL)**: `app.js?v=20261123ai` 200, `data/videos.json`에 두 항목 반영. 카드 배지 — 6/2 `🎬 스윙 영상`, 8/12 `🎬 스윙 영상`(스코어 미입력 안내 카드와 함께 표시). 펼친 상세 인라인 플레이어 `readyState 4`·720×1280·duration 8.03/10.9·error 없음, 모달 자동재생(클럽72는 0:08/0:08까지, 루쓰쓰는 중간 프레임 확인) `readyState 4`·`videoWidth 720`. 영상 14개·포스터 14개·데이터 3개 모두 라이브 200(로컬 용량 일치), 4xx/5xx 0건.
+- 스크린샷: `browser/club72_video_modal-2026-11-23-223353.png`, `browser/rusutsu_video_modal-2026-11-23-223422.png`
