@@ -8,7 +8,7 @@
     slateLight: '#94a3b8', ink: '#0f172a'
   };
 
-  const state = { year: 'all', search: '', sortKey: 'date', sortDir: 'desc', openId: null };
+  const state = { year: 'all', search: '', sortKey: 'date', sortDir: 'desc', openId: null, photo: null };
   let DATA = null, ROUNDS = [], COURSES = [], map = null, markers = [];
   const charts = {};
 
@@ -187,7 +187,69 @@
     vid.removeAttribute('src');
     vid.load();
     modal.hidden = true;
-    document.body.classList.remove('modal-open');
+    if ($('#photoModal').hidden) document.body.classList.remove('modal-open');
+  }
+
+  /* ---------- ROUND PHOTOS ---------- */
+  function roundPhotos(r) {
+    return r && Array.isArray(r.photos) ? r.photos.filter(Boolean) : [];
+  }
+
+  function photoMeta(r) {
+    return `${dateKo(r.date)}${r.teeTime ? ' ' + r.teeTime + ' 티오프' : ''} · ${hasScore(r)
+      ? `${r.total}타 (파 ${r.par}, ${fmtSign(r.toPar)})`
+      : '스코어 미입력'}`;
+  }
+
+  function renderPhotoModal() {
+    const p = state.photo;
+    if (!p) return;
+    const r = ROUNDS.find(x => x.id === p.roundId);
+    if (!r) return;
+    const list = roundPhotos(r);
+    if (!list.length) return;
+    const idx = Math.max(0, Math.min(p.idx, list.length - 1));
+    p.idx = idx;
+    const img = $('#pmImg');
+    img.src = list[idx];
+    img.alt = `${r.clubShort} 라운드 사진 ${idx + 1}`;
+    $('#pmTitle').textContent = `${r.clubShort} · 라운드 사진`;
+    $('#pmSub').textContent = photoMeta(r);
+    const course = courseLabel(r);
+    $('#pmFoot').innerHTML = `<span>${idx + 1} / ${list.length}장${course !== '코스 정보 없음' ? ' · ' + course : ''}</span>` +
+      `<a href="${list[idx]}" target="_blank" rel="noopener">원본 열기 ↗</a>`;
+    const multi = list.length > 1;
+    $('#pmPrev').hidden = !multi;
+    $('#pmNext').hidden = !multi;
+  }
+
+  function openPhoto(roundId, idx) {
+    const r = ROUNDS.find(x => x.id === roundId);
+    if (!r || !roundPhotos(r).length) return;
+    state.photo = { roundId, idx: Number(idx) || 0 };
+    renderPhotoModal();
+    $('#photoModal').hidden = false;
+    document.body.classList.add('modal-open');
+    $('#pmClose').focus();
+  }
+
+  function stepPhoto(delta) {
+    if (!state.photo) return;
+    const r = ROUNDS.find(x => x.id === state.photo.roundId);
+    const n = roundPhotos(r).length;
+    if (n < 2) return;
+    state.photo.idx = (state.photo.idx + delta + n) % n;
+    renderPhotoModal();
+  }
+
+  function closePhoto() {
+    const modal = $('#photoModal');
+    if (!modal || modal.hidden) return;
+    const img = $('#pmImg');
+    img.removeAttribute('src');
+    modal.hidden = true;
+    state.photo = null;
+    if ($('#videoModal').hidden) document.body.classList.remove('modal-open');
   }
 
   /* ---------- KPI ---------- */
@@ -806,9 +868,11 @@
       const main = `
         <tr class="row ${open ? 'open' : ''}" data-id="${r.id}">
           <td style="white-space:nowrap;color:var(--slate-500)">${dateKo(r.date)}</td>
-          <td><div class="cell-club">${r.clubShort}</div>${r.swingVideo
+          <td><div class="cell-club">${r.clubShort}</div>${(r.swingVideo || roundPhotos(r).length) ? `<div class="media-chips">${r.swingVideo
             ? `<button class="swing-chip" type="button" data-vid="${r.id}" title="스윙 영상 바로 재생"><span class="ic">🎬</span>스윙 영상</button>`
-            : ''}<div class="cell-courses">${r.region}</div></td>
+            : ''}${roundPhotos(r).length
+            ? `<button class="photo-chip" type="button" data-photo="${r.id}" data-idx="0" title="라운드 사진 크게 보기"><span class="ic">📷</span>사진</button>`
+            : ''}</div>` : ''}<div class="cell-courses">${r.region}</div></td>
           <td style="color:var(--slate-500);font-size:12px">${(r.courses && r.courses.length) ? courseLabel(r) : '–'}</td>
           <td>${hasScore(r)
             ? `<span class="score-badge ${scoreClass(r.total)}">${r.total}</span>`
@@ -857,11 +921,9 @@
             <div class="sc-nine">${head}${pars}${scores}</div>`;
   }
 
-  function scorecardHtml(r) {
-    const holes = r.holes || [];
-    const front = holes.slice(0, 9);
-    const back = holes.slice(9, 18);
-    const videoBlock = r.swingVideo ? `<div class="sc-video">
+  function videoBlockHtml(r) {
+    if (!r.swingVideo) return '';
+    return `<div class="sc-video">
         <div class="scv-head">
           <span class="scv-label">🎬 스윙 영상</span>
           <span class="scv-sub">${r.swingVideo.title} · ${fmtDur(r.swingVideo.durationSec)} · ${r.swingVideo.note}</span>
@@ -873,7 +935,41 @@
             <button class="scv-play" type="button" aria-label="${r.swingVideo.title} 재생">▶</button>
           </div>
         </div>
-      </div>` : '';
+      </div>`;
+  }
+
+  function photoBlockHtml(r) {
+    const photos = roundPhotos(r);
+    if (!photos.length) return '';
+    const thumbs = photos.length > 1 ? `<div class="scp-thumbs">${photos.map((p, i) =>
+      `<button class="scp-thumb-btn" type="button" data-photo="${r.id}" data-idx="${i}" aria-label="사진 ${i + 1} 크게 보기"><img src="${p}" alt="" loading="lazy"></button>`
+    ).join('')}</div>` : '';
+    return `<div class="sc-photo">
+        <div class="scv-head">
+          <span class="scv-label">📷 라운드 사진</span>
+          <span class="scv-sub">${photos.length > 1 ? photos.length + '장 · ' : ''}눌러서 크게 보기</span>
+          <button class="scv-open" type="button" data-photo="${r.id}" data-idx="0">크게 보기 ⤢</button>
+        </div>
+        <div class="scp-frame">
+          <button class="scp-img-btn" type="button" data-photo="${r.id}" data-idx="0" aria-label="${r.clubShort} 라운드 사진 크게 보기">
+            <img src="${photos[0]}" alt="${r.clubShort} 라운드 사진" loading="lazy">
+          </button>
+        </div>
+        ${thumbs}
+      </div>`;
+  }
+
+  function mediaBlockHtml(r) {
+    const blocks = [videoBlockHtml(r), photoBlockHtml(r)].filter(Boolean);
+    if (!blocks.length) return '';
+    return `<div class="sc-media ${blocks.length > 1 ? 'two' : 'one'}">${blocks.join('')}</div>`;
+  }
+
+  function scorecardHtml(r) {
+    const holes = r.holes || [];
+    const front = holes.slice(0, 9);
+    const back = holes.slice(9, 18);
+    const videoBlock = mediaBlockHtml(r);
 
     const head = `<div class="sc-head">
         <div>
@@ -942,13 +1038,31 @@
       }, 130);
     });
 
-    // 영상 버튼은 행 펼치기보다 먼저 처리 (capture)
+    // 영상·사진 버튼은 행 펼치기보다 먼저 처리 (capture)
     document.addEventListener('click', e => {
       const trigger = e.target.closest && e.target.closest('[data-vid]');
       if (trigger) {
         e.preventDefault();
         e.stopPropagation();
         openVideo(trigger.dataset.vid);
+        return;
+      }
+      const photoTrigger = e.target.closest && e.target.closest('[data-photo]');
+      if (photoTrigger) {
+        e.preventDefault();
+        e.stopPropagation();
+        openPhoto(photoTrigger.dataset.photo, Number(photoTrigger.dataset.idx || 0));
+        return;
+      }
+      const pmNav = e.target.closest && e.target.closest('[data-pmnav]');
+      if (pmNav) {
+        e.preventDefault();
+        e.stopPropagation();
+        stepPhoto(Number(pmNav.dataset.pmnav));
+        return;
+      }
+      if (e.target.closest && e.target.closest('#pmClose, [data-photo-close]')) {
+        closePhoto();
         return;
       }
       if (e.target.closest && e.target.closest('#vmClose, [data-close]')) {
@@ -968,7 +1082,11 @@
     }, true);
 
     document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeVideo();
+      if (e.key === 'Escape') { closePhoto(); closeVideo(); }
+      if (state.photo && $('#photoModal') && !$('#photoModal').hidden) {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); stepPhoto(-1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); stepPhoto(1); }
+      }
     });
 
     $$('#roundsTable th[data-sort]').forEach(th => {

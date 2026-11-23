@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2026-11-23T14:40:00+09:00",
+  "note": "라운드에 연결된 사진 목록. make_data.py가 이 파일을 읽어 scores.json의 해당 라운드에 photos 배열을 붙입니다.",
+  "photos": [
+    {
+      "roundId": "e9e746d5-52d1-5c9c-8444-f0e960667af5",
+      "date": "2026-07-31",
+      "club": "서원밸리CC",
+      "files": [
+        "photos/seowon_valley_20260731.jpg"
+      ],
+      "title": "단체사진",
+      "note": "서원밸리CC 라운드 · 티샷 전 단체사진",
+      "width": 1200,
+      "height": 1600,
+      "bytes": 300639,
+      "originalFile": "IMG_1979.jpg"
+    }
+  ]
+}
