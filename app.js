@@ -902,9 +902,10 @@
     list.innerHTML = up.map(u => upcomingCardHtml(u)).join('') + rows.map(roundCardHtml).join('');
 
     $$('#roundsList .round-card').forEach(card => {
-      card.addEventListener('click', () => toggleRound(card.dataset.id));
+      const id = card.closest('.round-item').dataset.id;
+      card.addEventListener('click', () => toggleRound(id));
       card.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleRound(card.dataset.id); }
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleRound(id); }
       });
     });
 
