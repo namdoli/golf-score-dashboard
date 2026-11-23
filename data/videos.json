@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T22:32:28+09:00",
+  "generatedAt": "2026-11-23T22:39:18+09:00",
   "note": "라운드에 연결된 스윙 영상 목록. 한 라운드에 여러 개를 두려면 같은 roundId로 항목을 여러 번 넣으면 됩니다(배열 순서 = 재생 순서). make_data.py가 이 파일을 읽어 scores.json의 해당 라운드에 swingVideos 배열(1개면 swingVideo도 함께)을 붙입니다.",
   "videos": [
     {
@@ -211,6 +211,36 @@
       "bytes": 2691648,
       "originalFile": "_talkv_...a78ed372.mp4 (TalkV)",
       "originalBytes": 4257546
+    },
+    {
+      "roundId": "8782c510-a0be-453d-8a53-0e8b8bc0044d",
+      "date": "2026-04-10",
+      "club": "라비에벨CC 듄스코스",
+      "src": "videos/lavieestbelle_dunes_20260410_1.mp4",
+      "poster": "videos/lavieestbelle_dunes_20260410_1.jpg",
+      "title": "티샷 스윙",
+      "note": "초록 상의 · 라비에벨 듄스코스 라운드 · 산 능선 배경 티샷(정면)",
+      "durationSec": 12.49,
+      "width": 720,
+      "height": 1280,
+      "bytes": 1330399,
+      "originalFile": "na4aX1EtzUM5…eec7.mov (채팅 첨부)",
+      "originalBytes": 3517242
+    },
+    {
+      "roundId": "8782c510-a0be-453d-8a53-0e8b8bc0044d",
+      "date": "2026-04-10",
+      "club": "라비에벨CC 듄스코스",
+      "src": "videos/lavieestbelle_dunes_20260410_2.mp4",
+      "poster": "videos/lavieestbelle_dunes_20260410_2.jpg",
+      "title": "티샷 스윙",
+      "note": "초록 상의 · 바위 언덕 아래 티샷(뒤에서)",
+      "durationSec": 16.3,
+      "width": 720,
+      "height": 1280,
+      "bytes": 3385139,
+      "originalFile": "MVATW4N1nTTQ…6b3.mp4 (채팅 첨부)",
+      "originalBytes": 4366886
     }
   ]
 }
