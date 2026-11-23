@@ -130,8 +130,7 @@
     $('#heroBadges').innerHTML = [
       `<span class="hbadge">핸디캡 <b>${m.handicap.index}</b></span>`,
       `<span class="hbadge">베스트 <b>${m.best}타</b></span>`,
-      `<span class="hbadge">평균 <b>${m.avg}타</b></span>`,
-      `<span class="hbadge">${m.counts.courses}개 골프장</span>`
+      `<span class="hbadge">평균 <b>${m.avg}타</b></span>`
     ].join('');
     const yc = {};
     ROUNDS.forEach(r => { yc[r.year] = (yc[r.year] || 0) + 1; });
