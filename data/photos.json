@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T17:48:03+09:00",
+  "generatedAt": "2026-11-23T17:53:59+09:00",
   "note": "라운드에 연결된 사진 목록. make_data.py가 이 파일을 읽어 scores.json의 해당 라운드에 photos 배열을 붙입니다.",
   "photos": [
     {
@@ -29,6 +29,20 @@
       "height": 1600,
       "bytes": 271496,
       "originalFile": "IMG_2201.jpg"
+    },
+    {
+      "roundId": "f3063e23-08c9-4209-8d22-6dcddd667525",
+      "date": "2026-07-19",
+      "club": "H1 CLUB",
+      "files": [
+        "photos/h1club_20260719.jpg"
+      ],
+      "title": "클럽하우스 셀피",
+      "note": "H1 CLUB 라운드 · 클럽하우스 거울 셀피 (분홍 상의)",
+      "width": 1200,
+      "height": 1600,
+      "bytes": 379781,
+      "originalFile": "IMG_1917.jpg"
     }
   ]
 }
