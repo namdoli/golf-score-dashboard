@@ -73,3 +73,12 @@
 - 캐시 버스팅 `?v=20261123m` · 커밋 `b553d7a`(사진) → `f689a92`(밴드/이동평균 복원) → `ec19ff9`(5R 이동평균 제거) → `cb6e9d6`(범례 표시)
 - **라이브 검증(14:44–14:47)**: 사진 200/image 300,939B(1200x1600), 영상 `readyState 4`·720x1280, 4xx/5xx 0건. 표 배지 → 모달, 상세 썸네일 → 모달, Esc 닫기 동작. 추세 차트 데이터셋 = 5R밴드(최저/최고)·라운드 스코어·10라운드 이동평균·성장 추세선(각 66점), 범례 3항목
 - 스크린샷: `golf/preview_seowon_photo.png`, `golf/preview_seowon_photo_modal.png`, `golf/preview_trend_restored.png`
+
+## 써닝포인트CC 18홀 야디지북 + 샷 오버레이 엔진 (2026-11-23 15:00–15:25, `?v=20261123q`)
+- **예정 라운드 분리**: 2026-11-27(금) 07:40 써닝포인트CC는 완료 통계(94라운드·56곳·평균 95.1타·1,188홀)에 넣지 않고 `data/upcoming.json`으로 분리. `scores.json`은 건드리지 않아 재생성해도 예정 라운드가 통계에 섞이지 않음. 표 맨 위에 `📅 11/27 예정 · 야디지북 준비됨` 배지 행 고정, 표 카운터는 `94라운드 + 예정 1`.
+- **데이터**: `data/yardage/sunningpoint.json` — SUN 1~9홀(Par 37, 9번 Par6 637m)·POINT 10~18홀(Par 36), 18홀 × (par·HDCP·Black/Blue/White/Yellow/Red m·홀 소개·공략·홀그림·그린맵·언듈레이션·이미지 크기). 출처: `course-sun.asp`·`course-point.asp`(홀 소개·공략·맵) + `course-info.asp`(공식 스코어카드 거리·Par·HDCP: SUN 1·7·6·5·3·2·9·4·8 / POINT 7·1·4·3·5·8·9·6·2).
+- **이미지**: `courses/sunningpoint/{sun,point}_NN.png`(홀 그림 558x513 계열), `_green.jpg`(그린맵 465x385), `_undul.jpg`(언듈레이션 665x385), `greenmap_caption.png` — 총 54장 + 범례, 전부 200 확인.
+- **UI**: 펼치면 SUN/POINT 탭 + 1~18홀 칩, 홀 그림 위 SVG 궤적 + 번호 핀(①→②→③, 티샷 점선·이후 실선, 마지막 핀 앰버) + 샷 라벨, 우측에 홀 요약·기록 배지(타수/퍼트/페어웨이)·티별 거리(White 기본 강조)·그린맵·언듈레이션·공략·샷 목록. 라운드 전이라 `shots: []`, 안내 문구 `라운드 중 톡으로 …` 노출.
+- **샷 스키마**: `shots:[{order,label,club,lie,x,y}]`(x·y는 홀 그림 백분율), `putts`, `score`, `note`, `fairway`. 채워지면 홀 그림 위에 자동 표시(테스트 렌더 확인: `golf/preview_yardage_overlay_test.png`).
+- **라이브 검증(15:18–15:22)**: KPI 94회/56곳/95.1타/81타/17.7 그대로, 표 94행 + 예정 1행, 야디지북 18홀 칩·탭 전환·이미지 54장 200(404 0), 데이터 `shots` 전부 빈 배열.
+- 스크린샷: `golf/preview_yardage_sunningpoint.png`
