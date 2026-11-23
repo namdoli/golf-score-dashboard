@@ -418,7 +418,6 @@
   function renderTrend(rounds) {
     const all = scored(ROUNDS);
     const scores = all.map(r => r.total);
-    const ma5 = movingAvg(scores, 5);
     const ma10 = movingAvg(scores, 10);
     const bandMax = scores.map((_, i) => Math.max(...scores.slice(Math.max(0, i - 4), i + 1)));
     const bandMin = scores.map((_, i) => Math.min(...scores.slice(Math.max(0, i - 4), i + 1)));
@@ -453,11 +452,6 @@
         label: '라운드 스코어', data: pick(i => scores[i]),
         borderColor: 'rgba(148,163,184,.85)', backgroundColor: 'rgba(148,163,184,.85)',
         borderWidth: 1.6, pointRadius: 2.6, pointHoverRadius: 4, tension: .25
-      },
-      {
-        label: '5라운드 이동평균', data: pick(i => ma5[i]),
-        borderColor: COLORS.emerald, backgroundColor: COLORS.emerald,
-        borderWidth: 2.8, pointRadius: 0, pointHoverRadius: 4, tension: .35, fill: false
       },
       {
         label: '10라운드 이동평균', data: pick(i => ma10[i]),
