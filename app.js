@@ -126,7 +126,7 @@
   function hydrateHeader() {
     const m = DATA.meta;
     $('#heroSub').textContent =
-      `${m.owner} · ${dateKo(m.period.from)} – ${dateKo(m.period.to)} · ${m.counts.rounds}라운드 ${m.counts.holes.toLocaleString()}홀`;
+      `${dateKo(m.period.from)} – ${dateKo(m.period.to)} · ${m.counts.rounds}라운드 ${m.counts.holes.toLocaleString()}홀`;
     $('#heroBadges').innerHTML = [
       `<span class="hbadge">핸디캡 <b>${m.handicap.index}</b></span>`,
       `<span class="hbadge">베스트 <b>${m.best}타</b></span>`,
