@@ -1,0 +1,380 @@
+[
+ {
+  "key": "베르힐 영종",
+  "name": "베르힐CC 영종",
+  "region": "인천 영종",
+  "address": "인천 영종구 한상중앙로 66",
+  "lat": 37.52595,
+  "lng": 126.56271,
+  "mapsUrl": "http://place.map.kakao.com/1080935210"
+ },
+ {
+  "key": "라비에벨CC 올드코스",
+  "name": "라비에벨CC 올드코스",
+  "region": "강원 춘천",
+  "address": "강원특별자치도 춘천시 동산면 종자리로 436",
+  "lat": 37.74134,
+  "lng": 127.75789,
+  "mapsUrl": "http://place.map.kakao.com/12108104"
+ },
+ {
+  "key": "라싸골프클럽",
+  "name": "라싸GC",
+  "region": "경기 포천",
+  "address": "경기 포천시 이동면 제비울2길 161",
+  "lat": 37.99376,
+  "lng": 127.38436,
+  "mapsUrl": "http://place.map.kakao.com/1016562664"
+ },
+ {
+  "key": "원더클럽 클럽72",
+  "name": "클럽72CC (원더클럽)",
+  "region": "인천 영종",
+  "address": "인천 영종구 공항동로 392",
+  "lat": 37.48347,
+  "lng": 126.46878,
+  "mapsUrl": "http://place.map.kakao.com/25070550"
+ },
+ {
+  "key": "라데나 골프클럽",
+  "name": "라데나GC",
+  "region": "강원 춘천",
+  "address": "강원특별자치도 춘천시 신동면 칠전동길 72",
+  "lat": 37.84124,
+  "lng": 127.71866,
+  "mapsUrl": "http://place.map.kakao.com/25070292"
+ },
+ {
+  "key": "라비에벨CC 듄스코스",
+  "name": "라비에벨CC 듄스코스",
+  "region": "강원 춘천",
+  "address": "강원특별자치도 춘천시 동산면 종자리로 436",
+  "lat": 37.74378,
+  "lng": 127.76669,
+  "mapsUrl": "http://place.map.kakao.com/27571941"
+ },
+ {
+  "key": "남춘천CC",
+  "name": "남춘천컨트리클럽",
+  "region": "강원 춘천",
+  "address": "강원특별자치도 춘천시 신동면 오봉길 156",
+  "lat": 37.78559,
+  "lng": 127.70096,
+  "mapsUrl": "https://place.map.kakao.com/11896780"
+ },
+ {
+  "key": "몽베르컨트리클럽",
+  "name": "몽베르컨트리클럽",
+  "region": "경기 포천",
+  "address": "경기 포천시 영북면 산정호수로 359-12",
+  "lat": 38.08433,
+  "lng": 127.31175,
+  "mapsUrl": "http://place.map.kakao.com/21308244"
+ },
+ {
+  "key": "세현 컨트리클럽",
+  "name": "세현CC",
+  "region": "경기 용인",
+  "address": "경기 용인시 처인구 이동읍 백자로 450",
+  "lat": 37.187,
+  "lng": 127.18831,
+  "mapsUrl": "http://place.map.kakao.com/679995474"
+ },
+ {
+  "key": "수원cc",
+  "name": "수원CC",
+  "region": "경기 용인",
+  "address": "경기 용인시 기흥구 중부대로 495",
+  "lat": 37.27888,
+  "lng": 127.12092,
+  "mapsUrl": "http://place.map.kakao.com/8456286"
+ },
+ {
+  "key": "이글몬트CC",
+  "name": "이글몬트CC",
+  "region": "경기 안성",
+  "address": "경기 안성시 보개면 보삼로 106",
+  "lat": 37.09168,
+  "lng": 127.3302,
+  "mapsUrl": "http://place.map.kakao.com/630629360"
+ },
+ {
+  "key": "인서울27골프클럽",
+  "name": "인서울27GC",
+  "region": "서울 강서",
+  "address": "서울 강서구 오정로 443-198",
+  "lat": 37.54672,
+  "lng": 126.79583,
+  "mapsUrl": "http://place.map.kakao.com/1323633110"
+ },
+ {
+  "key": "클럽72(바다)",
+  "name": "클럽72CC 오션코스",
+  "region": "인천 영종",
+  "address": "인천 영종구 공항동로 392",
+  "lat": 37.48344,
+  "lng": 126.46884,
+  "mapsUrl": "http://place.map.kakao.com/626488761"
+ },
+ {
+  "key": "88CC",
+  "name": "88CC",
+  "region": "경기 용인",
+  "address": "경기 용인시 기흥구 석성로521번길 169",
+  "lat": 37.30281,
+  "lng": 127.16679,
+  "mapsUrl": "https://place.map.kakao.com/10576496"
+ },
+ {
+  "key": "감곡CC",
+  "name": "감곡CC",
+  "region": "충북 음성",
+  "address": "충북 음성군 감곡면 오갑길 195",
+  "lat": 37.129,
+  "lng": 127.69893,
+  "mapsUrl": "http://place.map.kakao.com/1408711400"
+ },
+ {
+  "key": "고양컨트리클럽",
+  "name": "고양CC",
+  "region": "경기 고양",
+  "address": "경기 고양시 덕양구 도내동 1129",
+  "lat": 37.63802,
+  "lng": 126.85837,
+  "mapsUrl": "http://place.map.kakao.com/13100652"
+ },
+ {
+  "key": "금강CC",
+  "name": "금강CC",
+  "region": "경기 여주",
+  "address": "경기 여주시 가남읍 금강그린길 84",
+  "lat": 37.24309,
+  "lng": 127.60203,
+  "mapsUrl": "http://place.map.kakao.com/12457489"
+ },
+ {
+  "key": "남여주GC",
+  "name": "남여주GC",
+  "region": "경기 여주",
+  "address": "경기 여주시 가여로 532",
+  "lat": 37.22696,
+  "lng": 127.62746,
+  "mapsUrl": "http://place.map.kakao.com/25021687"
+ },
+ {
+  "key": "베어즈베스트 청라 G.C",
+  "name": "베어즈베스트청라GC",
+  "region": "인천 서해",
+  "address": "인천 서해구 청라동 9-90",
+  "lat": 37.54473,
+  "lng": 126.63468,
+  "mapsUrl": "http://place.map.kakao.com/27389031"
+ },
+ {
+  "key": "블루헤런 골프클럽",
+  "name": "블루헤런CC",
+  "region": "경기 여주",
+  "address": "경기 여주시 대신면 고달사로 67",
+  "lat": 37.38443,
+  "lng": 127.64794,
+  "mapsUrl": "http://place.map.kakao.com/8405831"
+ },
+ {
+  "key": "사우스스프링스CC",
+  "name": "사우스스프링스CC",
+  "region": "경기 이천",
+  "address": "경기 이천시 모가면 공원로 64",
+  "lat": 37.1757,
+  "lng": 127.45136,
+  "mapsUrl": "http://place.map.kakao.com/25070457"
+ },
+ {
+  "key": "설해원 골프",
+  "name": "설해원",
+  "region": "강원 양양",
+  "address": "강원특별자치도 양양군 손양면 공항로 230",
+  "lat": 38.05352,
+  "lng": 128.66224,
+  "mapsUrl": "http://place.map.kakao.com/816955367"
+ },
+ {
+  "key": "센추리21CC",
+  "name": "센추리21CC",
+  "region": "강원 원주",
+  "address": "강원특별자치도 원주시 문막읍 궁말길 193",
+  "lat": 37.28119,
+  "lng": 127.85373,
+  "mapsUrl": "http://place.map.kakao.com/12860546"
+ },
+ {
+  "key": "원더클럽 신라CC",
+  "name": "신라CC (원더클럽)",
+  "region": "경기 여주",
+  "address": "경기 여주시 북내면 신라그린길 84",
+  "lat": 37.36716,
+  "lng": 127.69641,
+  "mapsUrl": "http://place.map.kakao.com/8412181"
+ },
+ {
+  "key": "아난티 중앙 골프클럽",
+  "name": "아난티 중앙 골프클럽",
+  "region": "충북 진천",
+  "address": "충북 진천군 백곡면 배티로 818-105",
+  "lat": 36.93949,
+  "lng": 127.33711,
+  "mapsUrl": "http://place.map.kakao.com/10001405"
+ },
+ {
+  "key": "포천아도니스CC",
+  "name": "아도니스CC",
+  "region": "경기 포천",
+  "address": "경기 포천시 신북면 포천로 2499",
+  "lat": 37.96537,
+  "lng": 127.16513,
+  "mapsUrl": "http://place.map.kakao.com/8123914"
+ },
+ {
+  "key": "아세코밸리골프클럽",
+  "name": "아세코밸리골프클럽",
+  "region": "경기 시흥",
+  "address": "경기 시흥시 마전로 307",
+  "lat": 37.36797,
+  "lng": 126.77117,
+  "mapsUrl": "http://place.map.kakao.com/25723258"
+ },
+ {
+  "key": "안성CC",
+  "name": "안성컨트리클럽",
+  "region": "경기 안성",
+  "address": "경기 안성시 죽산면 걸미로 487",
+  "lat": 37.03866,
+  "lng": 127.41314,
+  "mapsUrl": "http://place.map.kakao.com/7991742"
+ },
+ {
+  "key": "H1 CLUB",
+  "name": "에이치원클럽",
+  "region": "경기 이천",
+  "address": "경기 이천시 호법면 장자터로 115",
+  "lat": 37.1883,
+  "lng": 127.40266,
+  "mapsUrl": "http://place.map.kakao.com/2038715571"
+ },
+ {
+  "key": "엘리시안강촌CC",
+  "name": "엘리시안 강촌CC",
+  "region": "강원 춘천",
+  "address": "강원특별자치도 춘천시 남산면 북한강변길 688",
+  "lat": 37.82995,
+  "lng": 127.57857,
+  "mapsUrl": "http://place.map.kakao.com/25070174"
+ },
+ {
+  "key": "오로라골프앤리조트",
+  "name": "오로라골프앤리조트",
+  "region": "강원 원주",
+  "address": "강원특별자치도 원주시 신림면 구학산로 1520",
+  "lat": 37.20291,
+  "lng": 128.04315,
+  "mapsUrl": "http://place.map.kakao.com/1685793314"
+ },
+ {
+  "key": "오크밸리CC",
+  "name": "오크밸리CC",
+  "region": "강원 원주",
+  "address": "강원특별자치도 원주시 지정면 월송석화로 950",
+  "lat": 37.43809,
+  "lng": 127.81376,
+  "mapsUrl": "http://place.map.kakao.com/169258613"
+ },
+ {
+  "key": "유니아일랜드 골프&스파 리조트",
+  "name": "유니아일랜드 골프&스파리조트",
+  "region": "인천 강화",
+  "address": "인천 강화군 삼산면 어류정길177번길 15",
+  "lat": 37.65368,
+  "lng": 126.34462,
+  "mapsUrl": "http://place.map.kakao.com/1535445292"
+ },
+ {
+  "key": "이천실크밸리GC",
+  "name": "이천실크밸리GC",
+  "region": "경기 이천",
+  "address": "경기 이천시 율면 임오산로 296",
+  "lat": 37.08075,
+  "lng": 127.57305,
+  "mapsUrl": "http://place.map.kakao.com/19730102"
+ },
+ {
+  "key": "젠스필드CC",
+  "name": "젠스필드CC",
+  "region": "충북 음성",
+  "address": "충북 음성군 삼성면 덕호로 382",
+  "lat": 37.04186,
+  "lng": 127.516,
+  "mapsUrl": "http://place.map.kakao.com/17157210"
+ },
+ {
+  "key": "참밸리컨트리클럽",
+  "name": "코브스윙 (구 참밸리CC)",
+  "region": "경기 포천",
+  "address": "경기 포천시 삼육사로 1982",
+  "lat": 37.86684,
+  "lng": 127.13611,
+  "mapsUrl": "http://place.map.kakao.com/1407421179"
+ },
+ {
+  "key": "타이거CC",
+  "name": "타이거CC",
+  "region": "경기 파주",
+  "address": "경기 파주시 법원읍 술이홀로 1803",
+  "lat": 37.92455,
+  "lng": 126.89603,
+  "mapsUrl": "http://place.map.kakao.com/27138022"
+ },
+ {
+  "key": "원더클럽 파주CC",
+  "name": "파주CC (원더클럽)",
+  "region": "경기 파주",
+  "address": "경기 파주시 법원읍 화합로 306",
+  "lat": 37.84629,
+  "lng": 126.90026,
+  "mapsUrl": "http://place.map.kakao.com/25070559"
+ },
+ {
+  "key": "페럼클럽CC",
+  "name": "페럼클럽",
+  "region": "경기 여주",
+  "address": "경기 여주시 점동면 점동로 181",
+  "lat": 37.20459,
+  "lng": 127.6854,
+  "mapsUrl": "http://place.map.kakao.com/25772483"
+ },
+ {
+  "key": "플라밍고CC",
+  "name": "플라밍고CC",
+  "region": "충남 당진",
+  "address": "충남 당진시 석문면 산단8로 299",
+  "lat": 37.01189,
+  "lng": 126.58313,
+  "mapsUrl": "http://place.map.kakao.com/1404551021"
+ },
+ {
+  "key": "힐데스하임CC",
+  "name": "힐데스하임CC",
+  "region": "충북 음성",
+  "address": "충북 음성군 소이면 후삼로158번길 101",
+  "lat": 36.92959,
+  "lng": 127.77901,
+  "mapsUrl": "http://place.map.kakao.com/751199763"
+ },
+ {
+  "key": "힐마루 골프앤리조트 포천",
+  "name": "힐마루골프&리조트",
+  "region": "경기 포천",
+  "address": "경기 포천시 영중면 금화봉4길 77",
+  "lat": 37.98915,
+  "lng": 127.2239,
+  "mapsUrl": "http://place.map.kakao.com/1641460654"
+ }
+]

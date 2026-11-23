@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>골프 스코어 대시보드 · 남돌군</title>
+<meta name="description" content="안남석(남돌군) 골프 라운드 기록 대시보드 — 66라운드 · 1,188홀">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+
+  <header class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-inner">
+      <div class="brand">
+        <span class="flag">⛳</span>
+        <div>
+          <h1>골프 스코어 대시보드</h1>
+          <p class="sub" id="heroSub">불러오는 중…</p>
+        </div>
+      </div>
+      <div class="hero-badges" id="heroBadges"></div>
+    </div>
+  </header>
+
+  <nav class="filters" id="filtersBar" aria-label="연도 필터">
+    <div class="year-pills" id="yearPills"></div>
+    <div class="filter-hint" id="filterHint"></div>
+  </nav>
+
+  <main>
+    <section class="kpi-grid" id="kpiGrid" aria-label="핵심 지표"></section>
+
+    <section class="card map-card">
+      <div class="card-head">
+        <div>
+          <h2><span class="ico">🗺️</span> 골프장 지도</h2>
+          <p class="card-sub" id="mapSub">방문한 골프장을 한눈에 — 마커 크기·색은 방문 횟수</p>
+        </div>
+        <div class="map-legend">
+          <span><i class="dot d1"></i>1회</span>
+          <span><i class="dot d2"></i>2회</span>
+          <span><i class="dot d3"></i>3회</span>
+          <span><i class="dot d4"></i>4회+</span>
+        </div>
+      </div>
+      <div id="map"></div>
+      <div class="map-foot" id="mapFoot"></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2><span class="ico">📈</span> 이동평균 &amp; 실력 성장 추이</h2>
+          <p class="card-sub">최근 5·10라운드 이동평균과 5라운드 베스트/워스트 밴드</p>
+        </div>
+      </div>
+      <div class="chart-wrap tall"><canvas id="trendChart"></canvas></div>
+      <div class="year-compare">
+        <div class="chart-wrap short"><canvas id="yearChart"></canvas></div>
+        <div class="insight-list" id="trendInsights"></div>
+      </div>
+    </section>
+
+    <div class="two-col">
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h2><span class="ico">⛳</span> Par 3 · 4 · 5 공략</h2>
+            <p class="card-sub">파별 평균 타수와 파 대비 오버파</p>
+          </div>
+        </div>
+        <div class="par-cards" id="parCards"></div>
+        <div class="chart-wrap short"><canvas id="parChart"></canvas></div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <div>
+            <h2><span class="ico">🎯</span> 홀 스코어 분포</h2>
+            <p class="card-sub" id="distSub">전체 홀 결과 비율</p>
+          </div>
+        </div>
+        <div class="chart-wrap donut"><canvas id="distChart"></canvas></div>
+        <div class="dist-legend" id="distLegend"></div>
+      </section>
+    </div>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2><span class="ico">🔄</span> 전반(OUT) vs 후반(IN)</h2>
+          <p class="card-sub">라운드별 전·후반 타수와 차이</p>
+        </div>
+        <div class="insight-pill" id="halfInsight"></div>
+      </div>
+      <div class="half-top" id="halfTop"></div>
+      <div class="chart-wrap short"><canvas id="halfChart"></canvas></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2><span class="ico">🏁</span> 목표 트래커</h2>
+          <p class="card-sub">80대 진입 · 70대 도전 · 노 더블 파</p>
+        </div>
+      </div>
+      <div class="goal-grid" id="goalGrid"></div>
+      <div class="chart-wrap short"><canvas id="goalChart"></canvas></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2><span class="ico">📅</span> 월별 라운드 히트맵</h2>
+          <p class="card-sub">월별 라운드 횟수(색)와 평균 타수(숫자)</p>
+        </div>
+      </div>
+      <div class="heatmap-scroll"><div class="heatmap" id="heatmap"></div></div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <div>
+          <h2><span class="ico">📋</span> 라운드 기록</h2>
+          <p class="card-sub">행을 누르면 18홀 스코어카드가 펼쳐집니다</p>
+        </div>
+        <div class="table-tools">
+          <input id="search" type="search" placeholder="골프장 · 연도 검색" aria-label="라운드 검색">
+          <span class="count-chip" id="tableCount"></span>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table class="rounds" id="roundsTable">
+          <thead>
+            <tr>
+              <th data-sort="date" class="sorted">날짜<span class="caret">↓</span></th>
+              <th data-sort="club">골프장<span class="caret"></span></th>
+              <th>코스</th>
+              <th data-sort="total">타수<span class="caret"></span></th>
+              <th data-sort="toPar">파 대비<span class="caret"></span></th>
+              <th>전반</th>
+              <th>후반</th>
+              <th class="center">노 더블 파</th>
+            </tr>
+          </thead>
+          <tbody id="roundsBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>데이터: 네이버 스포츠 MY골프 64라운드 + G Lounge 남춘천CC 2라운드 · 2023.11 – 2026.11</p>
+    <p class="muted">본인 기록만 표시합니다. 골프장 좌표는 카카오맵·구글맵 지오코딩 결과입니다.</p>
+  </footer>
+</div>
+
+<div class="loading" id="loading"><div class="spinner"></div><p>스코어 데이터를 불러오는 중…</p></div>
+<div class="load-error" id="loadError" hidden>
+  <p>데이터를 불러오지 못했습니다.</p>
+  <p class="muted">잠시 후 새로고침해 주세요.</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
