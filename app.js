@@ -50,6 +50,11 @@
     return COURSES.find(c => c.key === k);
   }
 
+  function courseLabel(r, sep) {
+    const names = (r.courses || []).filter(c => c && String(c).trim());
+    return names.length ? names.join(sep || ' · ') : '코스 정보 없음';
+  }
+
   function statForCourses(rounds) {
     const m = new Map();
     rounds.forEach(r => {
@@ -232,7 +237,7 @@
       }).addTo(map);
 
       const roundRows = rs.slice().sort(byDate).reverse().map(r =>
-        `<div class="pc-round"><span>${dateKo(r.date)} <em>${(r.courses || []).join('·')}</em></span><b>${r.total}</b></div>`
+        `<div class="pc-round"><span>${dateKo(r.date)} <em>${courseLabel(r, '·')}</em></span><b>${r.total}</b></div>`
       ).join('');
 
       mk.bindPopup(`
@@ -708,7 +713,7 @@
         r.club.toLowerCase().includes(q) ||
         r.clubShort.toLowerCase().includes(q) ||
         String(r.year).includes(q) ||
-        (r.courses || []).join(' ').toLowerCase().includes(q) ||
+        courseLabel(r, ' ').toLowerCase().includes(q) ||
         r.date.includes(q)
       );
     }
@@ -737,7 +742,7 @@
         <tr class="row ${open ? 'open' : ''}" data-id="${r.id}">
           <td style="white-space:nowrap;color:var(--slate-500)">${dateKo(r.date)}</td>
           <td><div class="cell-club">${r.clubShort}</div><div class="cell-courses">${r.region}</div></td>
-          <td style="color:var(--slate-500);font-size:12px">${(r.courses || []).join(' · ')}</td>
+          <td style="color:var(--slate-500);font-size:12px">${courseLabel(r)}</td>
           <td><span class="score-badge ${scoreClass(r.total)}">${r.total}</span></td>
           <td class="toPar">${fmtSign(r.toPar)}</td>
           <td style="color:var(--slate-600)">${r.frontScore || '–'}<span style="color:var(--slate-300)"> / ${r.front.par || '–'}</span></td>
@@ -789,7 +794,7 @@
     return `<div class="scorecard">
       <div class="sc-head">
         <div>
-          <h4>${r.clubShort} <span style="font-weight:600;color:var(--slate-400);font-size:12px">${(r.courses || []).join(' · ')}</span></h4>
+          <h4>${r.clubShort} <span style="font-weight:600;color:var(--slate-400);font-size:12px">${courseLabel(r)}</span></h4>
           <div class="meta">${dateKo(r.date)} ${r.teeTime ? '· ' + r.teeTime + ' 티오프' : ''} · 총 ${r.total}타 (파 ${r.par}, ${fmtSign(r.toPar)}) · ${r.source}</div>
         </div>
         <div class="meta">전반 ${r.frontScore} / 후반 ${r.backScore} · 노 더블 파 ${r.noDoublePar ? '달성 ✅' : '미달성'}</div>
