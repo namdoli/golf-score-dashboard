@@ -57,7 +57,7 @@ p{margin:0}
 .sticky-bar{
   position:sticky;top:0;z-index:500;
   margin:18px 0 22px;
-  background:rgba(255,255,255,.9);
+  background:#fff;
   -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
   border:1px solid var(--slate-200);border-radius:16px;
   box-shadow:var(--shadow-sm);
@@ -65,7 +65,7 @@ p{margin:0}
 }
 .sticky-bar.stuck{
   border-radius:0 0 16px 16px;
-  background:rgba(255,255,255,.94);
+  background:#fff;
   box-shadow:0 12px 30px -20px rgba(15,23,42,.55);
 }
 .sb-head{
