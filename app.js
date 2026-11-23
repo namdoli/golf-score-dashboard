@@ -410,6 +410,10 @@
       yc[r.year].push(r.total);
     });
     const years = Object.keys(yc).map(Number).sort();
+    if (!years.length) {
+      $('#trendInsights').innerHTML = '<div class="insight"><span class="ic">📝</span><span>이 기간에는 스코어가 기록된 라운드가 없습니다.</span></div>';
+      return;
+    }
     const avgByYear = years.map(y => mean(yc[y]));
     const counts = years.map(y => yc[y].length);
     drawChart('yearChart', {
