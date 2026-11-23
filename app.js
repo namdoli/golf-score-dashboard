@@ -197,9 +197,9 @@
   /* ---------- MAP ---------- */
   function markerColor(v) {
     if (v >= 4) return '#065f46';
-    if (v === 3) return '#059669';
-    if (v === 2) return '#34d399';
-    return '#6ee7b7';
+    if (v === 3) return '#047857';
+    if (v === 2) return '#059669';
+    return '#10b981';
   }
 
   function renderMap(rounds) {
@@ -208,9 +208,15 @@
       return;
     }
     if (!map) {
-      map = L.map('map', { scrollWheelZoom: false, zoomControl: true }).setView([37.5, 127.6], 7);
-      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors', maxZoom: 19
+      map = L.map('map', { scrollWheelZoom: false, zoomControl: true, minZoom: 6, maxZoom: 13 }).setView([37.5, 127.6], 7);
+      // 연회색 미니멀 베이스(Esri Light Gray) — 수계·도로만 남긴 저채도 톤
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; <a href="https://www.esri.com/" target="_blank" rel="noopener">Esri</a> — Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
+        maxNativeZoom: 13, maxZoom: 13
+      }).addTo(map);
+      // 확대 시 도로·지명만 은은하게 얹는 라벨 레이어
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+        maxNativeZoom: 13, maxZoom: 13, className: 'ref-tiles'
       }).addTo(map);
       map.on('click', () => map.closePopup());
     }
@@ -232,8 +238,8 @@
       const radius = 6 + Math.min(visits, 5) * 2.4;
 
       const mk = L.circleMarker([g.lat, g.lng], {
-        radius, color: '#ffffff', weight: 2, opacity: 1,
-        fillColor: markerColor(visits), fillOpacity: 0.9
+        radius, color: '#ffffff', weight: 2.4, opacity: 1,
+        fillColor: markerColor(visits), fillOpacity: 0.95
       }).addTo(map);
 
       const roundRows = rs.slice().sort(byDate).reverse().map(r =>
