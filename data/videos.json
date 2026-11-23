@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T17:57:54+09:00",
+  "generatedAt": "2026-11-23T22:32:28+09:00",
   "note": "라운드에 연결된 스윙 영상 목록. 한 라운드에 여러 개를 두려면 같은 roundId로 항목을 여러 번 넣으면 됩니다(배열 순서 = 재생 순서). make_data.py가 이 파일을 읽어 scores.json의 해당 라운드에 swingVideos 배열(1개면 swingVideo도 함께)을 붙입니다.",
   "videos": [
     {
@@ -181,6 +181,36 @@
       "bytes": 1102513,
       "originalFile": "video_...20bc6b1e.mov",
       "originalBytes": 3584977
+    },
+    {
+      "roundId": "c7d56f8c-6c36-40cd-af2f-c43ebc327239",
+      "date": "2026-06-02",
+      "club": "클럽72(바다)",
+      "src": "videos/club72_20260602.mp4",
+      "poster": "videos/club72_20260602.jpg",
+      "title": "티샷 스윙",
+      "note": "베이지 상의 · 클럽72CC 오션코스 라운드 · 해질녘 파3 티샷",
+      "durationSec": 8.03,
+      "width": 720,
+      "height": 1280,
+      "bytes": 1060641,
+      "originalFile": "_talkv_...eb883101.mp4 (TalkV)",
+      "originalBytes": 2574863
+    },
+    {
+      "roundId": "9afca1db-6a81-5eed-9d8e-dc258dcc02bc",
+      "date": "2026-08-12",
+      "club": "루스쓰 리조트",
+      "src": "videos/rusutsu_20260812.mp4",
+      "poster": "videos/rusutsu_20260812.jpg",
+      "title": "티샷 스윙",
+      "note": "연분홍 상의 · 루스쓰 리조트 Wood Course 라운드 · 숲 능선 배경 티샷",
+      "durationSec": 10.9,
+      "width": 720,
+      "height": 1280,
+      "bytes": 2691648,
+      "originalFile": "_talkv_...a78ed372.mp4 (TalkV)",
+      "originalBytes": 4257546
     }
   ]
 }
