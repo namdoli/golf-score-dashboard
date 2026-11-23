@@ -873,7 +873,7 @@
 
     const head = `<div class="sc-head">
         <div>
-          <h4>${r.clubShort} <span style="font-weight:600;color:var(--slate-400);font-size:12px">${courseLabel(r)}</span></h4>
+          <h4>${r.clubShort} ${(r.courses && r.courses.length) ? `<span style="font-weight:600;color:var(--slate-400);font-size:12px">${courseLabel(r)}</span>` : ''}</h4>
           <div class="meta">${dateKo(r.date)} ${r.teeTime ? '· ' + r.teeTime + ' 티오프' : ''} · ${hasScore(r) ? `총 ${r.total}타 (파 ${r.par}, ${fmtSign(r.toPar)})` : '스코어 미입력'} · ${sourceLabel(r)}</div>
         </div>
         <div class="meta">${hasScore(r) ? `전반 ${r.frontScore} / 후반 ${r.backScore} · 노 더블 파 ${r.noDoublePar ? '달성 ✅' : '미달성'}` : '스코어카드 미저장'}</div>
