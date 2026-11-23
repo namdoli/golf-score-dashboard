@@ -1,0 +1,36 @@
+{
+  "generatedAt": "2026-11-23T14:15:00+09:00",
+  "note": "라운드에 연결된 스윙 영상 목록. make_data.py가 이 파일을 읽어 scores.json의 해당 라운드에 swingVideo를 붙입니다.",
+  "videos": [
+    {
+      "roundId": "316cf34d-ae51-4687-bdb9-b6a8d9cb041f",
+      "date": "2026-10-29",
+      "club": "라비에벨CC 올드코스",
+      "src": "videos/lavieestbelle_old_20261029.mp4",
+      "poster": "videos/lavieestbelle_old_20261029.jpg",
+      "title": "티샷 스윙",
+      "note": "하얀 상의 · 라비에벨 올드코스 라운드",
+      "durationSec": 18.73,
+      "width": 720,
+      "height": 1280,
+      "bytes": 2050028,
+      "originalFile": "IMG_7229.mp4",
+      "originalBytes": 6858703
+    },
+    {
+      "roundId": "9bb04278-d803-4645-a380-58888d140350",
+      "date": "2026-10-30",
+      "club": "라비에벨CC 듄스코스",
+      "src": "videos/lavieestbelle_dunes_20261030.mp4",
+      "poster": "videos/lavieestbelle_dunes_20261030.jpg",
+      "title": "티샷 스윙",
+      "note": "초록(청록) 상의 · 라비에벨 듄스코스 라운드",
+      "durationSec": 4.77,
+      "width": 720,
+      "height": 1280,
+      "bytes": 1066514,
+      "originalFile": "IMG_2400.mp4",
+      "originalBytes": 1877778
+    }
+  ]
+}

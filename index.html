@@ -10,7 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9B%B3%3C/text%3E%3C/svg%3E">
-<link rel="stylesheet" href="styles.css?v=20261123b">
+<link rel="stylesheet" href="styles.css?v=20261123c">
 </head>
 <body>
 <div class="app">
@@ -125,6 +125,17 @@
       <div class="heatmap-scroll"><div class="heatmap" id="heatmap"></div></div>
     </section>
 
+    <section class="card swing-card" id="swingCard" hidden>
+      <div class="card-head">
+        <div>
+          <h2><span class="ico">🎬</span> 스윙 영상</h2>
+          <p class="card-sub">영상이 연결된 라운드 — 눌러서 바로 재생</p>
+        </div>
+        <div class="swing-card-note" id="swingCardNote"></div>
+      </div>
+      <div class="swing-grid" id="swingGrid"></div>
+    </section>
+
     <section class="card">
       <div class="card-head">
         <div>
@@ -132,6 +143,7 @@
           <p class="card-sub">행을 누르면 18홀 스코어카드가 펼쳐집니다</p>
         </div>
         <div class="table-tools">
+          <button class="video-filter" id="videoOnlyBtn" type="button" aria-pressed="false" title="스윙 영상이 있는 라운드만 보기">🎬 스윙 영상만</button>
           <input id="search" type="search" placeholder="골프장 · 연도 검색" aria-label="라운드 검색">
           <span class="count-chip" id="tableCount"></span>
         </div>
@@ -168,8 +180,25 @@
   <p class="muted">잠시 후 새로고침해 주세요.</p>
 </div>
 
+<div class="video-modal" id="videoModal" hidden>
+  <div class="vm-backdrop" data-close></div>
+  <div class="vm-panel" role="dialog" aria-modal="true" aria-labelledby="vmTitle">
+    <div class="vm-head">
+      <div class="vm-titles">
+        <h3 id="vmTitle">스윙 영상</h3>
+        <p class="vm-sub" id="vmSub"></p>
+      </div>
+      <button class="vm-close" id="vmClose" type="button" aria-label="닫기">✕</button>
+    </div>
+    <div class="vm-body">
+      <video id="vmVideo" controls playsinline preload="metadata"></video>
+    </div>
+    <div class="vm-foot" id="vmFoot"></div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="app.js?v=20261123b"></script>
+<script src="app.js?v=20261123c"></script>
 </body>
 </html>

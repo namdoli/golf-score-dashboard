@@ -8,7 +8,7 @@
     slateLight: '#94a3b8', ink: '#0f172a'
   };
 
-  const state = { year: 'all', search: '', sortKey: 'date', sortDir: 'desc', openId: null };
+  const state = { year: 'all', search: '', sortKey: 'date', sortDir: 'desc', openId: null, videoOnly: false };
   let DATA = null, ROUNDS = [], COURSES = [], map = null, markers = [];
   const charts = {};
 
@@ -41,6 +41,14 @@
     return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
   };
   const mean = arr => (arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0);
+  const fmtDur = sec => {
+    const s = Math.round(sec || 0);
+    return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+  };
+  const fmtMB = b => (b / 1048576).toFixed(1) + 'MB';
+  function swingRounds() {
+    return ROUNDS.filter(r => r.swingVideo && r.swingVideo.src);
+  }
 
   function filteredRounds() {
     return state.year === 'all' ? ROUNDS : ROUNDS.filter(r => r.year === Number(state.year));
@@ -148,7 +156,64 @@
     renderHalf(rounds);
     renderGoals(rounds);
     renderHeatmap(rounds);
+    renderSwingGallery();
     renderTable(rounds);
+  }
+
+  /* ---------- SWING VIDEO ---------- */
+  function renderSwingGallery() {
+    const card = $('#swingCard');
+    if (!card) return;
+    const list = swingRounds().slice().sort(byDate).reverse();
+    if (!list.length) { card.hidden = true; return; }
+    card.hidden = false;
+    $('#swingCardNote').textContent = list.length + '개 라운드';
+    $('#swingGrid').innerHTML = list.map(r => {
+      const v = r.swingVideo;
+      return `<button class="swing-item" type="button" data-vid="${r.id}" aria-label="${r.clubShort} ${dateKo(r.date)} ${v.title} 재생">
+        <div class="swing-thumb" style="background-image:url('${v.poster}')">
+          <span class="swing-play">▶</span>
+          <span class="swing-dur">${fmtDur(v.durationSec)}</span>
+        </div>
+        <div class="swing-meta">
+          <div class="swing-course">${r.clubShort}<span class="swing-style">🎬 ${v.title}</span></div>
+          <div class="swing-sub">${dateKo(r.date)}${r.teeTime ? ' ' + r.teeTime + ' 티오프' : ''} · ${courseLabel(r)}</div>
+          <div class="swing-tags">
+            <span class="swing-tag score">${r.total}타</span>
+            <span class="swing-tag">${fmtSign(r.toPar)}</span>
+            <span class="swing-tag">${v.note}</span>
+          </div>
+        </div>
+      </button>`;
+    }).join('');
+  }
+
+  function openVideo(roundId) {
+    const r = ROUNDS.find(x => x.id === roundId);
+    if (!r || !r.swingVideo) return;
+    const v = r.swingVideo, modal = $('#videoModal'), vid = $('#vmVideo');
+    $('#vmTitle').textContent = `${r.clubShort} · ${v.title}`;
+    $('#vmSub').textContent = `${dateKo(r.date)}${r.teeTime ? ' ' + r.teeTime + ' 티오프' : ''} · ${r.total}타 (파 ${r.par}, ${fmtSign(r.toPar)}) · ${v.note}`;
+    $('#vmFoot').innerHTML = `<span>${courseLabel(r)} · ${fmtDur(v.durationSec)} · ${fmtMB(v.bytes)}</span>` +
+      `<a href="${v.src}" target="_blank" rel="noopener">원본 열기 ↗</a>`;
+    vid.poster = v.poster;
+    vid.src = v.src;
+    modal.hidden = false;
+    document.body.classList.add('modal-open');
+    vid.load();
+    const p = vid.play();
+    if (p && p.catch) p.catch(() => {});
+    $('#vmClose').focus();
+  }
+
+  function closeVideo() {
+    const modal = $('#videoModal'), vid = $('#vmVideo');
+    if (!modal || modal.hidden) return;
+    try { vid.pause(); } catch (e) {}
+    vid.removeAttribute('src');
+    vid.load();
+    modal.hidden = true;
+    document.body.classList.remove('modal-open');
   }
 
   /* ---------- KPI ---------- */
@@ -723,6 +788,7 @@
         r.date.includes(q)
       );
     }
+    if (state.videoOnly) rows = rows.filter(r => r.swingVideo && r.swingVideo.src);
     rows.sort((a, b) => {
       const k = state.sortKey;
       let va, vb;
@@ -747,7 +813,9 @@
       const main = `
         <tr class="row ${open ? 'open' : ''}" data-id="${r.id}">
           <td style="white-space:nowrap;color:var(--slate-500)">${dateKo(r.date)}</td>
-          <td><div class="cell-club">${r.clubShort}</div><div class="cell-courses">${r.region}</div></td>
+          <td><div class="cell-club">${r.clubShort}</div>${r.swingVideo
+            ? `<button class="swing-chip" type="button" data-vid="${r.id}" title="스윙 영상 바로 재생"><span class="ic">🎬</span>스윙 영상</button>`
+            : ''}<div class="cell-courses">${r.region}</div></td>
           <td style="color:var(--slate-500);font-size:12px">${courseLabel(r)}</td>
           <td><span class="score-badge ${scoreClass(r.total)}">${r.total}</span></td>
           <td class="toPar">${fmtSign(r.toPar)}</td>
@@ -805,6 +873,16 @@
         </div>
         <div class="meta">전반 ${r.frontScore} / 후반 ${r.backScore} · 노 더블 파 ${r.noDoublePar ? '달성 ✅' : '미달성'}</div>
       </div>
+      ${r.swingVideo ? `<div class="sc-video">
+        <div class="scv-head">
+          <span class="scv-label">🎬 스윙 영상</span>
+          <span class="scv-sub">${r.swingVideo.title} · ${fmtDur(r.swingVideo.durationSec)} · ${r.swingVideo.note}</span>
+          <button class="scv-open" type="button" data-vid="${r.id}">크게 보기 ⤢</button>
+        </div>
+        <div class="scv-frame">
+          <video controls playsinline preload="none" poster="${r.swingVideo.poster}" src="${r.swingVideo.src}"></video>
+        </div>
+      </div>` : ''}
       <div class="sc-wrap">
         <div class="sc-grid two">
           ${nineHtml(front, r.front.par, r.frontScore, '전반 OUT')}
@@ -847,6 +925,31 @@
         state.search = search.value;
         renderTable(filteredRounds());
       }, 130);
+    });
+
+    const vBtn = $('#videoOnlyBtn');
+    if (vBtn) vBtn.addEventListener('click', () => {
+      state.videoOnly = !state.videoOnly;
+      vBtn.setAttribute('aria-pressed', String(state.videoOnly));
+      renderTable(filteredRounds());
+    });
+
+    // 영상 버튼은 행 펼치기보다 먼저 처리 (capture)
+    document.addEventListener('click', e => {
+      const trigger = e.target.closest && e.target.closest('[data-vid]');
+      if (trigger) {
+        e.preventDefault();
+        e.stopPropagation();
+        openVideo(trigger.dataset.vid);
+        return;
+      }
+      if (e.target.closest && e.target.closest('#vmClose, [data-close]')) {
+        closeVideo();
+      }
+    }, true);
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeVideo();
     });
 
     $$('#roundsTable th[data-sort]').forEach(th => {
