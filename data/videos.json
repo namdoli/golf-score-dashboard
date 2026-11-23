@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-23T14:25:00+09:00",
-  "note": "라운드에 연결된 스윙 영상 목록. make_data.py가 이 파일을 읽어 scores.json의 해당 라운드에 swingVideo를 붙입니다.",
+  "generatedAt": "2026-11-23T16:35:00+09:00",
+  "note": "라운드에 연결된 스윙 영상 목록. 한 라운드에 여러 개를 두려면 같은 roundId로 항목을 여러 번 넣으면 됩니다(배열 순서 = 재생 순서). make_data.py가 이 파일을 읽어 scores.json의 해당 라운드에 swingVideos 배열(1개면 swingVideo도 함께)을 붙입니다.",
   "videos": [
     {
       "roundId": "316cf34d-ae51-4687-bdb9-b6a8d9cb041f",
@@ -46,6 +46,51 @@
       "bytes": 1153441,
       "originalFile": "_talkv_...4645dfe1.mp4 (TalkV)",
       "originalBytes": 3339621
+    },
+    {
+      "roundId": "67755a56-f998-4b16-a8e5-d8e434cacd85",
+      "date": "2026-11-06",
+      "club": "젠스필드CC",
+      "src": "videos/jensfield_20261106.mp4",
+      "poster": "videos/jensfield_20261106.jpg",
+      "title": "티샷 스윙",
+      "note": "초록 상의 · 젠스필드CC 라운드 · 노을 티샷",
+      "durationSec": 17.57,
+      "width": 720,
+      "height": 1280,
+      "bytes": 2093060,
+      "originalFile": "_talkv_...fc414a5d.mp4 (TalkV)",
+      "originalBytes": 6800362
+    },
+    {
+      "roundId": "0fa99441-b67c-4d7d-a5f3-c5c623972019",
+      "date": "2026-11-08",
+      "club": "힐데스하임CC",
+      "src": "videos/hildesheim_20261108_1.mp4",
+      "poster": "videos/hildesheim_20261108_1.jpg",
+      "title": "티샷 스윙",
+      "note": "흰 상의 · 힐데스하임CC 라운드 · 단풍 배경",
+      "durationSec": 8.9,
+      "width": 720,
+      "height": 1280,
+      "bytes": 1647928,
+      "originalFile": "_talkv_...c886569f.mp4 (TalkV)",
+      "originalBytes": 3052925
+    },
+    {
+      "roundId": "0fa99441-b67c-4d7d-a5f3-c5c623972019",
+      "date": "2026-11-08",
+      "club": "힐데스하임CC",
+      "src": "videos/hildesheim_20261108_2.mp4",
+      "poster": "videos/hildesheim_20261108_2.jpg",
+      "title": "티샷 스윙",
+      "note": "흰 상의 · 힐데스하임CC 7번 홀 파3 티샷",
+      "durationSec": 17,
+      "width": 720,
+      "height": 1280,
+      "bytes": 1718196,
+      "originalFile": "_talkv_...9a5e0afe.mp4 (TalkV)",
+      "originalBytes": 5651749
     }
   ]
 }

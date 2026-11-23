@@ -9,7 +9,7 @@
   };
 
   const state = {
-    year: 'all', search: '', sortKey: 'date', sortDir: 'desc', openId: null, photo: null,
+    year: 'all', search: '', sortKey: 'date', sortDir: 'desc', openId: null, photo: null, video: null,
     yrd: { course: 'SUN', hole: 1, doc: null, loading: false, path: null }
   };
   let DATA = null, ROUNDS = [], COURSES = [], UPCOMING = [], map = null, markers = [];
@@ -228,22 +228,48 @@
   }
 
   /* ---------- SWING VIDEO ---------- */
-  function openVideo(roundId) {
+  /* 한 라운드에 스윙 영상이 여러 개일 수 있다: swingVideos 배열, 예전 데이터의 swingVideo 단일 객체도 호환 */
+  function roundVideos(r) {
+    if (!r) return [];
+    if (Array.isArray(r.swingVideos)) return r.swingVideos.filter(Boolean);
+    return r.swingVideo ? [r.swingVideo] : [];
+  }
+
+  function openVideo(roundId, idx) {
     const r = ROUNDS.find(x => x.id === roundId);
-    if (!r || !r.swingVideo) return;
-    const v = r.swingVideo, modal = $('#videoModal'), vid = $('#vmVideo');
-    $('#vmTitle').textContent = `${r.clubShort} · ${v.title}`;
+    const list = roundVideos(r);
+    if (!list.length) return;
+    state.video = { roundId, idx: Math.max(0, Math.min(Number(idx) || 0, list.length - 1)) };
+    renderVideoModal();
+    $('#videoModal').hidden = false;
+    document.body.classList.add('modal-open');
+    $('#vmClose').focus();
+  }
+
+  function renderVideoModal() {
+    const s = state.video;
+    if (!s) return;
+    const r = ROUNDS.find(x => x.id === s.roundId);
+    const list = roundVideos(r);
+    if (!r || !list.length) return;
+    s.idx = Math.max(0, Math.min(s.idx, list.length - 1));
+    const v = list[s.idx], multi = list.length > 1, vid = $('#vmVideo');
+    $('#vmTitle').textContent = multi ? `${r.clubShort} · 스윙 영상 ${s.idx + 1}/${list.length}` : `${r.clubShort} · ${v.title}`;
     $('#vmSub').textContent = `${dateKo(r.date)}${r.teeTime ? ' ' + r.teeTime + ' 티오프' : ''} · ${hasScore(r) ? `${r.total}타 (파 ${r.par}, ${fmtSign(r.toPar)})` : '스코어 미입력'} · ${v.note}`;
     $('#vmFoot').innerHTML = `<span>${courseLabel(r)} · ${fmtDur(v.durationSec)} · ${fmtMB(v.bytes)}</span>` +
       `<a href="${v.src}" target="_blank" rel="noopener">원본 열기 ↗</a>`;
+    const tabs = $('#vmTabs');
+    if (tabs) {
+      tabs.hidden = !multi;
+      tabs.innerHTML = multi ? `<span class="vm-tabs-lbl">영상 선택</span>` + list.map((x, i) =>
+        `<button class="vm-tab${i === s.idx ? ' active' : ''}" type="button" data-vmtab="${i}" aria-pressed="${i === s.idx ? 'true' : 'false'}">영상 ${i + 1}<small>${fmtDur(x.durationSec)}</small></button>`
+      ).join('') : '';
+    }
     vid.poster = v.poster;
     vid.src = v.src;
-    modal.hidden = false;
-    document.body.classList.add('modal-open');
     vid.load();
     const p = vid.play();
     if (p && p.catch) p.catch(() => {});
-    $('#vmClose').focus();
   }
 
   function closeVideo() {
@@ -253,6 +279,9 @@
     vid.removeAttribute('src');
     vid.load();
     modal.hidden = true;
+    state.video = null;
+    const tabs = $('#vmTabs');
+    if (tabs) { tabs.hidden = true; tabs.innerHTML = ''; }
     if ($('#photoModal').hidden) document.body.classList.remove('modal-open');
   }
 
@@ -985,8 +1014,11 @@
 
   function mediaChipsHtml(r) {
     const chips = [];
-    if (r.swingVideo) {
-      chips.push(`<button class="rc-chip rc-chip-media" type="button" data-vid="${r.id}" title="스윙 영상 바로 재생"><span aria-hidden="true">🎬</span>스윙 영상</button>`);
+    const vids = roundVideos(r);
+    if (vids.length) {
+      const label = vids.length > 1 ? `스윙 영상 ${vids.length}` : '스윙 영상';
+      const tip = vids.length > 1 ? `스윙 영상 ${vids.length}개 바로 재생` : '스윙 영상 바로 재생';
+      chips.push(`<button class="rc-chip rc-chip-media" type="button" data-vid="${r.id}" data-vidx="0" title="${tip}"><span aria-hidden="true">🎬</span>${label}</button>`);
     }
     if (roundPhotos(r).length) {
       chips.push(`<button class="rc-chip rc-chip-media" type="button" data-photo="${r.id}" data-idx="0" title="라운드 사진 크게 보기"><span aria-hidden="true">📷</span>사진</button>`);
@@ -1046,19 +1078,25 @@
   }
 
   function videoBlockHtml(r) {
-    if (!r.swingVideo) return '';
+    const list = roundVideos(r);
+    if (!list.length) return '';
+    const multi = list.length > 1;
+    const durs = list.map(v => fmtDur(v.durationSec)).join(' · ');
+    const notes = Array.from(new Set(list.map(v => v.note).filter(Boolean))).join(' / ');
+    const players = list.map((v, i) => `<div class="scv-item">
+            <div class="scv-player">
+              <video controls playsinline preload="metadata" poster="${v.poster}" src="${v.src}"></video>
+              <button class="scv-play" type="button" aria-label="${esc(v.title)}${multi ? ' ' + (i + 1) + '번' : ''} 재생">▶</button>
+            </div>
+            ${multi ? `<button class="scv-cap" type="button" data-vid="${r.id}" data-vidx="${i}" title="${esc(v.title)} 크게 보기">영상 ${i + 1} · ${esc(v.title)} <small>${fmtDur(v.durationSec)}</small></button>` : ''}
+          </div>`).join('');
     return `<div class="sc-video">
         <div class="scv-head">
-          <span class="scv-label">🎬 스윙 영상</span>
-          <span class="scv-sub">${r.swingVideo.title} · ${fmtDur(r.swingVideo.durationSec)} · ${r.swingVideo.note}</span>
-          <button class="scv-open" type="button" data-vid="${r.id}">크게 보기 ⤢</button>
+          <span class="scv-label">🎬 스윙 영상${multi ? ' ' + list.length : ''}</span>
+          <span class="scv-sub">${multi ? list.length + '개 · ' : list[0].title + ' · '}${durs}${notes ? ' · ' + esc(notes) : ''}</span>
+          <button class="scv-open" type="button" data-vid="${r.id}" data-vidx="0">크게 보기 ⤢</button>
         </div>
-        <div class="scv-frame">
-          <div class="scv-player">
-            <video controls playsinline preload="metadata" poster="${r.swingVideo.poster}" src="${r.swingVideo.src}"></video>
-            <button class="scv-play" type="button" aria-label="${r.swingVideo.title} 재생">▶</button>
-          </div>
-        </div>
+        <div class="scv-frame${multi ? ' multi' : ''}">${players}</div>
       </div>`;
   }
 
@@ -1349,11 +1387,21 @@
 
     // 영상·사진 버튼은 행 펼치기보다 먼저 처리 (capture)
     document.addEventListener('click', e => {
+      const vtab = e.target.closest && e.target.closest('[data-vmtab]');
+      if (vtab) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (state.video) {
+          state.video.idx = Number(vtab.dataset.vmtab) || 0;
+          renderVideoModal();
+        }
+        return;
+      }
       const trigger = e.target.closest && e.target.closest('[data-vid]');
       if (trigger) {
         e.preventDefault();
         e.stopPropagation();
-        openVideo(trigger.dataset.vid);
+        openVideo(trigger.dataset.vid, Number(trigger.dataset.vidx || 0));
         return;
       }
       const photoTrigger = e.target.closest && e.target.closest('[data-photo]');
