@@ -1098,7 +1098,6 @@
         state.yrd.doc = doc;
         state.yrd.path = path;
         state.yrd.loading = false;
-        if (/[?&]yrdemo=1/.test(location.search)) yrdDemo(doc);
         renderYardage();
       })
       .catch(err => {
@@ -1156,25 +1155,6 @@
     }).join('');
   }
 
-  // [임시 검증용] ?yrdemo=1 일 때만 샷 예시를 채워 오버레이를 확인한다. 검증 후 제거.
-  function yrdDemo(doc) {
-    const h1 = doc.courses[0].holes[0];
-    if (!h1.shots || !h1.shots.length) {
-      h1.shots = [
-        { order: 1, label: '티샷', club: '드라이버', lie: '페어웨이 우측 150m 말붕 근처', x: 47, y: 63 },
-        { order: 2, label: '세컨', club: '7아이언', lie: '그린 앞 우측 러프', x: 74, y: 28 },
-        { order: 3, label: '서드', club: '웨지', lie: '그린 온 (핀 우측 4m)', x: 82, y: 13 }
-      ];
-      h1.putts = 2;
-      h1.score = 5;
-      h1.note = '테스트 데이터 — 2단 그린 상단 핀';
-    }
-    const h12 = doc.courses[1].holes[2];
-    h12.shots = [{ order: 1, label: '티샷', club: '6아이언', lie: '그린 중앙 온', x: 54, y: 40 }];
-    h12.putts = 2;
-    h12.score = 3;
-  }
-
   function renderYardage() {
     const body = $('#yrdBody');
     if (!body) return;
@@ -1209,10 +1189,10 @@
       <div class="yrd-main">
         <div class="yrd-stage">
           <div class="yrd-frame" style="aspect-ratio:${W} / ${H}">
-            <img class="yrd-img" src="${esc(hole.images.layout)}" alt="${esc(course.label)} ${hole.courseNo}번 홀 레이아웃" loading="lazy">
+            <img class="yrd-img" src="${esc(hole.images.layout)}" alt="${esc(course.label)} ${hole.courseNo}번 홀(${hole.no}번) 레이아웃" loading="lazy">
             ${yrdTrajectory(hole)}
             ${yrdPins(hole)}
-            <span class="yrd-stagetag">${hole.no}번 홀 <i>파${hole.par}</i></span>
+            <span class="yrd-stagetag">${hole.no}번 홀${hole.courseNo !== hole.no ? ` <i>${esc(course.code)} ${hole.courseNo}번</i>` : ''} · 파${hole.par}</span>
           </div>
           <div class="yrd-hint">
             <span class="yrd-hint-ico">💬</span>
@@ -1225,7 +1205,7 @@
             <span class="yrd-bigno">${hole.no}</span>
             <div>
               <h5>${esc(hole.title || '')}</h5>
-              <p>${esc(course.label)} ${hole.courseNo}번 · 파 ${hole.par} · HDCP ${hole.hdcp} · ${hole.distances[defTee]}m (${esc(teLabels[defTee] || defTee)})</p>
+              <p>${esc(course.label)} ${hole.courseNo}번${hole.courseNo !== hole.no ? ` (=${hole.no}번)` : ''} · 파 ${hole.par} · HDCP ${hole.hdcp} · ${hole.distances[defTee]}m (${esc(teLabels[defTee] || defTee)})</p>
             </div>
           </div>
           ${rec.length || hole.note ? `<div class="yrd-record">${rec.join('')}${hole.note ? `<span class="yrd-recnote">${esc(hole.note)}</span>` : ''}</div>` : ''}
@@ -1235,8 +1215,8 @@
           </div>
           <div class="yrd-sec">그린맵 · 언듈레이션</div>
           <div class="yrd-greens">
-            <figure><img src="${esc(hole.images.greenmap)}" alt="${hole.courseNo}번 홀 그린맵" loading="lazy"><figcaption>Green Map</figcaption></figure>
-            <figure><img src="${esc(hole.images.undulation)}" alt="${hole.courseNo}번 홀 언듈레이션" loading="lazy"><figcaption>Undulation</figcaption></figure>
+            <figure><img src="${esc(hole.images.greenmap)}" alt="${hole.no}번 홀 그린맵" loading="lazy"><figcaption>Green Map</figcaption></figure>
+            <figure><img src="${esc(hole.images.undulation)}" alt="${hole.no}번 홀 언듈레이션" loading="lazy"><figcaption>Undulation</figcaption></figure>
           </div>
           <div class="yrd-tip"><div class="yrd-sec">공략 포인트</div><p>${esc(hole.tip || '')}</p></div>
           ${shotList}
