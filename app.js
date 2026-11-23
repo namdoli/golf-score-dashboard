@@ -8,8 +8,11 @@
     slateLight: '#94a3b8', ink: '#0f172a'
   };
 
-  const state = { year: 'all', search: '', sortKey: 'date', sortDir: 'desc', openId: null, photo: null };
-  let DATA = null, ROUNDS = [], COURSES = [], map = null, markers = [];
+  const state = {
+    year: 'all', search: '', sortKey: 'date', sortDir: 'desc', openId: null, photo: null,
+    yrd: { course: 'SUN', hole: 1, doc: null, loading: false, path: null }
+  };
+  let DATA = null, ROUNDS = [], COURSES = [], UPCOMING = [], map = null, markers = [];
   const charts = {};
 
   const $ = (s, el = document) => el.querySelector(s);
@@ -51,6 +54,7 @@
     return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
   };
   const fmtMB = b => (b / 1048576).toFixed(1) + 'MB';
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 
   function filteredRounds() {
     return state.year === 'all' ? ROUNDS : ROUNDS.filter(r => r.year === Number(state.year));
@@ -77,13 +81,20 @@
 
   /* ---------- init ---------- */
   function boot() {
-    fetch('data/scores.json', { cache: 'no-store' })
-      .then(r => {
+    Promise.all([
+      fetch('data/scores.json', { cache: 'no-store' }).then(r => {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.json();
-      })
-      .then(doc => {
+      }),
+      // 예정 라운드는 완료 통계와 분리된 파일에서 읽는다 (없어도 대시보드는 정상 동작)
+      fetch('data/upcoming.json', { cache: 'no-store' })
+        .then(r => (r.ok ? r.json() : { rounds: [] }))
+        .catch(() => ({ rounds: [] }))
+    ])
+      .then(([doc, upcoming]) => {
         DATA = doc;
+        DATA.upcoming = (upcoming && upcoming.rounds) || [];
+        UPCOMING = DATA.upcoming;
         ROUNDS = doc.rounds.slice().sort(byDate);
         COURSES = doc.courses;
         ROUNDS.forEach(r => {
@@ -856,6 +867,7 @@
 
   function renderTable(rounds) {
     let rows = rounds.slice();
+    const up = upcomingFor();
     const q = state.search.trim().toLowerCase();
     if (q) {
       rows = rows.filter(r =>
@@ -880,14 +892,14 @@
       return state.sortDir === 'asc' ? va - vb : vb - va;
     });
 
-    $('#tableCount').textContent = rows.length + '라운드';
+    $('#tableCount').textContent = rows.length + '라운드' + (up.length ? ` + 예정 ${up.length}` : '');
 
-    if (!rows.length) {
+    if (!rows.length && !up.length) {
       $('#roundsBody').innerHTML = `<tr><td colspan="8" style="padding:36px;text-align:center;color:var(--slate-400)">조건에 맞는 라운드가 없습니다.</td></tr>`;
       return;
     }
 
-    $('#roundsBody').innerHTML = rows.map(r => {
+    $('#roundsBody').innerHTML = up.map(u => upcomingRowHtml(u)).join('') + rows.map(r => {
       const open = state.openId === r.id;
       const main = `
         <tr class="row ${open ? 'open' : ''}" data-id="${r.id}">
@@ -919,6 +931,9 @@
         if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }
     }));
+
+    // 펼쳐진 예정 라운드가 있으면 야디지북을 불러와 그린다
+    if (up.some(u => u.id === state.openId)) ensureYardage();
   }
 
   function holeClass(h) {
@@ -1028,7 +1043,186 @@
     </div>`;
   }
 
-  /* ---------- charts ---------- */
+  /* ---------- YARDAGE BOOK (예정 라운드) ---------- */
+  function upcomingFor() {
+    const q = state.search.trim().toLowerCase();
+    return UPCOMING.filter(u => {
+      if (state.year !== 'all' && String(u.year) !== String(state.year)) return false;
+      if (!q) return true;
+      return [u.club, u.clubShort, u.region, u.date, u.courseLabel, '예정'].join(' ').toLowerCase().includes(q);
+    });
+  }
+
+  function upcomingRowHtml(u) {
+    const open = state.openId === u.id;
+    return `<tr class="row upcoming ${open ? 'open' : ''}" data-id="${u.id}">
+        <td style="white-space:nowrap;color:#0f766e;font-weight:700">${dateKo(u.date)}</td>
+        <td>
+          <div class="cell-club">${esc(u.clubShort)}</div>
+          <span class="yrd-badge-chip">${esc(u.badge || '📅 예정 · 야디지북 준비됨')}</span>
+          <div class="cell-courses">${esc(u.region || '')}${u.teeTime ? ' · ' + esc(u.teeTime) + ' 티오프' : ''}</div>
+        </td>
+        <td style="color:var(--slate-500);font-size:12px">${esc(u.courseLabel || (u.courses || []).join(' · ') || '–')}</td>
+        <td><span class="score-upcoming">예정</span></td>
+        <td class="toPar">–</td>
+        <td style="color:var(--slate-300)">–</td>
+        <td style="color:var(--slate-300)">–</td>
+        <td class="td-center"><span class="tag tag-up">야디지북</span></td>
+      </tr>` + (open ? `<tr class="scorecard-row"><td colspan="8">${yardageBookHtml(u)}</td></tr>` : '');
+  }
+
+  function yardageBookHtml(u) {
+    return `<div class="scorecard yrd" id="yrd">
+      <div class="sc-head">
+        <div>
+          <h4>📓 ${esc(u.clubShort)} 18홀 야디지북</h4>
+          <div class="meta">${dateKo(u.date)}${u.weekday ? '(' + u.weekday + ')' : ''}${u.teeTime ? ' · ' + esc(u.teeTime) + ' 티오프' : ''} · 파 ${u.par || 73} · 18홀 (SUN 9 + POINT 9) · ${esc(u.source || '')}</div>
+        </div>
+        <div class="meta yrd-head-note">홀 칩을 누르면 홀 그림·그린맵·티별 거리·공략이 바뀝니다</div>
+      </div>
+      <div id="yrdBody" class="yrd-body"><div class="yrd-loading">야디지북을 불러오는 중…</div></div>
+    </div>`;
+  }
+
+  function ensureYardage() {
+    const body = $('#yrdBody');
+    if (!body) return;
+    const u = UPCOMING.find(x => x.id === state.openId) || {};
+    const path = u.yardage || 'data/yardage/sunningpoint.json';
+    if (state.yrd.doc && state.yrd.path === path) { renderYardage(); return; }
+    if (state.yrd.loading) return;
+    state.yrd.loading = true;
+    fetch(path, { cache: 'no-store' })
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .then(doc => {
+        state.yrd.doc = doc;
+        state.yrd.path = path;
+        state.yrd.loading = false;
+        renderYardage();
+      })
+      .catch(err => {
+        console.error('야디지북 로딩 실패', err);
+        state.yrd.loading = false;
+        const el = $('#yrdBody');
+        if (el) el.innerHTML = `<div class="yrd-loading">야디지북을 불러오지 못했습니다. 잠시 후 다시 열어 주세요.</div>`;
+      });
+  }
+
+  function yrdShots(h) {
+    return (h.shots || []).slice()
+      .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0))
+      .filter(s => Number.isFinite(Number(s.x)) && Number.isFinite(Number(s.y)))
+      .map((s, i) => Object.assign({}, s, { x: Number(s.x), y: Number(s.y), n: Number(s.order) || i + 1 }));
+  }
+
+  // 궤적(SVG) — 좌표는 그림 위 백분율, viewBox는 그림 실제 픽셀이라 비율이 정확하다
+  function yrdTrajectory(h) {
+    const W = (h.images && h.images.width) || 558;
+    const H = (h.images && h.images.height) || 513;
+    const pts = yrdShots(h);
+    if (pts.length < 2) return '';
+    const px = p => [p.x / 100 * W, p.y / 100 * H];
+    let paths = '';
+    pts.forEach((p, i) => {
+      if (i === 0) return;
+      const a = pts[i - 1];
+      const [x1, y1] = px(a), [x2, y2] = px(p);
+      const dx = x2 - x1, dy = y2 - y1, len = Math.hypot(dx, dy) || 1;
+      const bend = Math.min(30, len * 0.14);
+      const cx = (x1 + x2) / 2 - dy / len * bend;
+      const cy = (y1 + y2) / 2 + dx / len * bend;
+      const dash = i === 1 ? 'tee' : 'solid';
+      paths += `<path class="yrd-arc ${dash}" d="M${x1.toFixed(1)} ${y1.toFixed(1)} Q${cx.toFixed(1)} ${cy.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}" marker-end="url(#yrdArrow-${dash})"/>`;
+    });
+    return `<svg class="yrd-svg" viewBox="0 0 ${W} ${H}" aria-hidden="true">
+      <defs>
+        <marker id="yrdArrow-solid" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0f766e"/></marker>
+        <marker id="yrdArrow-tee" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#0ea5e9"/></marker>
+      </defs>${paths}</svg>`;
+  }
+
+  // 번호 핀 + 샷 라벨(HTML) — 글자는 화면 크기와 무관하게 또렷하게
+  function yrdPins(h) {
+    const pts = yrdShots(h);
+    if (!pts.length) return '';
+    return pts.map((p, i) => {
+      const label = [p.club, p.lie].filter(Boolean).join(' · ');
+      const side = p.x > 60 ? 'left' : 'right';
+      const isLast = i === pts.length - 1;
+      return `<div class="yrd-pin ${isLast ? 'last' : ''}" style="left:${p.x}%;top:${p.y}%">
+        <span class="yrd-dot">${p.n}</span>${label ? `<span class="yrd-tag ${side}">${esc(label)}</span>` : ''}
+      </div>`;
+    }).join('');
+  }
+
+  function renderYardage() {
+    const body = $('#yrdBody');
+    if (!body) return;
+    const doc = state.yrd.doc;
+    if (!doc) return;
+    const all = doc.courses.reduce((a, c) => a.concat(c.holes), []);
+    const hole = all.find(x => x.no === Number(state.yrd.hole)) || all[0];
+    const course = doc.courses.find(c => c.code === hole.courseCode) || doc.courses[0];
+    const meta = doc.meta || {};
+    const tees = meta.tees || ['black', 'blue', 'white', 'yellow', 'red'];
+    const teLabels = meta.teeLabels || {};
+    const defTee = meta.defaultTee || 'white';
+    const W = (hole.images && hole.images.width) || 558;
+    const H = (hole.images && hole.images.height) || 513;
+    const shots = yrdShots(hole);
+
+    const tabs = doc.courses.map(c => `<button type="button" class="yrd-tab ${c.code === hole.courseCode ? 'active' : ''}" data-ytab="${c.code}">${esc(c.label)}<span>${c.startHole}~${c.endHole}홀 · 파 ${c.par}</span></button>`).join('');
+    const chips = doc.courses.map(c => `<div class="yrd-chipgroup"><span class="yrd-chipcourse">${c.code}</span>${c.holes.map(x =>
+      `<button type="button" class="yrd-hchip ${x.no === hole.no ? 'active' : ''}" data-yhole="${x.no}" title="${x.courseNo}번 홀 · 파${x.par} · HDCP ${x.hdcp}">
+        <b>${x.no}</b><i>파${x.par}</i><em>${x.distances[defTee] != null ? x.distances[defTee] + 'm' : ''}</em></button>`).join('')}</div>`).join('');
+    const distRows = tees.map(t => `<tr class="${t === defTee ? 'on' : ''}"><th>${esc(teLabels[t] || t)}${t === defTee ? ' <em>기본</em>' : ''}</th><td>${hole.distances[t] != null ? hole.distances[t] : '–'}<small>m</small></td></tr>`).join('');
+
+    const rec = [];
+    if (hole.score != null) rec.push(`<span class="yrd-rec"><b>${hole.score}</b>타<em>파${hole.par} ${fmtSign(Number(hole.score) - hole.par)}</em></span>`);
+    if (hole.putts != null) rec.push(`<span class="yrd-rec"><b>${hole.putts}</b>퍼트</span>`);
+    if (hole.fairway) rec.push(`<span class="yrd-rec">페어웨이 <b>${esc(hole.fairway)}</b></span>`);
+    const shotList = shots.length ? `<div class="yrd-shots"><div class="yrd-sec">샷 기록</div><ol>${shots.map(s => `<li><b>${s.n}</b><span>${esc([s.club, s.lie].filter(Boolean).join(' · ') || '기록')}</span></li>`).join('')}</ol></div>` : '';
+
+    body.innerHTML = `
+      <div class="yrd-tabs" role="tablist" aria-label="코스 선택">${tabs}</div>
+      <div class="yrd-chips" role="group" aria-label="홀 선택">${chips}</div>
+      <div class="yrd-main">
+        <div class="yrd-stage">
+          <div class="yrd-frame" style="aspect-ratio:${W} / ${H}">
+            <img class="yrd-img" src="${esc(hole.images.layout)}" alt="${esc(course.label)} ${hole.courseNo}번 홀 레이아웃" loading="lazy">
+            ${yrdTrajectory(hole)}
+            ${yrdPins(hole)}
+            <span class="yrd-stagetag">${hole.no}번 홀 <i>파${hole.par}</i></span>
+          </div>
+          <div class="yrd-hint">
+            <span class="yrd-hint-ico">💬</span>
+            <div><b>${shots.length ? '샷 기록 ' + shots.length + '개가 홀 그림 위에 표시됐습니다.' : '아직 샷 기록이 없습니다.'}</b>
+            <span>${shots.length ? '톡으로 새 샷을 보내주시면 번호 핀과 궤적이 바로 이어서 그려집니다.' : '라운드 중 톡으로 "티샷 우측 러프 150m 말뚝 근처", "세컨 그린 온"처럼 보내주시면 이 홀 그림 위 정확한 위치에 번호 핀과 궤적이 바로 표시됩니다.'}</span></div>
+          </div>
+        </div>
+        <aside class="yrd-side">
+          <div class="yrd-holehead">
+            <span class="yrd-bigno">${hole.no}</span>
+            <div>
+              <h5>${esc(hole.title || '')}</h5>
+              <p>${esc(course.label)} ${hole.courseNo}번 · 파 ${hole.par} · HDCP ${hole.hdcp} · ${hole.distances[defTee]}m (${esc(teLabels[defTee] || defTee)})</p>
+            </div>
+          </div>
+          ${rec.length || hole.note ? `<div class="yrd-record">${rec.join('')}${hole.note ? `<span class="yrd-recnote">${esc(hole.note)}</span>` : ''}</div>` : ''}
+          <div class="yrd-grid">
+            <div class="yrd-sec">티별 거리 <em>단위 m</em></div>
+            <table class="yrd-dist"><thead><tr><th>티</th><th>거리</th></tr></thead><tbody>${distRows}</tbody></table>
+          </div>
+          <div class="yrd-sec">그린맵 · 언듈레이션</div>
+          <div class="yrd-greens">
+            <figure><img src="${esc(hole.images.greenmap)}" alt="${hole.courseNo}번 홀 그린맵" loading="lazy"><figcaption>Green Map</figcaption></figure>
+            <figure><img src="${esc(hole.images.undulation)}" alt="${hole.courseNo}번 홀 언듈레이션" loading="lazy"><figcaption>Undulation</figcaption></figure>
+          </div>
+          <div class="yrd-tip"><div class="yrd-sec">공략 포인트</div><p>${esc(hole.tip || '')}</p></div>
+          ${shotList}
+        </aside>
+      </div>`;
+  }
   function baseOptions(extra) {
     const o = {
       responsive: true,
@@ -1102,6 +1296,32 @@
           const p = vid.play();
           if (p && p.catch) p.catch(() => { playBtn.style.display = ''; });
         }
+        return;
+      }
+
+      // 야디지북: 홀 칩 / 코스 탭
+      const yHole = e.target.closest && e.target.closest('[data-yhole]');
+      if (yHole) {
+        e.preventDefault();
+        e.stopPropagation();
+        state.yrd.hole = Number(yHole.dataset.yhole);
+        const doc = state.yrd.doc;
+        const h = doc && doc.courses.reduce((a, c) => a.concat(c.holes), []).find(x => x.no === state.yrd.hole);
+        if (h) state.yrd.course = h.courseCode;
+        renderYardage();
+        return;
+      }
+      const yTab = e.target.closest && e.target.closest('[data-ytab]');
+      if (yTab) {
+        e.preventDefault();
+        e.stopPropagation();
+        const code = yTab.dataset.ytab;
+        const doc = state.yrd.doc;
+        const c = doc && doc.courses.find(x => x.code === code);
+        state.yrd.course = code;
+        if (c && c.holes.length) state.yrd.hole = c.holes[0].no;
+        renderYardage();
+        return;
       }
     }, true);
 
