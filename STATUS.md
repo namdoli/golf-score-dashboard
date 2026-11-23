@@ -1,6 +1,6 @@
 # 골프 대시보드 — 배포 완료
 
-**최종 업데이트:** 2026-11-23 13:55 (KST)
+**최종 업데이트:** 2026-11-23 14:20 (KST)
 
 - 저장소: https://github.com/namdoli/golf-score-dashboard (public, `main`)
 - 라이브: https://namdoli.github.io/golf-score-dashboard/ (GitHub Pages, `main` / `/ (root)`, 상태 `built`)
@@ -30,6 +30,21 @@
 - 마커 42개, 차트 6개, 라운드 표 66행 정상 · 연도 필터(2026=35라운드/21곳/92.6타, 2023=1라운드) 지도·전 섹션 갱신 확인
 - 스크린샷: `golf/preview_map_desktop.png`, `golf/preview_map_mobile.png`, `golf/preview_map_detail.png`
 - 남은 특성: 지명 라벨은 로마자(Seoul, Chuncheon)이고, 농촌 지역은 z12–13에서 라벨이 드물며 한강 하구 같은 곳은 확대 시 배경이 비어 보임.
+
+## 스윙 영상 연결 (2026-11-23 14:05–14:20)
+- 사용자가 보낸 영상 2개를 프레임 추출로 직접 확인해 판별: `IMG_7229`(18.74초, 하얀 상의, 흐린 하늘·암벽 배경) → 라비에벨 올드, `IMG_2400`(4.77초, 청록/초록 상의, 맑은 하늘·건조한 능선) → 라비에벨 듄스. 두 영상 모두 1280x720 저장 + 회전 메타데이터(세로 720x1280 표시).
+- 매칭 라운드(가장 최근): 올드 = 2026-10-29 11:46 티오프 · 90타(+18) `316cf34d…`, 듄스 = 2026-10-30 07:58 티오프 · 95타(+23) `9bb04278…`
+- 인코딩: 720x1280(세로), H.264 High, CRF 26/25, preset slow, `+faststart`, AAC 64k 모노, 30fps → 2.0MB(18.7초) / 1.0MB(4.8초). 포스터 JPG 별도 생성(89KB/153KB).
+- UI: 표 `🎬 스윙 영상` 배지(행 펼치기와 분리, 바로 모달) · 스코어카드 안 인라인 플레이어(포스터+▶ 오버레이, `preload=metadata`) · 전체화면 모달(`controls playsinline`, 자동재생, Esc/배경/✕ 닫기) · `🎬 스윙 영상만` 필터 · 상단 갤러리 카드. 캐시 버스팅 `?v=20261123d`.
+- 데이터: `data/scores.json` 두 라운드에 `swingVideo` 필드, 원본 목록은 `data/videos.json`, `golf/make_data.py`가 재생성 시 자동 재부착.
+
+## 스윙 영상 검증 (2026-11-23 14:18–14:19, 라이브 URL)
+- 배포 확인: `index.html` `?v=20261123d`, `videos/*.mp4`·`data/videos.json` 200.
+- 갤러리 카드 2개 → 모달: 올드 `readyState 4`, `videoWidth 720 / videoHeight 1280`, duration 18.73, error 없음, 자동재생 확인. 듄스 `readyState 4`, 720x1280, duration 4.77, 끝까지 재생(t=4.77).
+- 표 배지 클릭 → 모달 정상(행 펼치기와 충돌 없음), 크게 보기 → 모달, 인라인 ▶ 버튼 → `readyState 4`·`videoWidth 720`·재생 확인.
+- `🎬 스윙 영상만` 필터 → 2라운드만 표시(2026-10-30·2026-10-29).
+- 스크린샷: `golf/preview_video.png`(모달 재생), `golf/preview_swing_gallery.png`(갤러리·필터)
+- 남은 특성: 모달 제목의 부제가 좁은 폭에서 두 줄로 접힘(가독성 문제 없음).
 
 ## 데이터
 66라운드 · 1,188홀 · 42개 골프장(전부 카카오맵 실좌표) · 평균 95.1타 · 베스트 81타 · 핸디캡 17.7
