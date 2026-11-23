@@ -596,32 +596,50 @@
     }
     const avgByYear = years.map(y => mean(yc[y]));
     const counts = years.map(y => yc[y].length);
+    const avgMin = Math.min(...avgByYear), avgMax = Math.max(...avgByYear);
+    const isOn = y => state.year === 'all' || state.year === String(y);
     drawChart('yearChart', {
       type: 'bar',
       data: {
-        labels: years.map(String),
+        labels: years.map(y => `${y}년`),
         datasets: [
           {
-            label: '연도 평균 타수', data: avgByYear.map(v => Math.round(v * 10) / 10),
-            backgroundColor: years.map(y => (state.year === 'all' || state.year === String(y)) ? 'rgba(5,150,105,.82)' : 'rgba(203,213,225,.85)'),
-            borderRadius: 8, maxBarThickness: 52, order: 2
+            label: '라운딩 횟수', data: counts, yAxisID: 'y',
+            backgroundColor: years.map(y => isOn(y) ? 'rgba(251,146,60,.42)' : 'rgba(251,146,60,.15)'),
+            borderColor: years.map(y => isOn(y) ? '#fb923c' : 'rgba(251,146,60,.55)'),
+            borderWidth: 1.5, borderRadius: 8, borderSkipped: false, maxBarThickness: 52,
+            pointStyle: 'rectRounded', order: 2
           },
           {
-            label: '라운드 수', data: counts, type: 'line', yAxisID: 'y1',
-            borderColor: COLORS.amber, backgroundColor: COLORS.amber,
-            borderWidth: 2, pointRadius: 3, tension: .3, order: 1
+            label: '연도 평균 타수', data: avgByYear.map(v => Math.round(v * 10) / 10),
+            type: 'line', yAxisID: 'y1',
+            borderColor: COLORS.emerald, backgroundColor: COLORS.emerald,
+            borderWidth: 3, pointRadius: 4.5, pointHoverRadius: 6,
+            pointBackgroundColor: COLORS.emerald, pointBorderColor: '#fff', pointBorderWidth: 2,
+            pointStyle: 'circle', tension: .3, order: 0
           }
         ]
       },
       options: baseOptions({
         plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: { label: c => c.dataset.label === '라운드 수' ? `${c.parsed.y}라운드` : `평균 ${c.parsed.y}타` } }
+          legend: { display: true, position: 'top', align: 'end', labels: { boxWidth: 12, boxHeight: 12, font: { size: 11 }, padding: 10, usePointStyle: true } },
+          tooltip: { callbacks: {
+            label: c => c.dataset.type === 'line' ? `평균 ${fmt1(c.parsed.y)}타` : `${c.parsed.y}라운드`
+          } }
         },
         scales: {
           x: { grid: { display: false }, ticks: { font: { size: 11 } } },
-          y: { beginAtZero: false, suggestedMin: avgByYear.length ? Math.min(...avgByYear) - 4 : 70, title: { display: true, text: '평균 타수', font: { size: 10 } }, grid: { color: 'rgba(226,232,240,.9)' } },
-          y1: { position: 'right', beginAtZero: true, title: { display: true, text: '라운드', font: { size: 10 } }, grid: { display: false }, ticks: { precision: 0 } }
+          y: {
+            beginAtZero: true, suggestedMax: Math.max(...counts) + 4,
+            title: { display: true, text: '라운딩 횟수', font: { size: 10 } },
+            grid: { color: 'rgba(226,232,240,.9)' }, ticks: { precision: 0 }
+          },
+          y1: {
+            position: 'right', beginAtZero: false,
+            suggestedMin: Math.floor(avgMin - 3), suggestedMax: Math.ceil(avgMax + 3),
+            title: { display: true, text: '평균 타수', font: { size: 10 } },
+            grid: { display: false }
+          }
         }
       })
     });
