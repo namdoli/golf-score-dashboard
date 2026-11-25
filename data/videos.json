@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T22:42:48+09:00",
+  "generatedAt": "2026-11-25T16:45:21+09:00",
   "note": "라운드에 연결된 스윙 영상 목록. 한 라운드에 여러 개를 두려면 같은 roundId로 항목을 여러 번 넣으면 됩니다(배열 순서 = 재생 순서). make_data.py가 이 파일을 읽어 scores.json의 해당 라운드에 swingVideos 배열(1개면 swingVideo도 함께)을 붙입니다.",
   "videos": [
     {
@@ -271,6 +271,36 @@
       "bytes": 857230,
       "originalFile": "_talkv_…3b783b78 (TalkV)",
       "originalBytes": 3274858
+    },
+    {
+      "roundId": "eb98477e-ff5e-4c50-88a2-556b7dd33ef8",
+      "date": "2026-03-23",
+      "club": "원더클럽 클럽72",
+      "src": "videos/club72_20260323.mp4",
+      "poster": "videos/club72_20260323.jpg",
+      "title": "드라이버 티샷",
+      "note": "초록 상의 · 클럽72CC 레이크 코스 라운드 · 해질녘 티샷",
+      "durationSec": 8.97,
+      "width": 720,
+      "height": 1280,
+      "bytes": 1126568,
+      "originalFile": "_talkv_…f29da855.mp4 (TalkV)",
+      "originalBytes": 3138263
+    },
+    {
+      "roundId": "1d3145be-e640-4fa1-b5f9-d56c178cb6dd",
+      "date": "2026-03-27",
+      "club": "포천아도니스CC",
+      "src": "videos/pocheon_adonis_20260327.mp4",
+      "poster": "videos/pocheon_adonis_20260327.jpg",
+      "title": "드라이버 티샷",
+      "note": "자주(버건디) 상의 · 포천아도니스CC 중·서 코스 라운드 · 안개 낀 아침 티샷",
+      "durationSec": 13.6,
+      "width": 720,
+      "height": 1280,
+      "bytes": 1866211,
+      "originalFile": "hWhwLaJb…8e3f3.mp4 (채팅 첨부)",
+      "originalBytes": 3711329
     }
   ]
 }

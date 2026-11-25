@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T17:57:54+09:00",
+  "generatedAt": "2026-11-25T16:45:21+09:00",
   "note": "라운드에 연결된 사진 목록. make_data.py가 이 파일을 읽어 scores.json의 해당 라운드에 photos 배열을 붙입니다.",
   "photos": [
     {
@@ -57,6 +57,20 @@
       "height": 1600,
       "bytes": 328470,
       "originalFile": "IMG_1697.jpg"
+    },
+    {
+      "roundId": "1d3145be-e640-4fa1-b5f9-d56c178cb6dd",
+      "date": "2026-03-27",
+      "club": "포천아도니스CC",
+      "files": [
+        "photos/pocheon_adonis_20260327.jpg"
+      ],
+      "title": "아침 안개와 소나무",
+      "note": "포천아도니스CC · 새벽 안개 속 소나무와 일출 풍경",
+      "width": 1200,
+      "height": 1600,
+      "bytes": 214930,
+      "originalFile": "IMG_1328.jpg"
     }
   ]
 }
