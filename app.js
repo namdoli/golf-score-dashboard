@@ -1294,7 +1294,10 @@
       const label = [p.club, p.lie].filter(Boolean).join(' · ');
       const side = p.x > 60 ? 'left' : 'right';
       const isLast = i === pts.length - 1;
-      return `<div class="yrd-pin ${isLast ? 'last' : ''}" style="left:${p.x}%;top:${p.y}%">
+      const prev = pts[i - 1];
+      // 바로 앞 샷과 거의 같은 높이·자리면 라벨이 겹치므로 한 칸 아래로 내린다
+      const crowded = !!prev && Math.abs(prev.y - p.y) < 9 && Math.abs(prev.x - p.x) < 45;
+      return `<div class="yrd-pin ${isLast ? 'last' : ''} ${crowded ? 'tag-below' : ''}" style="left:${p.x}%;top:${p.y}%">
         <span class="yrd-dot">${p.n}</span>${label ? `<span class="yrd-tag ${side}">${esc(label)}</span>` : ''}
       </div>`;
     }).join('');

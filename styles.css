@@ -591,6 +591,7 @@ body.modal-open{overflow:hidden}
   box-shadow:0 2px 6px rgba(15,23,42,.12);max-width:230px;line-height:1.35;
 }
 .yrd-tag.left{left:auto;right:30px}
+.yrd-pin.tag-below .yrd-tag{top:calc(50% + 30px)}
 .yrd-stagetag{
   position:absolute;left:10px;top:10px;font-size:11px;font-weight:800;color:#fff;
   background:rgba(15,23,42,.72);backdrop-filter:blur(4px);border-radius:9px;padding:4px 10px;
