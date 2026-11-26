@@ -205,7 +205,24 @@
       "width": 558,
       "height": 513
      },
-     "shots": [],
+     "shots": [
+      {
+       "order": 1,
+       "n": 1,
+       "x": 73.1,
+       "y": 51.9,
+       "club": "티샷",
+       "lie": "페어웨이 중앙 · 105m 남음"
+      },
+      {
+       "order": 2,
+       "n": 2,
+       "x": 75.2,
+       "y": 18.5,
+       "club": "세컨",
+       "lie": "레귤러 온 · 핀하이 우측 7m"
+      }
+     ],
      "putts": null,
      "score": null,
      "note": null
