@@ -169,7 +169,16 @@
       "width": 558,
       "height": 513
      },
-     "shots": [],
+     "shots": [
+      {
+       "order": 1,
+       "n": 1,
+       "x": 45.9,
+       "y": 32.7,
+       "club": "티샷",
+       "lie": "그린 옆 좌측 해저드"
+      }
+     ],
      "putts": null,
      "score": null,
      "note": null
