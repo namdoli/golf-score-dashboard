@@ -42,275 +42,22 @@
   "notes": [
    "거리·Par·HDCP는 클럽 공식 코스정보 페이지 스코어카드 표를 기준으로 했습니다.",
    "course-point.asp 맵 페이지의 POINT 1번 Blue 거리는 333m로 표기되어 있으나, 공식 스코어카드 합계(3,122m)와 맞는 323m를 채택했습니다.",
-   "shots/putts/score/note 는 라운드 전이라 비어 있습니다. 라운드 중 채워지면 홀 그림 위에 자동으로 그려집니다."
+   "shots/putts/score/note 는 라운드 전이라 비어 있습니다. 라운드 중 채워지면 홀 그림 위에 자동으로 그려집니다.",
+   "2026-11-27 라운드 코스 순서 확정: POINT(전반 1~9홀, 파36) → SUN(후반 10~18홀, 파37). 배열 순서와 홀 번호(no)를 그 순서로 맞췄고, courseNo는 각 코스 1~9번 그대로입니다."
   ]
  },
  "courses": [
   {
-   "code": "SUN",
-   "label": "SUN 코스",
-   "par": 37,
-   "startHole": 1,
-   "endHole": 9,
-   "slug": "sun",
-   "note": "9번 홀이 Par 6(637m) — SUN 코스가 Par 37인 이유",
-   "holes": [
-    {
-     "no": 1,
-     "courseNo": 1,
-     "courseCode": "SUN",
-     "par": 4,
-     "hdcp": 1,
-     "title": "왕벗나무가 화려하게 펼쳐진 Par4홀",
-     "tip": "우측의 계류, 오르막 경사로 티샷에 부담을 갖기 쉬운 코스이다. 티샷은 페어웨이 중앙보다는 약간 좌측으로 공략하는 것이 유리하고 세컨샷은 그린 우측앞의 해저드와 벙커를 주의하여야 한다. 2단 그린으로 홀의 위치에 따라 전략적인 라인업이 필요하다.",
-     "distances": {
-      "black": 380,
-      "blue": 365,
-      "white": 341,
-      "yellow": 310,
-      "red": 280
-     },
-     "images": {
-      "layout": "courses/sunningpoint/sun_01.png",
-      "greenmap": "courses/sunningpoint/sun_01_green.jpg",
-      "undulation": "courses/sunningpoint/sun_01_undul.jpg",
-      "width": 564,
-      "height": 513
-     },
-     "shots": [],
-     "putts": null,
-     "score": null,
-     "note": null
-    },
-    {
-     "no": 2,
-     "courseNo": 2,
-     "courseCode": "SUN",
-     "par": 3,
-     "hdcp": 7,
-     "title": "오른쪽의 바위, 배롱나무, 야생화 단지가 조화를 이루고 있는 PAR3홀",
-     "tip": "티잉그라운드와 수평면에 그린이 위치하여 실제보다 앞뒤 쪽이 보인다. 거리를 믿고 편안히 샷을 하는 것이 중요하다. 그린은 전체적으로 중앙을 향한 내리막 경사이다.",
-     "distances": {
-      "black": 160,
-      "blue": 146,
-      "white": 135,
-      "yellow": 135,
-      "red": 113
-     },
-     "images": {
-      "layout": "courses/sunningpoint/sun_02.png",
-      "greenmap": "courses/sunningpoint/sun_02_green.jpg",
-      "undulation": "courses/sunningpoint/sun_02_undul.jpg",
-      "width": 558,
-      "height": 513
-     },
-     "shots": [],
-     "putts": null,
-     "score": null,
-     "note": null
-    },
-    {
-     "no": 3,
-     "courseNo": 3,
-     "courseCode": "SUN",
-     "par": 5,
-     "hdcp": 6,
-     "title": "부담 없이 티샷 할 수 있는 PAR5",
-     "tip": "클럽 하우스를 중심으로 남북으로 펼쳐 진 골프장 전체를 조망할 수 있다. 멀리 좌측에 보이는 소나무를 티샷의 타겟으로 삼는 것이 좋으며, 바위산 뒤쪽으로 벙커까지는 여유가 없다. 우측에 부담을 가져 지나치게 좌측으로 향하면 세컨샷에서 사면에 가릴 수 있다. 그린은 앞뒤로 길고 흐름은 무난하다.",
-     "distances": {
-      "black": 498,
-      "blue": 462,
-      "white": 462,
-      "yellow": 440,
-      "red": 374
-     },
-     "images": {
-      "layout": "courses/sunningpoint/sun_03.png",
-      "greenmap": "courses/sunningpoint/sun_03_green.jpg",
-      "undulation": "courses/sunningpoint/sun_03_undul.jpg",
-      "width": 558,
-      "height": 513
-     },
-     "shots": [],
-     "putts": null,
-     "score": null,
-     "note": null
-    },
-    {
-     "no": 4,
-     "courseNo": 4,
-     "courseCode": "SUN",
-     "par": 4,
-     "hdcp": 5,
-     "title": "시원한 조망을 느낄 수 있는 Par4홀",
-     "tip": "페어웨이 중앙 방향으로 공략하는 것이 안전하다. 앞뒤 긴 그린으로 백핀일 경우 세컨샷에서 충분한 거리를 고려하는 것이 좋다.",
-     "distances": {
-      "black": 343,
-      "blue": 343,
-      "white": 318,
-      "yellow": 284,
-      "red": 284
-     },
-     "images": {
-      "layout": "courses/sunningpoint/sun_04.png",
-      "greenmap": "courses/sunningpoint/sun_04_green.jpg",
-      "undulation": "courses/sunningpoint/sun_04_undul.jpg",
-      "width": 558,
-      "height": 513
-     },
-     "shots": [],
-     "putts": null,
-     "score": null,
-     "note": null
-    },
-    {
-     "no": 5,
-     "courseNo": 5,
-     "courseCode": "SUN",
-     "par": 3,
-     "hdcp": 3,
-     "title": "파 세이브가 쉽지 않은 전망 좋은 Par3홀",
-     "tip": "벙커가 있는 우측보다는 좌측으로 공략하는 것이 안전하다. 그린 중간 부터 뒤쪽으로 우측 내리막이 있다.",
-     "distances": {
-      "black": 173,
-      "blue": 163,
-      "white": 155,
-      "yellow": 143,
-      "red": 120
-     },
-     "images": {
-      "layout": "courses/sunningpoint/sun_05.png",
-      "greenmap": "courses/sunningpoint/sun_05_green.jpg",
-      "undulation": "courses/sunningpoint/sun_05_undul.jpg",
-      "width": 558,
-      "height": 513
-     },
-     "shots": [],
-     "putts": null,
-     "score": null,
-     "note": null
-    },
-    {
-     "no": 6,
-     "courseNo": 6,
-     "courseCode": "SUN",
-     "par": 4,
-     "hdcp": 2,
-     "title": "우리나라 꽃 무궁화가 만발하고, 좌측의 자작나무 숲, 정면의 억새군락이 함께 어우러진 아름다운 내리막 Par4홀",
-     "tip": "티잉그라운드에서 심리적 부담을 갖게 되므로 정면에 보이는 벙커 우측을 목표로 신중한 티샷이 요구 된다. 세컨샷 지점은 대체로 내리막 경사이므로 스탠스에 주의하여야 한다. 그린은 넓고 무난한 편이다.",
-     "distances": {
-      "black": 363,
-      "blue": 343,
-      "white": 343,
-      "yellow": 310,
-      "red": 310
-     },
-     "images": {
-      "layout": "courses/sunningpoint/sun_06.png",
-      "greenmap": "courses/sunningpoint/sun_06_green.jpg",
-      "undulation": "courses/sunningpoint/sun_06_undul.jpg",
-      "width": 558,
-      "height": 513
-     },
-     "shots": [],
-     "putts": null,
-     "score": null,
-     "note": null
-    },
-    {
-     "no": 7,
-     "courseNo": 7,
-     "courseCode": "SUN",
-     "par": 4,
-     "hdcp": 9,
-     "title": "암벽과 보존림이 우측을 지켜주며 좌측과 그린 주위를 단풍나무가 휘감고 있는 Par4홀",
-     "tip": "티샷은 그린 뒤쪽 벙커를 타겟으로 삼는 것이 좋다. 세컨샷 지점에서 그린까지 거리가 실제보다 짧아 보이는 홀이니 거리 표시를 믿는 것이 좋다. 그린 중간 우측의 마운드를 주의하는 것이 좋다.",
-     "distances": {
-      "black": 351,
-      "blue": 351,
-      "white": 340,
-      "yellow": 322,
-      "red": 289
-     },
-     "images": {
-      "layout": "courses/sunningpoint/sun_07.png",
-      "greenmap": "courses/sunningpoint/sun_07_green.jpg",
-      "undulation": "courses/sunningpoint/sun_07_undul.jpg",
-      "width": 558,
-      "height": 513
-     },
-     "shots": [],
-     "putts": null,
-     "score": null,
-     "note": null
-    },
-    {
-     "no": 8,
-     "courseNo": 8,
-     "courseCode": "SUN",
-     "par": 4,
-     "hdcp": 4,
-     "title": "산수유가 넓은 홀을 감싸고 있는 Par4촤측 도그렉 홀",
-     "tip": "티잉 그라운드 정면으로 좌측 수목에 가려진 워터 해저드가 그린앞에 위치하고 있다. 티샷시 클럽 선택과 방향 설정에 신중해야 한다. 세컨샷은 한 클럽 정도 길게 선택하는 것이 좋다. 그린은 전체적으로 오르막 경사이며 우측 면이 높다.",
-     "distances": {
-      "black": 370,
-      "blue": 370,
-      "white": 345,
-      "yellow": 345,
-      "red": 317
-     },
-     "images": {
-      "layout": "courses/sunningpoint/sun_08.png",
-      "greenmap": "courses/sunningpoint/sun_08_green.jpg",
-      "undulation": "courses/sunningpoint/sun_08_undul.jpg",
-      "width": 558,
-      "height": 513
-     },
-     "shots": [],
-     "putts": null,
-     "score": null,
-     "note": null
-    },
-    {
-     "no": 9,
-     "courseNo": 9,
-     "courseCode": "SUN",
-     "par": 6,
-     "hdcp": 8,
-     "title": "시원하게 펼쳐진 페어웨이를 향해 새로운 도전을 할 수 있는 PAR6홀",
-     "tip": "티샷의 거리와 방향성에 따라 스코어가 좌우되는 홀이다. 정면에 보이는 돌담과 우측 벙커 사이를 공략하는 것이 가장 좋다. 그린 공략 시 뒤편이 OB(Out of bounds) 지역임을 감안하고 그린은 뒤편과 우측이 높은 편이다.",
-     "distances": {
-      "black": 637,
-      "blue": 609,
-      "white": 581,
-      "yellow": 581,
-      "red": 526
-     },
-     "images": {
-      "layout": "courses/sunningpoint/sun_09.png",
-      "greenmap": "courses/sunningpoint/sun_09_green.jpg",
-      "undulation": "courses/sunningpoint/sun_09_undul.jpg",
-      "width": 560,
-      "height": 513
-     },
-     "shots": [],
-     "putts": null,
-     "score": null,
-     "note": null
-    }
-   ]
-  },
-  {
    "code": "POINT",
    "label": "POINT 코스",
    "par": 36,
-   "startHole": 10,
-   "endHole": 18,
+   "startHole": 1,
+   "endHole": 9,
    "slug": "point",
    "note": "파3 3홀 · 파5 2홀",
    "holes": [
     {
-     "no": 10,
+     "no": 1,
      "courseNo": 1,
      "courseCode": "POINT",
      "par": 4,
@@ -337,7 +84,7 @@
      "note": null
     },
     {
-     "no": 11,
+     "no": 2,
      "courseNo": 2,
      "courseCode": "POINT",
      "par": 4,
@@ -364,7 +111,7 @@
      "note": null
     },
     {
-     "no": 12,
+     "no": 3,
      "courseNo": 3,
      "courseCode": "POINT",
      "par": 3,
@@ -391,7 +138,7 @@
      "note": null
     },
     {
-     "no": 13,
+     "no": 4,
      "courseNo": 4,
      "courseCode": "POINT",
      "par": 4,
@@ -418,7 +165,7 @@
      "note": null
     },
     {
-     "no": 14,
+     "no": 5,
      "courseNo": 5,
      "courseCode": "POINT",
      "par": 5,
@@ -445,7 +192,7 @@
      "note": null
     },
     {
-     "no": 15,
+     "no": 6,
      "courseNo": 6,
      "courseCode": "POINT",
      "par": 4,
@@ -472,7 +219,7 @@
      "note": null
     },
     {
-     "no": 16,
+     "no": 7,
      "courseNo": 7,
      "courseCode": "POINT",
      "par": 3,
@@ -499,7 +246,7 @@
      "note": null
     },
     {
-     "no": 17,
+     "no": 8,
      "courseNo": 8,
      "courseCode": "POINT",
      "par": 4,
@@ -526,7 +273,7 @@
      "note": null
     },
     {
-     "no": 18,
+     "no": 9,
      "courseNo": 9,
      "courseCode": "POINT",
      "par": 5,
@@ -546,6 +293,260 @@
       "undulation": "courses/sunningpoint/point_09_undul.jpg",
       "width": 558,
       "height": 530
+     },
+     "shots": [],
+     "putts": null,
+     "score": null,
+     "note": null
+    }
+   ]
+  },
+  {
+   "code": "SUN",
+   "label": "SUN 코스",
+   "par": 37,
+   "startHole": 10,
+   "endHole": 18,
+   "slug": "sun",
+   "note": "9번 홀이 Par 6(637m) — SUN 코스가 Par 37인 이유",
+   "holes": [
+    {
+     "no": 10,
+     "courseNo": 1,
+     "courseCode": "SUN",
+     "par": 4,
+     "hdcp": 1,
+     "title": "왕벗나무가 화려하게 펼쳐진 Par4홀",
+     "tip": "우측의 계류, 오르막 경사로 티샷에 부담을 갖기 쉬운 코스이다. 티샷은 페어웨이 중앙보다는 약간 좌측으로 공략하는 것이 유리하고 세컨샷은 그린 우측앞의 해저드와 벙커를 주의하여야 한다. 2단 그린으로 홀의 위치에 따라 전략적인 라인업이 필요하다.",
+     "distances": {
+      "black": 380,
+      "blue": 365,
+      "white": 341,
+      "yellow": 310,
+      "red": 280
+     },
+     "images": {
+      "layout": "courses/sunningpoint/sun_01.png",
+      "greenmap": "courses/sunningpoint/sun_01_green.jpg",
+      "undulation": "courses/sunningpoint/sun_01_undul.jpg",
+      "width": 564,
+      "height": 513
+     },
+     "shots": [],
+     "putts": null,
+     "score": null,
+     "note": null
+    },
+    {
+     "no": 11,
+     "courseNo": 2,
+     "courseCode": "SUN",
+     "par": 3,
+     "hdcp": 7,
+     "title": "오른쪽의 바위, 배롱나무, 야생화 단지가 조화를 이루고 있는 PAR3홀",
+     "tip": "티잉그라운드와 수평면에 그린이 위치하여 실제보다 앞뒤 쪽이 보인다. 거리를 믿고 편안히 샷을 하는 것이 중요하다. 그린은 전체적으로 중앙을 향한 내리막 경사이다.",
+     "distances": {
+      "black": 160,
+      "blue": 146,
+      "white": 135,
+      "yellow": 135,
+      "red": 113
+     },
+     "images": {
+      "layout": "courses/sunningpoint/sun_02.png",
+      "greenmap": "courses/sunningpoint/sun_02_green.jpg",
+      "undulation": "courses/sunningpoint/sun_02_undul.jpg",
+      "width": 558,
+      "height": 513
+     },
+     "shots": [],
+     "putts": null,
+     "score": null,
+     "note": null
+    },
+    {
+     "no": 12,
+     "courseNo": 3,
+     "courseCode": "SUN",
+     "par": 5,
+     "hdcp": 6,
+     "title": "부담 없이 티샷 할 수 있는 PAR5",
+     "tip": "클럽 하우스를 중심으로 남북으로 펼쳐 진 골프장 전체를 조망할 수 있다. 멀리 좌측에 보이는 소나무를 티샷의 타겟으로 삼는 것이 좋으며, 바위산 뒤쪽으로 벙커까지는 여유가 없다. 우측에 부담을 가져 지나치게 좌측으로 향하면 세컨샷에서 사면에 가릴 수 있다. 그린은 앞뒤로 길고 흐름은 무난하다.",
+     "distances": {
+      "black": 498,
+      "blue": 462,
+      "white": 462,
+      "yellow": 440,
+      "red": 374
+     },
+     "images": {
+      "layout": "courses/sunningpoint/sun_03.png",
+      "greenmap": "courses/sunningpoint/sun_03_green.jpg",
+      "undulation": "courses/sunningpoint/sun_03_undul.jpg",
+      "width": 558,
+      "height": 513
+     },
+     "shots": [],
+     "putts": null,
+     "score": null,
+     "note": null
+    },
+    {
+     "no": 13,
+     "courseNo": 4,
+     "courseCode": "SUN",
+     "par": 4,
+     "hdcp": 5,
+     "title": "시원한 조망을 느낄 수 있는 Par4홀",
+     "tip": "페어웨이 중앙 방향으로 공략하는 것이 안전하다. 앞뒤 긴 그린으로 백핀일 경우 세컨샷에서 충분한 거리를 고려하는 것이 좋다.",
+     "distances": {
+      "black": 343,
+      "blue": 343,
+      "white": 318,
+      "yellow": 284,
+      "red": 284
+     },
+     "images": {
+      "layout": "courses/sunningpoint/sun_04.png",
+      "greenmap": "courses/sunningpoint/sun_04_green.jpg",
+      "undulation": "courses/sunningpoint/sun_04_undul.jpg",
+      "width": 558,
+      "height": 513
+     },
+     "shots": [],
+     "putts": null,
+     "score": null,
+     "note": null
+    },
+    {
+     "no": 14,
+     "courseNo": 5,
+     "courseCode": "SUN",
+     "par": 3,
+     "hdcp": 3,
+     "title": "파 세이브가 쉽지 않은 전망 좋은 Par3홀",
+     "tip": "벙커가 있는 우측보다는 좌측으로 공략하는 것이 안전하다. 그린 중간 부터 뒤쪽으로 우측 내리막이 있다.",
+     "distances": {
+      "black": 173,
+      "blue": 163,
+      "white": 155,
+      "yellow": 143,
+      "red": 120
+     },
+     "images": {
+      "layout": "courses/sunningpoint/sun_05.png",
+      "greenmap": "courses/sunningpoint/sun_05_green.jpg",
+      "undulation": "courses/sunningpoint/sun_05_undul.jpg",
+      "width": 558,
+      "height": 513
+     },
+     "shots": [],
+     "putts": null,
+     "score": null,
+     "note": null
+    },
+    {
+     "no": 15,
+     "courseNo": 6,
+     "courseCode": "SUN",
+     "par": 4,
+     "hdcp": 2,
+     "title": "우리나라 꽃 무궁화가 만발하고, 좌측의 자작나무 숲, 정면의 억새군락이 함께 어우러진 아름다운 내리막 Par4홀",
+     "tip": "티잉그라운드에서 심리적 부담을 갖게 되므로 정면에 보이는 벙커 우측을 목표로 신중한 티샷이 요구 된다. 세컨샷 지점은 대체로 내리막 경사이므로 스탠스에 주의하여야 한다. 그린은 넓고 무난한 편이다.",
+     "distances": {
+      "black": 363,
+      "blue": 343,
+      "white": 343,
+      "yellow": 310,
+      "red": 310
+     },
+     "images": {
+      "layout": "courses/sunningpoint/sun_06.png",
+      "greenmap": "courses/sunningpoint/sun_06_green.jpg",
+      "undulation": "courses/sunningpoint/sun_06_undul.jpg",
+      "width": 558,
+      "height": 513
+     },
+     "shots": [],
+     "putts": null,
+     "score": null,
+     "note": null
+    },
+    {
+     "no": 16,
+     "courseNo": 7,
+     "courseCode": "SUN",
+     "par": 4,
+     "hdcp": 9,
+     "title": "암벽과 보존림이 우측을 지켜주며 좌측과 그린 주위를 단풍나무가 휘감고 있는 Par4홀",
+     "tip": "티샷은 그린 뒤쪽 벙커를 타겟으로 삼는 것이 좋다. 세컨샷 지점에서 그린까지 거리가 실제보다 짧아 보이는 홀이니 거리 표시를 믿는 것이 좋다. 그린 중간 우측의 마운드를 주의하는 것이 좋다.",
+     "distances": {
+      "black": 351,
+      "blue": 351,
+      "white": 340,
+      "yellow": 322,
+      "red": 289
+     },
+     "images": {
+      "layout": "courses/sunningpoint/sun_07.png",
+      "greenmap": "courses/sunningpoint/sun_07_green.jpg",
+      "undulation": "courses/sunningpoint/sun_07_undul.jpg",
+      "width": 558,
+      "height": 513
+     },
+     "shots": [],
+     "putts": null,
+     "score": null,
+     "note": null
+    },
+    {
+     "no": 17,
+     "courseNo": 8,
+     "courseCode": "SUN",
+     "par": 4,
+     "hdcp": 4,
+     "title": "산수유가 넓은 홀을 감싸고 있는 Par4촤측 도그렉 홀",
+     "tip": "티잉 그라운드 정면으로 좌측 수목에 가려진 워터 해저드가 그린앞에 위치하고 있다. 티샷시 클럽 선택과 방향 설정에 신중해야 한다. 세컨샷은 한 클럽 정도 길게 선택하는 것이 좋다. 그린은 전체적으로 오르막 경사이며 우측 면이 높다.",
+     "distances": {
+      "black": 370,
+      "blue": 370,
+      "white": 345,
+      "yellow": 345,
+      "red": 317
+     },
+     "images": {
+      "layout": "courses/sunningpoint/sun_08.png",
+      "greenmap": "courses/sunningpoint/sun_08_green.jpg",
+      "undulation": "courses/sunningpoint/sun_08_undul.jpg",
+      "width": 558,
+      "height": 513
+     },
+     "shots": [],
+     "putts": null,
+     "score": null,
+     "note": null
+    },
+    {
+     "no": 18,
+     "courseNo": 9,
+     "courseCode": "SUN",
+     "par": 6,
+     "hdcp": 8,
+     "title": "시원하게 펼쳐진 페어웨이를 향해 새로운 도전을 할 수 있는 PAR6홀",
+     "tip": "티샷의 거리와 방향성에 따라 스코어가 좌우되는 홀이다. 정면에 보이는 돌담과 우측 벙커 사이를 공략하는 것이 가장 좋다. 그린 공략 시 뒤편이 OB(Out of bounds) 지역임을 감안하고 그린은 뒤편과 우측이 높은 편이다.",
+     "distances": {
+      "black": 637,
+      "blue": 609,
+      "white": 581,
+      "yellow": 581,
+      "red": 526
+     },
+     "images": {
+      "layout": "courses/sunningpoint/sun_09.png",
+      "greenmap": "courses/sunningpoint/sun_09_green.jpg",
+      "undulation": "courses/sunningpoint/sun_09_undul.jpg",
+      "width": 560,
+      "height": 513
      },
      "shots": [],
      "putts": null,

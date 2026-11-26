@@ -1221,7 +1221,7 @@
       <div class="sc-head">
         <div>
           <h4>📓 ${esc(u.clubShort)} 18홀 야디지북</h4>
-          <div class="meta">${dateKo(u.date)}${u.weekday ? '(' + u.weekday + ')' : ''}${u.teeTime ? ' · ' + esc(u.teeTime) + ' 티오프' : ''} · 파 ${u.par || 73} · 18홀 (SUN 9 + POINT 9)</div>
+          <div class="meta">${dateKo(u.date)}${u.weekday ? '(' + u.weekday + ')' : ''}${u.teeTime ? ' · ' + esc(u.teeTime) + ' 티오프' : ''} · 파 ${u.par || 73} · <span id="yrdCourses">18홀</span></div>
         </div>
         <div class="meta yrd-head-note">홀 칩을 누르면 홀 그림·그린맵·티별 거리·공략이 바뀝니다</div>
       </div>
@@ -1316,9 +1316,11 @@
     const H = (hole.images && hole.images.height) || 513;
     const shots = yrdShots(hole);
 
+    const head = $('#yrdCourses');
+    if (head) head.textContent = '18홀 (' + doc.courses.map(c => `${c.code} ${c.holes.length}`).join(' + ') + ')';
     const tabs = doc.courses.map(c => `<button type="button" class="yrd-tab ${c.code === hole.courseCode ? 'active' : ''}" data-ytab="${c.code}">${esc(c.label)}<span>${c.startHole}~${c.endHole}홀 · 파 ${c.par}</span></button>`).join('');
     const chips = doc.courses.map(c => `<div class="yrd-chipgroup"><span class="yrd-chipcourse">${c.code}</span>${c.holes.map(x =>
-      `<button type="button" class="yrd-hchip ${x.no === hole.no ? 'active' : ''}" data-yhole="${x.no}" title="${x.courseNo}번 홀 · 파${x.par} · HDCP ${x.hdcp}">
+      `<button type="button" class="yrd-hchip ${x.no === hole.no ? 'active' : ''}" data-yhole="${x.no}" title="${x.no}번 홀 (${c.code} ${x.courseNo}번) · 파${x.par} · HDCP ${x.hdcp}">
         <b>${x.no}</b><i>파${x.par}</i><em>${x.distances[defTee] != null ? x.distances[defTee] + 'm' : ''}</em></button>`).join('')}</div>`).join('');
     const distRows = tees.map(t => `<tr class="${t === defTee ? 'on' : ''}"><th>${esc(teLabels[t] || t)}${t === defTee ? ' <em>기본</em>' : ''}</th><td>${hole.distances[t] != null ? hole.distances[t] : '–'}<small>m</small></td></tr>`).join('');
 
