@@ -696,7 +696,16 @@
       "width": 558,
       "height": 513
      },
-     "shots": [],
+     "shots": [
+      {
+       "order": 1,
+       "n": 1,
+       "x": 81.0,
+       "y": 37.0,
+       "club": "티샷",
+       "lie": "그린 옆 우측 벙커"
+      }
+     ],
      "putts": null,
      "score": null,
      "note": null
