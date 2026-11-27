@@ -591,7 +591,16 @@
       "width": 558,
       "height": 513
      },
-     "shots": [],
+     "shots": [
+      {
+       "order": 1,
+       "n": 1,
+       "x": 72.6,
+       "y": 26.6,
+       "club": "5번 우드",
+       "lie": "페어웨이 · 72m 남음"
+      }
+     ],
      "putts": null,
      "score": null,
      "note": null
