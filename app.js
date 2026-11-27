@@ -1004,8 +1004,9 @@
       });
     });
 
-    // 펼쳐진 예정 라운드가 있으면 야디지북을 불러와 그린다
-    if (up.some(u => u.id === state.openId)) ensureYardage();
+    // 펼쳐진 카드가 야디지북을 쓰는 라운드(예정·완료)면 불러와 그린다
+    const openYrd = up.concat(rows).find(x => x.id === state.openId && x.yardage);
+    if (openYrd) ensureYardage();
   }
 
   function toggleRound(id) {
@@ -1030,6 +1031,9 @@
 
   function mediaChipsHtml(r) {
     const chips = [];
+    if (r.yardage) {
+      chips.push(`<span class="rc-chip rc-chip-plan" title="라운드 중 기록한 홀별 샷·퍼트 야디지북"><span aria-hidden="true">📓</span>야디지북</span>`);
+    }
     const vids = roundVideos(r);
     if (vids.length) {
       const label = vids.length > 1 ? `스윙 영상 ${vids.length}` : '스윙 영상';
@@ -1179,7 +1183,7 @@
         </div>
       </div>
       <div class="sc-note">색상: <span style="color:#047857;font-weight:700">버디 이하</span> · <span style="color:#0369a1;font-weight:700">파</span> · <span style="color:#334155;font-weight:700">보기</span> · <span style="color:#b45309;font-weight:700">더블</span> · <span style="color:#be123c;font-weight:700">트리플+</span></div>
-    </div>`;
+    </div>${r.yardage ? `<div class="round-yardage">${yardageBookHtml(r)}</div>` : ''}`;
   }
 
   /* ---------- YARDAGE BOOK (예정 라운드) ---------- */
@@ -1217,13 +1221,15 @@
   }
 
   function yardageBookHtml(u) {
+    const wd = u.weekday || weekdayKo(u.date);
+    const done = hasScore(u);
     return `<div class="scorecard yrd" id="yrd">
       <div class="sc-head">
         <div>
-          <h4>📓 ${esc(u.clubShort)} 18홀 야디지북</h4>
-          <div class="meta">${dateKo(u.date)}${u.weekday ? '(' + u.weekday + ')' : ''}${u.teeTime ? ' · ' + esc(u.teeTime) + ' 티오프' : ''} · 파 ${u.par || 73} · <span id="yrdCourses">18홀</span></div>
+          <h4>📓 ${esc(u.clubShort)} 18홀 야디지북${done ? ' <span style="font-weight:700;color:#0f766e;font-size:11.5px">라운드 중 기록</span>' : ''}</h4>
+          <div class="meta">${dateKo(u.date)}${wd ? '(' + wd + ')' : ''}${u.teeTime ? ' · ' + esc(u.teeTime) + ' 티오프' : ''} · 파 ${u.par || 73} · <span id="yrdCourses">18홀</span></div>
         </div>
-        <div class="meta yrd-head-note">홀 칩을 누르면 홀 그림·그린맵·티별 거리·공략이 바뀝니다</div>
+        <div class="meta yrd-head-note">홀 칩을 누르면 홀 그림·그린맵·티별 거리·공략과 라운드 중 샷 기록이 바뀝니다</div>
       </div>
       <div id="yrdBody" class="yrd-body"><div class="yrd-loading">야디지북을 불러오는 중…</div></div>
     </div>`;
@@ -1232,7 +1238,7 @@
   function ensureYardage() {
     const body = $('#yrdBody');
     if (!body) return;
-    const u = UPCOMING.find(x => x.id === state.openId) || {};
+    const u = UPCOMING.find(x => x.id === state.openId) || ROUNDS.find(x => x.id === state.openId) || {};
     const path = u.yardage || 'data/yardage/sunningpoint.json';
     if (state.yrd.doc && state.yrd.path === path) { renderYardage(); return; }
     if (state.yrd.loading) return;
@@ -1328,7 +1334,9 @@
     const distRows = tees.map(t => `<tr class="${t === defTee ? 'on' : ''}"><th>${esc(teLabels[t] || t)}${t === defTee ? ' <em>기본</em>' : ''}</th><td>${hole.distances[t] != null ? hole.distances[t] : '–'}<small>m</small></td></tr>`).join('');
 
     const rec = [];
-    if (hole.score != null) rec.push(`<span class="yrd-rec"><b>${hole.score}</b>타<em>파${hole.par} ${fmtSign(Number(hole.score) - hole.par)}</em></span>`);
+    const offDiff = hole.officialScore != null && hole.score != null && Number(hole.officialScore) !== Number(hole.score);
+    if (hole.score != null) rec.push(`<span class="yrd-rec"><b>${hole.score}</b>타<em>${offDiff ? '라운드 기록 · ' : ''}파${hole.par} ${fmtSign(Number(hole.score) - hole.par)}</em></span>`);
+    if (offDiff) rec.push(`<span class="yrd-rec"><b>${hole.officialScore}</b>타<em>공식 · 파${hole.par} ${fmtSign(Number(hole.officialScore) - hole.par)}</em></span>`);
     if (hole.putts != null) rec.push(`<span class="yrd-rec"><b>${hole.putts}</b>퍼트</span>`);
     if (hole.fairway) rec.push(`<span class="yrd-rec">페어웨이 <b>${esc(hole.fairway)}</b></span>`);
     const shotList = shots.length ? `<div class="yrd-shots"><div class="yrd-sec">샷 기록</div><ol>${shots.map(s => `<li><b>${s.n}</b><span>${esc([s.club, s.lie].filter(Boolean).join(' · ') || '기록')}</span></li>`).join('')}</ol></div>` : '';

@@ -515,5 +515,14 @@
   "lng": 140.90341,
   "mapsUrl": "https://maps.google.com/?cid=2200508278114603649&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQQAhgEIAA",
   "country": "JP"
+ },
+ {
+  "key": "써닝포인트CC",
+  "name": "써닝포인트CC",
+  "region": "경기 용인",
+  "address": "경기 용인시 처인구 백암면 고안로51번길 205",
+  "lat": 37.14585,
+  "lng": 127.41976,
+  "mapsUrl": "http://place.map.kakao.com/18153261"
  }
 ]

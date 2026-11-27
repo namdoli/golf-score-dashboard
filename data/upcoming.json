@@ -1,37 +1,7 @@
 {
   "meta": {
-    "note": "예정 라운드. 완료 통계(라운드 수·방문 골프장·평균 타수)에는 포함되지 않습니다. scores.json의 rounds와 별도로 관리됩니다.",
-    "updatedAt": "2026-11-27T11:46:00+09:00"
+    "note": "예정 라운드. 완료 통계(라운드 수·방문 골프장·평균 타수)에는 포함되지 않습니다. scores.json의 rounds와 별도로 관리됩니다. 2026-11-27 써닝포인트CC 라운드는 공식 스코어카드가 올라와 scores.json으로 이관했습니다.",
+    "updatedAt": "2026-11-27T11:55:10+09:00"
   },
-  "rounds": [
-    {
-      "id": "up-20261127-sunningpoint",
-      "status": "upcoming",
-      "date": "2026-11-27",
-      "year": 2026,
-      "month": 11,
-      "weekday": "금",
-      "teeTime": "07:40",
-      "club": "써닝포인트CC",
-      "clubShort": "써닝포인트CC",
-      "region": "경기 용인",
-      "courseLabel": "POINT + SUN 18홀",
-      "par": 73,
-      "total": 97,
-      "toPar": 24,
-      "front": {
-        "par": 36,
-        "score": 48
-      },
-      "back": {
-        "par": 37,
-        "score": 49
-      },
-      "holes": [],
-      "badge": "📅 11/27 예정 · 야디지북 준비됨",
-      "yardage": "data/yardage/sunningpoint.json",
-      "source": "애플 캘린더 (예정)",
-      "note": "18홀 · 파 73 (POINT 36 + SUN 37) · 07:40 POINT 코스 출발"
-    }
-  ]
+  "rounds": []
 }
