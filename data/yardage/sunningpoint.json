@@ -564,10 +564,19 @@
       "width": 558,
       "height": 513
      },
-     "shots": [],
-     "putts": null,
-     "score": null,
-     "note": null
+     "shots": [
+      {
+       "order": 1,
+       "n": 1,
+       "x": 67.5,
+       "y": 34.5,
+       "club": "티샷",
+       "lie": "그린 좌측 (어프로치)"
+      }
+     ],
+     "putts": 3,
+     "score": 5,
+     "note": "더블 보기 (그린 좌측 어프로치 온 → 3퍼트)"
     },
     {
      "no": 12,
