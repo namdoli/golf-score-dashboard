@@ -1,7 +1,7 @@
 {
   "meta": {
     "note": "예정 라운드. 완료 통계(라운드 수·방문 골프장·평균 타수)에는 포함되지 않습니다. scores.json의 rounds와 별도로 관리됩니다.",
-    "updatedAt": "2026-11-26T22:05:00+09:00"
+    "updatedAt": "2026-11-27T09:35:00+09:00"
   },
   "rounds": [
     {
@@ -21,7 +21,7 @@
       "toPar": null,
       "front": {
         "par": 36,
-        "score": null
+        "score": 48
       },
       "back": {
         "par": 37,
